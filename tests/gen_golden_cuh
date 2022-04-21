@@ -1,0 +1,16 @@
+#!/bin/sh
+# generate "golden" versions of gen_cuda output
+# *be careful* this assumes gen_cuda is correct!
+../build/src/gen_cuda test_00.clj > test_00.cuh
+../build/src/gen_cuda test_01.clj > test_01.cuh
+../build/src/gen_cuda test_02.clj > test_02.cuh
+../build/src/gen_cuda test_03.clj > test_03.cuh
+../build/src/gen_cuda test_04.clj > test_04.cuh
+../build/src/gen_cuda test_05.clj > test_05.cuh
+../build/src/gen_cuda test_06.clj > test_06.cuh
+../build/src/gen_cuda test_07.clj > test_07.cuh
+../build/src/gen_cuda test_08.clj > test_08.cuh
+../build/src/gen_cuda test_09.clj > test_09.cuh
+../build/src/gen_cuda test_10.clj > test_10.cuh
+../build/src/gen_cuda test_11.clj > test_11.cuh
+../build/src/gen_cuda test_12.clj > test_12.cuh

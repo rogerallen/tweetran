@@ -1,0 +1,17 @@
+#!/bin/sh
+# generate "golden" versions of gen_frag output
+# *be careful* this assumes gen_frag is correct!
+cd ..
+./build/src/gen_frag -1 tests/test_00.clj > tests/test_00.frag
+./build/src/gen_frag -1 tests/test_01.clj > tests/test_01.frag
+./build/src/gen_frag -1 tests/test_02.clj > tests/test_02.frag
+./build/src/gen_frag -1 tests/test_03.clj > tests/test_03.frag
+./build/src/gen_frag -1 tests/test_04.clj > tests/test_04.frag
+./build/src/gen_frag -1 tests/test_05.clj > tests/test_05.frag
+./build/src/gen_frag -1 tests/test_06.clj > tests/test_06.frag
+./build/src/gen_frag -1 tests/test_07.clj > tests/test_07.frag
+./build/src/gen_frag -1 tests/test_08.clj > tests/test_08.frag
+./build/src/gen_frag -1 tests/test_09.clj > tests/test_09.frag
+./build/src/gen_frag -1 tests/test_10.clj > tests/test_10.frag
+./build/src/gen_frag -1 tests/test_11.clj > tests/test_11.frag
+./build/src/gen_frag -1 tests/test_12.clj > tests/test_12.frag

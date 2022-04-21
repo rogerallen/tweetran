@@ -1,0 +1,1 @@
+(clisk.live/sigmoid (clisk.live/v+ (clisk.live/min-component (clisk.live/vround (clisk.live/min-component (clisk.live/v* clisk.live/pos [-2.9192 2.9694])))) (clisk.live/lightness-from-rgb (clisk.live/adjust-hsl 1.4514 (clisk.live/vabs (clisk.live/vsqrt (clisk.live/lightness-from-rgb [1.6084 0.1552])))))))

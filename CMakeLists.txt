@@ -1,0 +1,16 @@
+# Testing on Ubuntu 20.04 which has cmake 3.16
+cmake_minimum_required(VERSION 3.16)
+
+# FIXME make CUDA optional
+
+project(tweegeemeetranspiler
+    VERSION     0.1
+    DESCRIPTION "tweegeemeetranspiler"
+    LANGUAGES   CUDA CXX
+)
+
+add_subdirectory(src)
+add_subdirectory(cuda)
+
+enable_testing()
+add_subdirectory(tests) 
