@@ -44,6 +44,28 @@ where the `cuda` directory is.
 
 ### WebGL
 
+#### index.html & proto.js
+
+`webgl/index.hmtl` and `webgl/proto.js` are an example program that uses WebGL to generate an *interactive* tweegeemee image.  It is a simple prototype that you could modify for your own use cases.  See the web page & the source code for various things you can control.  You have to run your own web server to visit this web page.  Like:
+
+```
+$ cd webgl
+$ python3 -m http.server
+Serving HTTP on 0.0.0.0 port 8000 (http://0.0.0.0:8000/) ...
+```
+
+Then open up http://0.0.0.0:8000/ on your web browser to see some test images that you can pan (click-drag), zoom (mousewheel) and animate (click the button)!
+
+#### gen_frag
+
+*gen_frag* is a program to take the Clojure (clj) code that generates tweegeemee images and transpile it to WebGL.  This WebGL code relies on the `webgl/clisk.frag` (and other files) library code.
+
+Example:
+
+`./build/src/gen_frag examples/220605_013038_C.clj > webgl/proto/220605_013038_C.frag`
+
+At the top of `webgl/proto.js` is an array `frag_shaders` which lists the files you can view interactively in the browser.  Add `"proto/220605_013038_C.frag"` to that array in order to view this example.
+
 ## Testing
 
 ## License
