@@ -2,16 +2,16 @@
 # generate "golden" versions of gen_frag output
 # *be careful* this assumes gen_frag is correct!
 cd ..
-./build/src/gen_frag tests/test_00.clj > js/proto/test_00.frag
-./build/src/gen_frag tests/test_01.clj > js/proto/test_01.frag
-./build/src/gen_frag tests/test_02.clj > js/proto/test_02.frag
-./build/src/gen_frag tests/test_03.clj > js/proto/test_03.frag
-./build/src/gen_frag tests/test_04.clj > js/proto/test_04.frag
-./build/src/gen_frag tests/test_05.clj > js/proto/test_05.frag
-./build/src/gen_frag tests/test_06.clj > js/proto/test_06.frag
-./build/src/gen_frag tests/test_07.clj > js/proto/test_07.frag
-./build/src/gen_frag tests/test_08.clj > js/proto/test_08.frag
-./build/src/gen_frag tests/test_09.clj > js/proto/test_09.frag
-./build/src/gen_frag tests/test_10.clj > js/proto/test_10.frag
-./build/src/gen_frag tests/test_11.clj > js/proto/test_11.frag
-./build/src/gen_frag tests/test_12.clj > js/proto/test_12.frag
+#./build/src/gen_frag tests/test_00.clj > webgl/proto/test_00.frag
+#./build/src/gen_frag tests/test_01.clj > webgl/proto/test_01.frag
+#./build/src/gen_frag tests/test_02.clj > webgl/proto/test_02.frag
+#./build/src/gen_frag tests/test_03.clj > webgl/proto/test_03.frag
+#./build/src/gen_frag tests/test_04.clj > webgl/proto/test_04.frag
+#./build/src/gen_frag tests/test_05.clj > webgl/proto/test_05.frag
+#./build/src/gen_frag tests/test_06.clj > webgl/proto/test_06.frag
+#./build/src/gen_frag tests/test_07.clj > webgl/proto/test_07.frag
+#./build/src/gen_frag tests/test_08.clj > webgl/proto/test_08.frag
+./build/src/gen_frag tests/test_09.clj > webgl/proto/test_09.frag
+./build/src/gen_frag tests/test_10.clj > webgl/proto/test_10.frag
+./build/src/gen_frag tests/test_11.clj > webgl/proto/test_11.frag
+./build/src/gen_frag tests/test_12.clj > webgl/proto/test_12.frag

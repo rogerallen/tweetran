@@ -1,0 +1,19 @@
+html,
+body {
+  height: 100%;
+  margin: 0;
+  background-color: black;
+  color: rgb(240, 240, 240);
+}
+
+select,
+input,
+textarea {
+  background-color: #aaaaaa;
+}
+
+#canvas {
+  width: 720px;
+  height: 720px;
+  display: block;
+}

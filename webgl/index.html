@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<link rel="stylesheet" href="proto.css">
+</head>
+
+<body>
+	<p align="center">
+		<select id="dropdown">
+		</select>
+		<label for="animate">
+			Animate: <input type="checkbox" id="animate" name="animate">
+		</label>
+		animFactor<input id="aField" type="text" name="a">
+		<input id="reset" type="button" value="reset">
+		<br>
+		x<input id="xField" type="text" name="x">
+		y<input id="yField" type="text" name="y">
+		zoom<input id="zoomField" type="text" name="z">
+		<input id="xyzSet" type="button" value="set">
+		<canvas id="canvas"></canvas>
+	</p>
+	<script type="module" src="proto.js"></script>
+</body>
+
+</html>
