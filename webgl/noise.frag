@@ -1,3 +1,5 @@
+// Part of WebGL translation of the Clisk Library https://github.com/mikera/clisk
+// by Roger Allen for the purpose of making a transpiler.
 // --------------------------------------------------------------------------------
 // Noise
 // simplex_snoise via https://gist.github.com/patriciogonzalezvivo/670c22f3966e662d2f83

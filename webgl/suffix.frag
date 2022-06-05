@@ -1,3 +1,5 @@
+// Part of WebGL translation of the Clisk Library https://github.com/mikera/clisk
+// by Roger Allen for the purpose of making a transpiler.
 // --------------------------------------------------------------------------------
 // THREE.js main function
 void main() {

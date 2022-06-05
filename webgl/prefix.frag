@@ -1,3 +1,5 @@
+// Part of WebGL translation of the Clisk Library https://github.com/mikera/clisk
+// by Roger Allen for the purpose of making a transpiler.
 // --------------------------------------------------------------------------------
 #define M_PI 3.14159265358979323846
 

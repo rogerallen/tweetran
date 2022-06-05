@@ -1,3 +1,5 @@
+// Part of WebGL translation of the Clisk Library https://github.com/mikera/clisk
+// by Roger Allen for the purpose of making a transpiler.
 // --------------------------------------------------------------------------------
 // ShaderToy main function
 void mainImage( out vec4 fragColor, in vec2 fragCoord )
