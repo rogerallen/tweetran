@@ -1,5 +1,6 @@
-// My CUDA translation of the Clojure Clisk Library
-// https://github.com/mikera/clisk
+// CUDA translation of the Clisk Library https://github.com/mikera/clisk
+// by Roger Allen for the purpose of making a transpiler.
+//
 // Full list of functions used by Tweegeemee are here:
 // https://github.com/rogerallen/tweegeemee/blob/master/src/tweegeemee/image.clj
 //
