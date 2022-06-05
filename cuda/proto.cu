@@ -1,14 +1,15 @@
 #include <iostream>
 #include <time.h>
 
+#include "../src/utils.h"
 #include "cudaErrorCheck.h"
+
 #define JITIFY_PRINT_INSTANTIATION 0
 #define JITIFY_PRINT_SOURCE 0
 #define JITIFY_PRINT_LOG 0
 #define JITIFY_PRINT_PTX 0
 //#define JITIFY_PRINT_LINKER_LOG 0
 #define JITIFY_PRINT_LAUNCH 0
-#include "../src/utils.h"
 #include "jitify.hpp"
 
 #pragma GCC diagnostic push
@@ -20,49 +21,56 @@
 
 int main(int argc, char **argv)
 {
-    // FIXME add path to clisk.cuh
-    if (argc != 2) {
-        std::cerr << "USAGE: proto file.cuh\n";
+    if (argc != 3) {
+        std::cerr << "USAGE: proto infile.cuh outfile.png\n";
         std::exit(1);
     }
     std::string source_path = argv[1];
+    std::string dest_png{argv[2]};
 
-    int surface_width = 1600;
-    int surface_height = 800;
-    int image_width = 720;
-    int image_height = 720;
+    int magnification = 4;
+    int image_width = 720 * magnification;
+    int image_height = 720 * magnification;
+    int surface_width = image_width;
+    int surface_height = image_height;
     assert(surface_width >= image_width);
     assert(surface_height >= image_height);
-    int tx = 8;
-    int ty = 8;
+    int tx = 16;
+    int ty = 16;
 
     std::cerr << "Rendering a " << image_width << "x" << image_height << " image ";
-    std::cerr << "to a " << surface_width << "x" << surface_height << " surface ";
+    // std::cerr << "to a " << surface_width << "x" << surface_height << " surface ";
     std::cerr << "in " << tx << "x" << ty << " blocks.\n";
 
+    // pan around the image by moving the upper-left corner
     float U0 = 0.0, V0 = 0.0, W0 = 0.0, T0 = 0.0;
+    // zoom into the image by adjusting these (> 1 zooms out, < 1 zooms in)
     float dU = 1.0, dV = 1.0;
+
     float4 image_origin = make_float4(U0, V0, W0, T0);
     float2 image_delta = make_float2(dU, dV);
     std::cerr << "Origin: " << U0 << ", " << V0 << ", " << W0 << ", " << T0 << ".\n";
     std::cerr << " Delta: " << dU << ", " << dV << ".\n";
 
-    // int image_pixels = image_width * image_height;
     int surface_pixels = surface_width * surface_height;
     size_t fb_bytes = 4 * surface_pixels * sizeof(uint8_t);
 
-    // allocate FB
+    // allocate Frame Buffer (FB) on the GPU
     uint8_t *fb;
     cudaErrChk(cudaMallocManaged((void **)&fb, fb_bytes));
 
     // nvrt compile code.  Requires a module name as first line.
-    std::string proto_src = "proto\n#include \"cuda/clisk.cuh\"\n" + slurp(source_path);
+    // Use JITIFY_OPTIONS="-I/path/to/this/tweegeemeetranspiler" if not running
+    // from above the cuda directory.
+    std::string proto_src = "proto\n"
+                            "#include \"cuda/clisk.cuh\"\n" +
+                            slurp(source_path);
     static jitify::JitCache kernel_cache;
     jitify::Program program = kernel_cache.program(proto_src);
 
     clock_t start, stop;
     start = clock();
-    // Render our buffer
+    // Render to our FB
     dim3 blocks(image_width / tx + 1, image_height / ty + 1);
     dim3 threads(tx, ty);
     cuErrChk(program.kernel("render_rgba")
@@ -75,11 +83,12 @@ int main(int argc, char **argv)
     double timer_seconds = ((double)(stop - start)) / CLOCKS_PER_SEC;
     std::cerr << "took " << timer_seconds << " seconds.\n";
 
-    // bring fb back to the CPU
+    // bring FB back to the CPU memory
     cudaErrChk(cudaMemPrefetchAsync(fb, fb_bytes, cudaCpuDeviceId));
 
     // Output FB as PNG Image
-    stbi_write_png("proto.png", image_width, image_height, 4, (const void *)fb,
+    std::cerr << "writing to " << dest_png << "...\n";
+    stbi_write_png(dest_png.c_str(), image_width, image_height, 4, (const void *)fb,
                    surface_width * 4 * sizeof(uint8_t));
 
     cudaErrChk(cudaFree(fb));
