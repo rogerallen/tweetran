@@ -1,13 +1,13 @@
 if(MSVC)
     # msvc has W3 warnings in both of these flags by default.  Just change them to W4 to avoid a warning
 	string(REPLACE "/W3" "/W4" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}" )
-	string(REPLACE "/W3" "/W4" CMAKE_CUDA_FLAGS "${CMAKE_CUDA_FLAGS}" )
+	#string(REPLACE "/W3" "/W4" CMAKE_CUDA_FLAGS "${CMAKE_CUDA_FLAGS}" )
 endif(MSVC)
 if(CMAKE_COMPILER_IS_GNUCXX)
     # could not use add_compile_options() as that adds incorrectly to CUDA, too.
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -pedantic")
     # adding -pedantic to CUDA made for way too much spew.
-    set(CMAKE_CUDA_FLAGS "${CMAKE_CUDA_FLAGS} -Xcompiler -Wall,-Wextra")
+    #set(CMAKE_CUDA_FLAGS "${CMAKE_CUDA_FLAGS} -Xcompiler -Wall,-Wextra")
 endif(CMAKE_COMPILER_IS_GNUCXX)
 
 # pre-make expressions.h file
