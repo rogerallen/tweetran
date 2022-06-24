@@ -11,6 +11,7 @@ project(tweegeemeetranspiler
 
 add_subdirectory(src)
 add_subdirectory(cuda)
+add_subdirectory(cpp)
 
 enable_testing()
 add_subdirectory(tests) 

@@ -30,17 +30,25 @@ Example:
 
 `./build/src/gen_cuda examples/220605_013038_C.clj > examples/220605_013038_C.cuh`
 
-#### proto 
+#### cu_retwee 
 
-*proto* is an example program that uses CUDA to generate a PNG file.  It is a simple program
+*cu_retwee* is an example program that uses CUDA to generate a PNG file.  It is a simple program
 that you could modify for your own use cases.  See the code for various things you can control.
 
-`./build/cuda/proto examples/220605_013038_C.cuh examples/220605_013038_C.png`
+`./build/cuda/cu_retwee examples/220605_013038_C.cuh examples/220605_013038_C.png`
 
 Note: If you are not running from the root of this project, use JITIFY_OPTIONS to point to 
 where the `cuda` directory is.
 
-`JITIFY_OPTIONS="-I/path/to/this/tweegeemeetranspiler" proto infile.cuh image.png`
+`JITIFY_OPTIONS="-I/path/to/this/tweegeemeetranspiler" cu_retwee infile.cuh image.png`
+
+### C++
+
+See the CUDA/gen_cuda section above about how to output .cuda header (.cuh) files.
+
+The header file is compiled with the proto.cpp file to create an executable per tweegeemee image.  There is an example using the `tests/test_12.cuh` file.
+
+`./build/cpp/c_retwee_test_12`
 
 ### WebGL
 
