@@ -40,7 +40,7 @@ int main(int argc, char **argv)
 
     std::cerr << "Rendering a " << image_width << "x" << image_height << " image ";
     // std::cerr << "to a " << surface_width << "x" << surface_height << " surface ";
-    std::cerr << "in " << tx << "x" << ty << " blocks.\n";
+    std::cerr << "in " << tx << "x" << ty << " blocks using the GPU.\n";
 
     // pan around the image by moving the upper-left corner
     float U0 = 0.0, V0 = 0.0, W0 = 0.0, T0 = 0.0;
