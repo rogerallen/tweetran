@@ -50,6 +50,10 @@ The header file is compiled with the proto.cpp file to create an executable per 
 
 `./build/cpp/c_retwee_test_12`
 
+The `render_cpp.sh` puts download, compile & transpile and png-creation all in one script.  For example:
+
+`./render_cpp.sh 220605_013038_C`
+
 ### WebGL
 
 #### index.html & proto.js
