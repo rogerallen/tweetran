@@ -3,10 +3,12 @@
 // same code as the CUDA source.  Compile with the output from gen_cuda
 // like so:
 //
-// g++ -DGEN_CUDA_OUTPUT_FILE="../tests/test_12.cuh" -I../cuda proto.cpp -o c_retwee_test_12
+// g++ -DGEN_CUDA_OUTPUT_FILE="../tests/test_12.cuh" -I../cuda -fopenmp proto.cpp -o c_retwee_test_12 -lgomp
 //
 #include <iostream>
 #include <time.h>
+
+#include <omp.h>
 
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wmissing-field-initializers"
@@ -42,7 +44,9 @@ static float4 make_float4(float x, float y, float z, float w)
 
 void render(uint8_t *fb, int image_width, int image_height)
 {
+#pragma omp parallel for
     for (int y = 0; y < image_height; ++y) {
+#pragma omp parallel for
         for (int x = 0; x < image_width; ++x) {
             float u = 1.0 * x / image_width;
             float v = 1.0 * y / image_height;
@@ -54,16 +58,20 @@ void render(uint8_t *fb, int image_width, int image_height)
     }
 }
 
-int main(/*int argc, char **argv*/)
+int main(int argc, char **argv)
 {
 
-    int image_width = 720;
-    int image_height = 720;
-    int tx = 8;
-    int ty = 8;
+    if (argc != 2) {
+        std::cerr << "USAGE: proto outfile.png\n";
+        std::exit(1);
+    }
+    std::string dest_png{argv[1]};
 
-    std::cerr << "Rendering a " << image_width << "x" << image_height << " image ";
-    std::cerr << "in " << tx << "x" << ty << " blocks.\n";
+    int magnification = 4;
+    int image_width = 720 * magnification;
+    int image_height = 720 * magnification;
+
+    std::cerr << "Rendering a " << image_width << "x" << image_height << " image using the CPU.\n";
 
     int num_pixels = image_width * image_height;
 
@@ -78,7 +86,8 @@ int main(/*int argc, char **argv*/)
     std::cerr << "took " << timer_seconds << " seconds.\n";
 
     // Output FB as PNG Image
-    stbi_write_png("proto.png", image_width, image_height, 3, (const void *)fb,
+    std::cerr << "writing to " << dest_png << "...\n";
+    stbi_write_png(dest_png.c_str(), image_width, image_height, 3, (const void *)fb,
                    image_width * 3 * sizeof(uint8_t));
 
     delete[] fb;
