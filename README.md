@@ -90,7 +90,7 @@ At the top of `webgl/proto.js` is an array `frag_shaders` which lists the files 
 
 ## Testing
 
-TBD
+There are some parsing tests that run under ctest.
 
 ## License
 
