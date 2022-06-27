@@ -5,6 +5,8 @@
 //
 // g++ -DGEN_CUDA_OUTPUT_FILE="../tests/test_12.cuh" -I../cuda -fopenmp proto.cpp -o c_retwee_test_12 -lgomp
 //
+#include <cstring>
+#include <iomanip>
 #include <iostream>
 #include <time.h>
 
@@ -36,11 +38,15 @@ static float4 make_float4(float x, float y, float z, float w)
     float4 result = {x, y, z, w};
     return result;
 }
+inline long long int __double_as_longlong(double x)
+{
+    long long int ll;
+    std::memcpy(&ll, &x, sizeof(x));
+    return ll;
+}
 #define __global__ /*__global__*/
 #define __device__ /*__device__*/
 #define NO_CUDA_RENDER
-// FIXME: this is good in C, but not C++.  Hmm...
-#define __double_as_longlong(x) (*((long long *)(&x)))
 #include "clisk.cuh"
 // gen_cuda output file to be included here
 #include GEN_CUDA_OUTPUT_FILE
@@ -104,4 +110,6 @@ int main(int argc, char **argv)
                    image_width * 3 * sizeof(uint8_t));
 
     delete[] fb;
+
+    return 0;
 }
