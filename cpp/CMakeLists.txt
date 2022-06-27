@@ -10,11 +10,11 @@ endif(CMAKE_COMPILER_IS_GNUCXX)
 find_package(OpenMP)
 
 # proto C++
-add_executable(c_retwee_test_12 proto.cpp ../src/utils.cpp)
-target_compile_definitions(c_retwee_test_12 PUBLIC 
+add_executable(c_tweetran_test_12 proto.cpp ../src/utils.cpp)
+target_compile_definitions(c_tweetran_test_12 PUBLIC 
     GEN_CUDA_OUTPUT_FILE="${CMAKE_CURRENT_SOURCE_DIR}/../tests/test_12.cuh")
-target_include_directories(c_retwee_test_12 PUBLIC ../cuda)
-target_compile_features(c_retwee_test_12 PUBLIC cxx_std_11)
+target_include_directories(c_tweetran_test_12 PUBLIC ../cuda)
+target_compile_features(c_tweetran_test_12 PUBLIC cxx_std_11)
 if(OpenMP_CXX_FOUND)
-    target_link_libraries(c_retwee_test_12 PUBLIC OpenMP::OpenMP_CXX)
+    target_link_libraries(c_tweetran_test_12 PUBLIC OpenMP::OpenMP_CXX)
 endif()

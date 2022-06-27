@@ -3,9 +3,9 @@ cmake_minimum_required(VERSION 3.16)
 
 # FIXME make CUDA optional
 
-project(tweegeemeetranspiler
+project(tweetran
     VERSION     0.1
-    DESCRIPTION "tweegeemeetranspiler"
+    DESCRIPTION "tweetran"
     LANGUAGES   CUDA CXX
 )
 
