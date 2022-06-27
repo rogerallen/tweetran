@@ -8,6 +8,7 @@
 #include <iostream>
 #include <time.h>
 
+// OpenMP speeds this up considerably on a multi-core system
 #include <omp.h>
 
 #pragma GCC diagnostic push
@@ -17,6 +18,8 @@
 #include "stb_image_write.h"
 #pragma GCC diagnostic pop
 
+// There are some things that CUDA provides that we need to
+// create C++ equivalents. From here until #include "clisk.cuh"
 struct float3 {
     float x, y, z;
 };
@@ -36,8 +39,8 @@ static float4 make_float4(float x, float y, float z, float w)
 #define __global__ /*__global__*/
 #define __device__ /*__device__*/
 #define NO_CUDA_RENDER
+// FIXME: this is good in C, but not C++.  Hmm...
 #define __double_as_longlong(x) (*((long long *)(&x)))
-
 #include "clisk.cuh"
 // gen_cuda output file to be included here
 #include GEN_CUDA_OUTPUT_FILE
@@ -78,11 +81,21 @@ int main(int argc, char **argv)
     // allocate FB
     uint8_t *fb = new uint8_t[3 * num_pixels];
 
+#ifndef _OPENMP
     clock_t start, stop;
     start = clock();
+#else
+    double start, stop;
+    start = omp_get_wtime();
+#endif
     render(fb, image_width, image_height);
+#ifndef _OPENMP
     stop = clock();
     double timer_seconds = ((double)(stop - start)) / CLOCKS_PER_SEC;
+#else
+    stop = omp_get_wtime();
+    double timer_seconds = stop - start;
+#endif
     std::cerr << "took " << timer_seconds << " seconds.\n";
 
     // Output FB as PNG Image
