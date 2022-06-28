@@ -83,8 +83,8 @@ int main(int argc, char **argv)
     double timer_seconds = ((double)(stop - start)) / CLOCKS_PER_SEC;
     std::cerr << "took " << timer_seconds << " seconds.\n";
 
-    // bring FB back to the CPU memory
-    cudaErrChk(cudaMemPrefetchAsync(fb, fb_bytes, cudaCpuDeviceId));
+    // bring FB back to the CPU memory (no error check since this is just for performance and can fail on some systems)
+    cudaMemPrefetchAsync(fb, fb_bytes, cudaCpuDeviceId);
 
     // Output FB as PNG Image
     std::cerr << "writing to " << dest_png << "...\n";
