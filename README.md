@@ -12,6 +12,8 @@ The programs in this directory are meant to be examples of how to use the librar
 
 At this point, my suggestion is to read the code to understand how to use it.  I'll add some instructions later.
 
+This project was first developed on Linux and relies on Linux & Python to fully build, but there is a Windows Visual Studio 2022 solution file in the `win_vs22` directory that allows you to build & run executables on Windows.
+
 ## Tweegeemee code
 
 Find images via [tweegeemee](https://twitter.com/tweegeemee) and https://tweegeemee.com 
