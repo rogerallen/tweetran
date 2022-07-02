@@ -5,6 +5,7 @@ build/
 examples/
 .vs/
 win_vs22/c_tweetran/x64/
+win_vs22/cu_tweetran/x64/
 win_vs22/x64/
 *vcxproj.filters
 *vcxproj.user
