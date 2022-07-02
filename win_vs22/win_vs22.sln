@@ -9,6 +9,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "cu_tweetran", "cu_tweetran\
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "gen_cuda", "gen_cuda\gen_cuda.vcxproj", "{5F8BB378-202F-4680-8002-7A5F2EFC0D7A}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "gen_frag", "gen_frag\gen_frag.vcxproj", "{E5F9D737-3856-474E-A1C1-CF8967E5DE5A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -41,6 +43,14 @@ Global
 		{5F8BB378-202F-4680-8002-7A5F2EFC0D7A}.Release|x64.Build.0 = Release|x64
 		{5F8BB378-202F-4680-8002-7A5F2EFC0D7A}.Release|x86.ActiveCfg = Release|Win32
 		{5F8BB378-202F-4680-8002-7A5F2EFC0D7A}.Release|x86.Build.0 = Release|Win32
+		{E5F9D737-3856-474E-A1C1-CF8967E5DE5A}.Debug|x64.ActiveCfg = Debug|x64
+		{E5F9D737-3856-474E-A1C1-CF8967E5DE5A}.Debug|x64.Build.0 = Debug|x64
+		{E5F9D737-3856-474E-A1C1-CF8967E5DE5A}.Debug|x86.ActiveCfg = Debug|Win32
+		{E5F9D737-3856-474E-A1C1-CF8967E5DE5A}.Debug|x86.Build.0 = Debug|Win32
+		{E5F9D737-3856-474E-A1C1-CF8967E5DE5A}.Release|x64.ActiveCfg = Release|x64
+		{E5F9D737-3856-474E-A1C1-CF8967E5DE5A}.Release|x64.Build.0 = Release|x64
+		{E5F9D737-3856-474E-A1C1-CF8967E5DE5A}.Release|x86.ActiveCfg = Release|Win32
+		{E5F9D737-3856-474E-A1C1-CF8967E5DE5A}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
