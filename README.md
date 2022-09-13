@@ -1,6 +1,6 @@
 # tweetran - the tweegeemee Transpiler library
 
-Code to transpile the [tweegeemee](https://twitter.com/tweegeemee) Clojure [Clisk library](https://github.com/mikera/clisk) code into other languages.  This will only work for functions that tweegeemee uses and in the format that tweegeemee generates.  The code is a work in progress, *alpha* quality.  And I am vary far from a transpiler expert.  Failures happen quite often.  
+Code to transpile the [tweegeemee](https://twitter.com/tweegeemee) Clojure [Clisk library](https://github.com/mikera/clisk) code into other languages.  This will only work for functions that tweegeemee uses and in the format that tweegeemee generates.  The code is a work in progress, *alpha* quality.  And I am very far from a transpiler expert.  Failures happen quite often.  
 
 The primary benefit of this code is that CUDA and WebGL both use the GPU and it can render tweegeemee images *much* faster than the CPU.  Interactive frame rates are possible.  A C++ CPU-only version is also available, but it isn't as fast.
 
