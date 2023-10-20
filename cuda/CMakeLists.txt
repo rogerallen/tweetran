@@ -4,6 +4,9 @@ cmake_minimum_required(VERSION 3.16)
 include(CheckLanguage)
 check_language(CUDA)
 
+# https://arnon.dk/matching-sm-architectures-arch-and-gencode-for-various-nvidia-cards/
+set(CMAKE_CUDA_ARCHITECTURES 89)
+
 if(MSVC)
     # msvc has W3 warnings in both of these flags by default.  Just change them to W4 to avoid a warning
 	string(REPLACE "/W3" "/W4" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}" )
