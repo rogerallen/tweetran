@@ -678,6 +678,8 @@ inline bool load_source(
       // TODO: Handle block comments (currently they cause a compilation error).
       size_t comment_start = line_after_pragma.find("//");
       std::string pragma_args = line_after_pragma.substr(0, comment_start);
+      // handle quote character used in #pragma expression
+      pragma_args = replace_token(pragma_args, "\"", "\\\"");
       std::string comment = comment_start != std::string::npos
                                 ? line_after_pragma.substr(comment_start)
                                 : "";
@@ -688,7 +690,7 @@ inline bool load_source(
     source += line + "\n";
   }
   // HACK TESTING (WAR for cub)
-  // source = "#define cudaDeviceSynchronize() cudaSuccess\n" + source;
+  source = "#define cudaDeviceSynchronize() cudaSuccess\n" + source;
   ////source = "cudaError_t cudaDeviceSynchronize() { return cudaSuccess; }\n" +
   /// source;
 
@@ -1434,46 +1436,51 @@ static const char* jitsafe_header_float_h = R"(
 
 static const char* jitsafe_header_limits_h = R"(
 #pragma once
-
-#if defined _WIN32 || defined _WIN64
- #define __WORDSIZE 32
+#if __has_include(<cuda/std/climits>)
+ #include <cuda/std/climits>
+ #include <cuda/std/limits>
+ #include <cuda/std/cstdint>
 #else
- #if defined __x86_64__ && !defined __ILP32__
-  #define __WORDSIZE 64
- #else
+ #if defined _WIN32 || defined _WIN64
   #define __WORDSIZE 32
+ #else
+  #if defined(__LP64__) || (defined __x86_64__ && !defined __ILP32__)
+   #define __WORDSIZE 64
+  #else
+   #define __WORDSIZE 32
+  #endif
  #endif
+ #define MB_LEN_MAX  16
+ #define CHAR_BIT    8
+ #define SCHAR_MIN   (-128)
+ #define SCHAR_MAX   127
+ #define UCHAR_MAX   255
+ enum {
+   _JITIFY_CHAR_IS_UNSIGNED = (char)-1 >= 0,
+   CHAR_MIN = _JITIFY_CHAR_IS_UNSIGNED ? 0 : SCHAR_MIN,
+   CHAR_MAX = _JITIFY_CHAR_IS_UNSIGNED ? UCHAR_MAX : SCHAR_MAX,
+ };
+ #define SHRT_MIN    (-SHRT_MAX - 1)
+ #define SHRT_MAX    0x7fff
+ #define USHRT_MAX   0xffff
+ #define INT_MIN     (-INT_MAX - 1)
+ #define INT_MAX     0x7fffffff
+ #define UINT_MAX    0xffffffff
+ #if __WORDSIZE == 64
+  # define LONG_MAX  LLONG_MAX
+ #else
+  # define LONG_MAX  INT_MAX
+ #endif
+ #define LONG_MIN    (-LONG_MAX - 1)
+ #if __WORDSIZE == 64
+  #define ULONG_MAX  ULLONG_MAX
+ #else
+  #define ULONG_MAX  UINT_MAX
+ #endif
+ #define LLONG_MAX  0x7fffffffffffffff
+ #define LLONG_MIN  (-LLONG_MAX - 1)
+ #define ULLONG_MAX 0xffffffffffffffff
 #endif
-#define MB_LEN_MAX  16
-#define CHAR_BIT    8
-#define SCHAR_MIN   (-128)
-#define SCHAR_MAX   127
-#define UCHAR_MAX   255
-enum {
-  _JITIFY_CHAR_IS_UNSIGNED = (char)-1 >= 0,
-  CHAR_MIN = _JITIFY_CHAR_IS_UNSIGNED ? 0 : SCHAR_MIN,
-  CHAR_MAX = _JITIFY_CHAR_IS_UNSIGNED ? UCHAR_MAX : SCHAR_MAX,
-};
-#define SHRT_MIN    (-32768)
-#define SHRT_MAX    32767
-#define USHRT_MAX   65535
-#define INT_MIN     (-INT_MAX - 1)
-#define INT_MAX     2147483647
-#define UINT_MAX    4294967295U
-#if __WORDSIZE == 64
- # define LONG_MAX  9223372036854775807L
-#else
- # define LONG_MAX  2147483647L
-#endif
-#define LONG_MIN    (-LONG_MAX - 1L)
-#if __WORDSIZE == 64
- #define ULONG_MAX  18446744073709551615UL
-#else
- #define ULONG_MAX  4294967295UL
-#endif
-#define LLONG_MAX  9223372036854775807LL
-#define LLONG_MIN  (-LLONG_MAX - 1LL)
-#define ULLONG_MAX 18446744073709551615ULL
 )";
 
 static const char* jitsafe_header_iterator = R"(
@@ -1517,6 +1524,11 @@ struct iterator_traits<T const*> {
 //              using type specific structs since we can't template on floats.
 static const char* jitsafe_header_limits = R"(
 #pragma once
+#if __has_include(<cuda/std/limits>)
+ #include <cuda/std/climits>
+ #include <cuda/std/limits>
+ #include <cuda/std/cstdint>
+#endif
 #include <cfloat>
 #include <climits>
 #include <cstdint>
@@ -1712,6 +1724,9 @@ static const char* jitsafe_header_type_traits = R"(
     template<> struct is_floating_point<float>       :  true_type {};
     template<> struct is_floating_point<double>      :  true_type {};
     template<> struct is_floating_point<long double> :  true_type {};
+    #if __cplusplus >= 201703L
+    template<typename T> inline constexpr bool is_floating_point_v = is_floating_point<T>::value;
+    #endif  // __cplusplus >= 201703L
 
     template<class T> struct is_integral              : false_type {};
     template<> struct is_integral<bool>               :  true_type {};
@@ -1726,6 +1741,9 @@ static const char* jitsafe_header_type_traits = R"(
     template<> struct is_integral<unsigned long>      :  true_type {};
     template<> struct is_integral<long long>          :  true_type {};
     template<> struct is_integral<unsigned long long> :  true_type {};
+    #if __cplusplus >= 201703L
+    template<typename T> inline constexpr bool is_integral_v = is_integral<T>::value;
+    #endif  // __cplusplus >= 201703L
 
     template<typename T> struct is_signed    : false_type {};
     template<> struct is_signed<float>       :  true_type {};
@@ -1746,6 +1764,9 @@ static const char* jitsafe_header_type_traits = R"(
 
     template<typename T, typename U> struct is_same      : false_type {};
     template<typename T>             struct is_same<T,T> :  true_type {};
+    #if __cplusplus >= 201703L
+    template<typename T, typename U> inline constexpr bool is_same_v = is_same<T, U>::value;
+    #endif  // __cplusplus >= 201703L
 
     template<class T> struct is_array : false_type {};
     template<class T> struct is_array<T[]> : true_type {};
@@ -1762,6 +1783,21 @@ static const char* jitsafe_header_type_traits = R"(
     // TODO: This is a hack; a proper implem is quite complicated.
     typedef typename F::result_type type;
     };
+
+    template<class T> struct is_pointer                    : false_type {};
+    template<class T> struct is_pointer<T*>                : true_type {};
+    template<class T> struct is_pointer<T* const>          : true_type {};
+    template<class T> struct is_pointer<T* volatile>       : true_type {};
+    template<class T> struct is_pointer<T* const volatile> : true_type {};
+    #if __cplusplus >= 201703L
+    template< class T > inline constexpr bool is_pointer_v = is_pointer<T>::value;
+    #endif  // __cplusplus >= 201703L
+
+    template <class T> struct remove_pointer { typedef T type; };
+    template <class T> struct remove_pointer<T*> { typedef T type; };
+    template <class T> struct remove_pointer<T* const> { typedef T type; };
+    template <class T> struct remove_pointer<T* volatile> { typedef T type; };
+    template <class T> struct remove_pointer<T* const volatile> { typedef T type; };
 
     template <class T> struct remove_reference { typedef T type; };
     template <class T> struct remove_reference<T&> { typedef T type; };
@@ -1827,6 +1863,13 @@ static const char* jitsafe_header_type_traits = R"(
     constexpr value_type operator()() const noexcept { return value; }
     #endif
     };
+
+    template<typename T> struct is_arithmetic :
+    std::integral_constant<bool, std::is_integral<T>::value ||
+                                 std::is_floating_point<T>::value> {};
+    #if __cplusplus >= 201703L
+    template<typename T> inline constexpr bool is_arithmetic_v = is_arithmetic<T>::value;
+    #endif  // __cplusplus >= 201703L
 
     template<class T> struct is_lvalue_reference : false_type {};
     template<class T> struct is_lvalue_reference<T&> : true_type {};
@@ -1952,6 +1995,11 @@ static const char* jitsafe_header_type_traits = R"(
 // TODO: INT_FAST8_MAX et al. and a few other misc constants
 static const char* jitsafe_header_stdint_h =
     "#pragma once\n"
+    "#if __has_include(<cuda/std/cstdint>)\n"
+    " #include <cuda/std/climits>\n"
+    " #include <cuda/std/cstdint>\n"
+    " #define __jitify_using_libcudacxx\n"
+    "#endif\n"
     "#include <climits>\n"
     "namespace __jitify_stdint_ns {\n"
     "typedef signed char      int8_t;\n"
@@ -1967,7 +2015,6 @@ static const char* jitsafe_header_stdint_h =
     "typedef signed int       int_least32_t;\n"
     "typedef signed long long int_least64_t;\n"
     "typedef signed long long intmax_t;\n"
-    "typedef signed long      intptr_t; //optional\n"
     "typedef unsigned char      uint8_t;\n"
     "typedef unsigned short     uint16_t;\n"
     "typedef unsigned int       uint32_t;\n"
@@ -1981,36 +2028,43 @@ static const char* jitsafe_header_stdint_h =
     "typedef unsigned int       uint_least32_t;\n"
     "typedef unsigned long long uint_least64_t;\n"
     "typedef unsigned long long uintmax_t;\n"
-    "#define INT8_MIN    SCHAR_MIN\n"
-    "#define INT16_MIN   SHRT_MIN\n"
-    "#if defined _WIN32 || defined _WIN64\n"
-    "#define WCHAR_MIN   0\n"
-    "#define WCHAR_MAX   USHRT_MAX\n"
-    "typedef unsigned long long uintptr_t; //optional\n"
-    "#else\n"
-    "#define WCHAR_MIN   INT_MIN\n"
-    "#define WCHAR_MAX   INT_MAX\n"
-    "typedef unsigned long      uintptr_t; //optional\n"
+    "#ifndef __jitify_using_libcudacxx\n"
+    " typedef signed long      intptr_t; //optional\n"
+    " #define INT8_MIN    SCHAR_MIN\n"
+    " #define INT16_MIN   SHRT_MIN\n"
+    " #define INT32_MIN   INT_MIN\n"
+    " #define INT64_MIN   LLONG_MIN\n"
+    " #define INT8_MAX    SCHAR_MAX\n"
+    " #define INT16_MAX   SHRT_MAX\n"
+    " #define INT32_MAX   INT_MAX\n"
+    " #define INT64_MAX   LLONG_MAX\n"
+    " #define UINT8_MAX   UCHAR_MAX\n"
+    " #define UINT16_MAX  USHRT_MAX\n"
+    " #define UINT32_MAX  UINT_MAX\n"
+    " #define UINT64_MAX  ULLONG_MAX\n"
+    " #define INTPTR_MIN  LONG_MIN\n"
+    " #define INTMAX_MIN  LLONG_MIN\n"
+    " #define INTPTR_MAX  LONG_MAX\n"
+    " #define INTMAX_MAX  LLONG_MAX\n"
+    " #define UINTPTR_MAX ULONG_MAX\n"
+    " #define UINTMAX_MAX ULLONG_MAX\n"
+    " #define PTRDIFF_MIN INTPTR_MIN\n"
+    " #define PTRDIFF_MAX INTPTR_MAX\n"
+    " #define SIZE_MAX    UINT64_MAX\n"
     "#endif\n"
-    "#define INT32_MIN   INT_MIN\n"
-    "#define INT64_MIN   LLONG_MIN\n"
-    "#define INT8_MAX    SCHAR_MAX\n"
-    "#define INT16_MAX   SHRT_MAX\n"
-    "#define INT32_MAX   INT_MAX\n"
-    "#define INT64_MAX   LLONG_MAX\n"
-    "#define UINT8_MAX   UCHAR_MAX\n"
-    "#define UINT16_MAX  USHRT_MAX\n"
-    "#define UINT32_MAX  UINT_MAX\n"
-    "#define UINT64_MAX  ULLONG_MAX\n"
-    "#define INTPTR_MIN  LONG_MIN\n"
-    "#define INTMAX_MIN  LLONG_MIN\n"
-    "#define INTPTR_MAX  LONG_MAX\n"
-    "#define INTMAX_MAX  LLONG_MAX\n"
-    "#define UINTPTR_MAX ULONG_MAX\n"
-    "#define UINTMAX_MAX ULLONG_MAX\n"
-    "#define PTRDIFF_MIN INTPTR_MIN\n"
-    "#define PTRDIFF_MAX INTPTR_MAX\n"
-    "#define SIZE_MAX    UINT64_MAX\n"
+    "#if defined _WIN32 || defined _WIN64\n"
+    " #define WCHAR_MIN   0\n"
+    " #define WCHAR_MAX   USHRT_MAX\n"
+    " #ifndef __jitify_using_libcudacxx\n"
+    "  typedef unsigned long long uintptr_t; //optional\n"
+    " #endif\n"
+    "#else\n"
+    " #define WCHAR_MIN   INT_MIN\n"
+    " #define WCHAR_MAX   INT_MAX\n"
+    " #ifndef __jitify_using_libcudacxx\n"
+    "  typedef unsigned long      uintptr_t; //optional\n"
+    " #endif\n"
+    "#endif\n"
     "} // namespace __jitify_stdint_ns\n"
     "namespace std { using namespace __jitify_stdint_ns; }\n"
     "using namespace __jitify_stdint_ns;\n";
@@ -2375,6 +2429,18 @@ static const char* jitsafe_header_tuple = R"(
     #if __cplusplus >= 201103L
     namespace std {
     template<class... Types > class tuple;
+
+    template< size_t I, class T >
+    struct tuple_element;
+    // recursive case
+    template< size_t I, class Head, class... Tail >
+    struct tuple_element<I, tuple<Head, Tail...>>
+        : tuple_element<I-1, tuple<Tail...>> { };
+    // base case
+    template< class Head, class... Tail >
+    struct tuple_element<0, tuple<Head, Tail...>> {
+      using type = Head;
+    };
     } // namespace std
     #endif
  )";
@@ -2711,6 +2777,8 @@ inline nvrtcResult compile_kernel(std::string program_name,
   // Ensure nvrtc_program gets destroyed.
   struct ScopedNvrtcProgramDestroyer {
     nvrtcProgram& nvrtc_program_;
+    ScopedNvrtcProgramDestroyer(nvrtcProgram& nvrtc_program)
+        : nvrtc_program_(nvrtc_program) {}    
     ~ScopedNvrtcProgramDestroyer() { nvrtcDestroyProgram(&nvrtc_program_); }
     ScopedNvrtcProgramDestroyer(const ScopedNvrtcProgramDestroyer&) = delete;
     ScopedNvrtcProgramDestroyer& operator=(const ScopedNvrtcProgramDestroyer&) =
@@ -3109,6 +3177,7 @@ class KernelLauncher {
   std::unique_ptr<KernelLauncher_impl const> _impl;
 
  public:
+  KernelLauncher() = default;
   inline KernelLauncher(KernelInstantiation const& kernel_inst, dim3 grid,
                         dim3 block, unsigned int smem = 0,
                         cudaStream_t stream = 0);
@@ -3177,6 +3246,7 @@ class KernelInstantiation {
   std::unique_ptr<KernelInstantiation_impl const> _impl;
 
  public:
+  KernelInstantiation() = default;
   inline KernelInstantiation(Kernel const& kernel,
                              std::vector<std::string> const& template_args);
 
@@ -3324,6 +3394,7 @@ class Kernel {
   std::unique_ptr<Kernel_impl const> _impl;
 
  public:
+  Kernel() = default;
   Kernel(Program const& program, std::string name,
          jitify::detail::vector<std::string> options = 0);
 
