@@ -69,16 +69,21 @@ void render(uint8_t *fb, int image_width, int image_height)
 
 int main(int argc, char **argv)
 {
-
-    if (argc != 2) {
-        std::cerr << "USAGE: proto outfile.png\n";
+    if (argc < 2 || argc > 4) {
+        std::cerr << "USAGE: proto outfile.png [width] [height]\n";
         std::exit(1);
     }
     std::string dest_png{argv[1]};
 
-    int magnification = 4;
-    int image_width = 720 * magnification;
-    int image_height = 720 * magnification;
+    int image_width = 720 * 4;
+    int image_height = 720 * 4;
+    if (argc >= 3) {
+        image_width = std::atoi(argv[2]);
+        image_height = image_width;
+    }
+    if (argc == 4) {
+        image_height = std::atoi(argv[3]);
+    }
 
     std::cerr << "Rendering a " << image_width << "x" << image_height << " image using the CPU.\n";
 

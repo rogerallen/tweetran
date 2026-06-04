@@ -15,3 +15,5 @@ tests/references/
 tests/outputs/
 tests/automated/.cpcache/
 tests/cases/
+__pycache__/
+*.pyc

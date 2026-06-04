@@ -21,22 +21,28 @@
 
 int main(int argc, char **argv)
 {
-    if (argc != 3) {
-        std::cerr << "USAGE: proto infile.cuh outfile.png\n";
+    if (argc < 3 || argc > 5) {
+        std::cerr << "USAGE: proto infile.cuh outfile.png [width] [height]\n";
         std::exit(1);
     }
     std::string source_path = argv[1];
     std::string dest_png{argv[2]};
 
-    int magnification = 4;
-    int image_width = 720 * magnification;
-    int image_height = 720 * magnification;
+    int image_width = 720 * 4;
+    int image_height = 720 * 4;
+    if (argc >= 4) {
+        image_width = std::atoi(argv[3]);
+        image_height = image_width;
+    }
+    if (argc == 5) {
+        image_height = std::atoi(argv[4]);
+    }
     int surface_width = image_width;
     int surface_height = image_height;
     assert(surface_width >= image_width);
     assert(surface_height >= image_height);
-    int tx = 16;
-    int ty = 16;
+    int tx = (image_width < 16) ? image_width : 16;
+    int ty = (image_height < 16) ? image_height : 16;
 
     std::cerr << "Rendering a " << image_width << "x" << image_height << " image ";
     // std::cerr << "to a " << surface_width << "x" << surface_height << " surface ";
