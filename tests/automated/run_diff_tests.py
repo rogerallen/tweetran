@@ -248,7 +248,7 @@ def main():
         print(f"WebGL: {webgl_pass} PASSED, {webgl_fail} FAILED (out of {total} compared)")
         
     # Write CSV summary of differential issues
-    csv_path = os.path.join(base_dir, "tests", "outputs", "SUMMARY.csv")
+    csv_path = os.path.join(base_dir, "tests", "SUMMARY.csv")
     print(f"Writing CSV test summary to {csv_path}...")
     try:
         sorted_results = sorted(results, key=lambda x: x["name"])
