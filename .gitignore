@@ -17,3 +17,4 @@ tests/automated/.cpcache/
 tests/cases/
 __pycache__/
 *.pyc
+node_modules/

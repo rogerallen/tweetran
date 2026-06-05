@@ -18,23 +18,36 @@ def run_single_test(case_name, clj_path, ref_png, base_dir, targets):
     test_result = {
         "name": case_name,
         "cuda": {"status": "SKIPPED", "rmse": None, "error": None},
-        "cpp": {"status": "SKIPPED", "rmse": None, "error": None}
+        "cpp": {"status": "SKIPPED", "rmse": None, "error": None},
+        "webgl": {"status": "SKIPPED", "rmse": None, "error": None}
     }
     
-    # Transpile CLJ to CUH
+    # 1. Transpile CLJ to CUDA CUH
     cuh_path = os.path.join(base_dir, "tests", "outputs", f"{case_name}.cuh")
     gen_cuda_bin = os.path.join(base_dir, "build", "src", "gen_cuda")
     
+    # 2. Transpile CLJ to WebGL fragment shader
+    frag_path = os.path.join(base_dir, "tests", "outputs", "webgl", f"{case_name}.frag")
+    gen_frag_bin = os.path.join(base_dir, "build", "src", "gen_frag")
+    
     try:
-        # Run transpiler
-        with open(cuh_path, "w") as cuh_file:
-            subprocess.run([gen_cuda_bin, clj_path], stdout=cuh_file, check=True)
+        # Run gen_cuda transpiler
+        if "cuda" in targets or "cpp" in targets:
+            with open(cuh_path, "w") as cuh_file:
+                subprocess.run([gen_cuda_bin, clj_path], stdout=cuh_file, check=True)
+        
+        # Run gen_frag transpiler
+        if "webgl" in targets:
+            with open(frag_path, "w") as frag_file:
+                subprocess.run([gen_frag_bin, "-r", base_dir, clj_path], stdout=frag_file, check=True)
     except Exception as e:
-        test_result["cuda"] = {"status": "FAIL", "rmse": None, "error": f"Transpilation failed: {e}"}
-        test_result["cpp"] = {"status": "FAIL", "rmse": None, "error": f"Transpilation failed: {e}"}
+        err_msg = f"Transpilation failed: {e}"
+        test_result["cuda"] = {"status": "FAIL", "rmse": None, "error": err_msg}
+        test_result["cpp"] = {"status": "FAIL", "rmse": None, "error": err_msg}
+        test_result["webgl"] = {"status": "FAIL", "rmse": None, "error": err_msg}
         return test_result
 
-    # 1. CUDA Test
+    # CUDA Test Execution
     if "cuda" in targets:
         cuda_png = os.path.join(base_dir, "tests", "outputs", "cuda", f"{case_name}.png")
         cuda_diff = os.path.join(base_dir, "tests", "outputs", "cuda", f"{case_name}_diff.png")
@@ -42,7 +55,6 @@ def run_single_test(case_name, clj_path, ref_png, base_dir, targets):
         
         try:
             # Run GPU renderer (JIT compile and render at 64x64)
-            # JITIFY needs include path option
             env = os.environ.copy()
             env["JITIFY_OPTIONS"] = f"-I{base_dir}"
             
@@ -63,7 +75,7 @@ def run_single_test(case_name, clj_path, ref_png, base_dir, targets):
         except Exception as e:
             test_result["cuda"] = {"status": "FAIL", "rmse": None, "error": str(e)}
 
-    # 2. C++ Test
+    # C++ Test Execution
     if "cpp" in targets:
         cpp_bin = os.path.join(base_dir, "tests", "outputs", "cpp", case_name)
         cpp_png = os.path.join(base_dir, "tests", "outputs", "cpp", f"{case_name}.png")
@@ -71,7 +83,6 @@ def run_single_test(case_name, clj_path, ref_png, base_dir, targets):
         
         try:
             # Compile C++ executable dynamically targeting the CUH file
-            # Path to header is relative to where source file cpp/proto.cpp is
             cuh_rel_path = f"../tests/outputs/{case_name}.cuh"
             
             subprocess.run([
@@ -100,6 +111,35 @@ def run_single_test(case_name, clj_path, ref_png, base_dir, targets):
                 }
         except Exception as e:
             test_result["cpp"] = {"status": "FAIL", "rmse": None, "error": str(e)}
+
+    # WebGL Test Execution
+    if "webgl" in targets:
+        webgl_png = os.path.join(base_dir, "tests", "outputs", "webgl", f"{case_name}.png")
+        webgl_diff = os.path.join(base_dir, "tests", "outputs", "webgl", f"{case_name}_diff.png")
+        
+        try:
+            # Run headless WebGL renderer
+            subprocess.run([
+                "node",
+                "webgl/test_runner/render_headless.js",
+                frag_path,
+                "64", "64",
+                webgl_png
+            ], cwd=base_dir, capture_output=True, check=True)
+            
+            # Compare images
+            rmse = calculate_rmse(ref_png, webgl_png)
+            if rmse <= RMSE_THRESHOLD:
+                test_result["webgl"] = {"status": "PASS", "rmse": rmse, "error": None}
+            else:
+                generate_diff_image(ref_png, webgl_png, webgl_diff)
+                test_result["webgl"] = {
+                    "status": "FAIL",
+                    "rmse": rmse,
+                    "error": f"RMSE {rmse:.6f} exceeded threshold {RMSE_THRESHOLD} (diff saved)"
+                }
+        except Exception as e:
+            test_result["webgl"] = {"status": "FAIL", "rmse": None, "error": str(e)}
             
     return test_result
 
@@ -107,7 +147,7 @@ def main():
     base_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
     
     # Parse CLI arguments
-    targets = ["cpp", "cuda"]
+    targets = ["cpp", "cuda", "webgl"]
     regenerate_refs = False
     
     for arg in sys.argv[1:]:
@@ -115,6 +155,8 @@ def main():
             targets = ["cuda"]
         elif arg == "--cpp-only":
             targets = ["cpp"]
+        elif arg == "--webgl-only":
+            targets = ["webgl"]
         elif arg == "--regenerate-refs":
             regenerate_refs = True
             
@@ -122,6 +164,7 @@ def main():
     os.makedirs(os.path.join(base_dir, "tests", "outputs"), exist_ok=True)
     os.makedirs(os.path.join(base_dir, "tests", "outputs", "cuda"), exist_ok=True)
     os.makedirs(os.path.join(base_dir, "tests", "outputs", "cpp"), exist_ok=True)
+    os.makedirs(os.path.join(base_dir, "tests", "outputs", "webgl"), exist_ok=True)
     
     # Phase 1: Generate fresh test cases
     print("Generating fresh test cases...")
@@ -169,15 +212,22 @@ def main():
             cuda_status = f"CUDA:{res['cuda']['status']}"
             if res['cuda']['rmse'] is not None:
                 cuda_status += f"({res['cuda']['rmse']:.4f})"
+                
             cpp_status = f"C++:{res['cpp']['status']}"
             if res['cpp']['rmse'] is not None:
                 cpp_status += f"({res['cpp']['rmse']:.4f})"
                 
-            print(f" -> {res['name']}: {cuda_status} | {cpp_status}")
+            webgl_status = f"WebGL:{res['webgl']['status']}"
+            if res['webgl']['rmse'] is not None:
+                webgl_status += f"({res['webgl']['rmse']:.4f})"
+                
+            print(f" -> {res['name']}: {cuda_status} | {cpp_status} | {webgl_status}")
             if res['cuda']['error']:
                 print(f"    [CUDA Error] {res['cuda']['error']}")
             if res['cpp']['error']:
                 print(f"    [C++ Error] {res['cpp']['error']}")
+            if res['webgl']['error']:
+                print(f"    [WebGL Error] {res['webgl']['error']}")
 
     # Print summary
     print("\n================ TEST SUMMARY ================")
@@ -186,16 +236,22 @@ def main():
     cuda_fail = sum(1 for r in results if r["cuda"]["status"] == "FAIL")
     cpp_pass = sum(1 for r in results if r["cpp"]["status"] == "PASS")
     cpp_fail = sum(1 for r in results if r["cpp"]["status"] == "FAIL")
+    webgl_pass = sum(1 for r in results if r["webgl"]["status"] == "PASS")
+    webgl_fail = sum(1 for r in results if r["webgl"]["status"] == "FAIL")
     
     if "cuda" in targets:
-        print(f"CUDA: {cuda_pass} PASSED, {cuda_fail} FAILED (out of {total} compared)")
+        print(f"CUDA : {cuda_pass} PASSED, {cuda_fail} FAILED (out of {total} compared)")
     if "cpp" in targets:
-        print(f"C++ : {cpp_pass} PASSED, {cpp_fail} FAILED (out of {total} compared)")
+        print(f"C++  : {cpp_pass} PASSED, {cpp_fail} FAILED (out of {total} compared)")
+    if "webgl" in targets:
+        print(f"WebGL: {webgl_pass} PASSED, {webgl_fail} FAILED (out of {total} compared)")
         
     failed = False
     if "cuda" in targets and cuda_fail > 0:
         failed = True
     if "cpp" in targets and cpp_fail > 0:
+        failed = True
+    if "webgl" in targets and webgl_fail > 0:
         failed = True
         
     if failed:

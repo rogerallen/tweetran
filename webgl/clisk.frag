@@ -116,7 +116,7 @@ float saturationf(float r, float g, float b)
     float M = max(r, max(g, b));
     float m = min(r, min(g, b));
     float C = M - m;
-    float L = (M + m) * 0.5f;
+    float L = (M + m) * 0.5;
     if (C == 0.0) {
         return 0.0;
     }
@@ -129,7 +129,7 @@ float lightnessf(float r, float g, float b)
 {
     float M = max(r, max(g, b));
     float m = min(r, min(g, b));
-    return (M + m) * 0.5f;
+    return (M + m) * 0.5;
 }
 // JSFN rgb_from_hslf3
 vec3 rgb_from_hslf3(vec3 a)
@@ -470,7 +470,7 @@ vfloat vcos(vfloat arg0)
 vfloat vround(vfloat arg0)
 {
     vec4 a = smear_vec4(arg0);
-    vec4 r = round(a);
+    vec4 r = floor(a + 0.5);
     return make_vfloat(r);
 }
 // JSFN vfloor IN 1x4 OUT 1x4
@@ -729,7 +729,7 @@ vfloat vconcat(vfloat arg0, vfloat arg1)
 {
     int na = arg0.components;
     int nb = arg1.components;
-    int out_comp = min(4, na + nb);
+    int out_comp = (na + nb < 4) ? (na + nb) : 4;
     vec4 r;
     // convoluted, but hopefully works?
     r.x = (na >= 1) ? arg0.v.x : arg1.v.x;

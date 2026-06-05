@@ -102,16 +102,25 @@ ctest
 
 ### Automated Differential Testing (Multi-Target)
 
-We have a parallelized automated test suite that generates isolated test cases for all 73 supported Clisk functions, renders ground-truth reference images in Clojure, executes target outputs in C++ and CUDA, and evaluates pixel-by-pixel comparisons (using RMSE).
+We have a parallelized automated test suite that generates isolated test cases for all 73 supported Clisk functions, renders ground-truth reference images in Clojure, evaluates targets across C++, CUDA, and WebGL, and performs pixel-by-pixel differential comparisons (using RMSE).
 
-To run the entire test pipeline from the root directory:
+To run the entire test pipeline (C++, CUDA, and WebGL) from the root directory:
 ```bash
 python3 tests/automated/run_diff_tests.py
 ```
 
-Optional Flags:
+#### Headless WebGL Testing Prerequisites
+Headless WebGL tests compile and render fragment shaders using `headless-gl` inside a Node.js helper.
+To set up dependencies before running WebGL tests:
+```bash
+cd webgl/test_runner
+npm install
+```
+
+#### Optional Flags:
 *   `--cuda-only`: Evaluate only the CUDA GPU target.
 *   `--cpp-only`: Evaluate only the C++ CPU target.
+*   `--webgl-only`: Evaluate only the WebGL target.
 *   `--regenerate-refs`: Re-run the Clojure exporter script to overwrite and recreate all reference images.
 
 ## License
