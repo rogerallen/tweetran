@@ -1016,7 +1016,7 @@ vfloat pixel_fn1(vfloat pos)
 }
 vfloat gradient_pixel_fn1(vfloat pos)
 {
-    float epsilon = 0.0001;
+    float epsilon = 0.000001;
     float oo_epsilon = 1.0 / epsilon;
     vfloat pos_dx = make_vfloat(pos.v.x + epsilon, pos.v.y, pos.v.z, pos.v.w);
     vfloat pos_dy = make_vfloat(pos.v.x, pos.v.y + epsilon, pos.v.z, pos.v.w);
@@ -1028,9 +1028,9 @@ vfloat gradient_pixel_fn1(vfloat pos)
     vfloat var1_dz = pixel_fn1(pos_dz);
     vfloat var1_dw = pixel_fn1(pos_dw);
     float var0_dx = (var1_dx.v.x - var1.v.x) * oo_epsilon;
-    float var0_dy = (var1_dy.v.y - var1.v.y) * oo_epsilon;
-    float var0_dz = (var1_dz.v.z - var1.v.z) * oo_epsilon;
-    float var0_dw = (var1_dw.v.w - var1.v.w) * oo_epsilon;
+    float var0_dy = (var1_dy.v.x - var1.v.x) * oo_epsilon;
+    float var0_dz = (var1_dz.v.x - var1.v.x) * oo_epsilon;
+    float var0_dw = (var1_dw.v.x - var1.v.x) * oo_epsilon;
     vfloat var0 = make_vfloat(var0_dx, var0_dy, var0_dz, var0_dw);
     return var0;
 }

@@ -344,7 +344,7 @@ class Expression {
     {
         out << "vfloat gradient_" << fn_name << "(vfloat pos)\n";
         out << "{\n";
-        out << "    float epsilon = 0.0001;\n";
+        out << "    float epsilon = 0.000001;\n";
         out << "    float oo_epsilon = 1.0 / epsilon;\n";
         out << "    vfloat pos_dx = make_vfloat(pos.v.x + epsilon, pos.v.y, pos.v.z, pos.v.w);\n";
         out << "    vfloat pos_dy = make_vfloat(pos.v.x, pos.v.y + epsilon, pos.v.z, pos.v.w);\n";
@@ -356,9 +356,9 @@ class Expression {
         out << "    vfloat var1_dz = " << fn_name << "(pos_dz);\n";
         out << "    vfloat var1_dw = " << fn_name << "(pos_dw);\n";
         out << "    float var0_dx = (var1_dx.v.x - var1.v.x) * oo_epsilon;\n";
-        out << "    float var0_dy = (var1_dy.v.y - var1.v.y) * oo_epsilon;\n";
-        out << "    float var0_dz = (var1_dz.v.z - var1.v.z) * oo_epsilon;\n";
-        out << "    float var0_dw = (var1_dw.v.w - var1.v.w) * oo_epsilon;\n";
+        out << "    float var0_dy = (var1_dy.v.x - var1.v.x) * oo_epsilon;\n";
+        out << "    float var0_dz = (var1_dz.v.x - var1.v.x) * oo_epsilon;\n";
+        out << "    float var0_dw = (var1_dw.v.x - var1.v.x) * oo_epsilon;\n";
         out << "    vfloat var0 = make_vfloat(var0_dx, var0_dy, var0_dz, var0_dw);\n";
         out << "    return var0;\n";
         out << "}\n";

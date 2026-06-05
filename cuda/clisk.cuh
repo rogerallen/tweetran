@@ -860,8 +860,8 @@ __device__ vfloat rotate(vfloat pos, vfloat angle, vfloat (*fn)(vfloat))
 // FN gradient IN pos,fn OUT 1x4
 __device__ vfloat gradient(vfloat pos, vfloat (*fn)(vfloat))
 {
-    float epsilon = 0.0001;
-    float oo_epsilon = 1 / epsilon;
+    float epsilon = 0.000001f;
+    float oo_epsilon = 1.0f / epsilon;
     vfloat pos_dx = make_float4(pos.x() + epsilon, pos.y(), pos.z(), pos.w());
     vfloat pos_dy = make_float4(pos.x(), pos.y() + epsilon, pos.z(), pos.w());
     vfloat pos_dz = make_float4(pos.x(), pos.y(), pos.z() + epsilon, pos.w());
@@ -872,9 +872,9 @@ __device__ vfloat gradient(vfloat pos, vfloat (*fn)(vfloat))
     vfloat var1_dz = fn(pos_dz);
     vfloat var1_dw = fn(pos_dw);
     float var0_dx = (var1_dx.x() - var1.x()) * oo_epsilon;
-    float var0_dy = (var1_dy.y() - var1.y()) * oo_epsilon;
-    float var0_dz = (var1_dz.z() - var1.z()) * oo_epsilon;
-    float var0_dw = (var1_dw.w() - var1.w()) * oo_epsilon;
+    float var0_dy = (var1_dy.x() - var1.x()) * oo_epsilon;
+    float var0_dz = (var1_dz.x() - var1.x()) * oo_epsilon;
+    float var0_dw = (var1_dw.x() - var1.x()) * oo_epsilon;
     vfloat var0 = make_float4(var0_dx, var0_dy, var0_dz, var0_dw);
     return var0;
 }
