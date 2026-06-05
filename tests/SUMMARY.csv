@@ -7,7 +7,7 @@ test_average,PASS,0.002264,,PASS,0.002264,,PASS,0.002264,
 test_blotches,PASS,0.000123,,PASS,0.000123,,FAIL,0.306371,RMSE 0.306371 exceeded threshold 0.025 (diff saved)
 test_blue_from_hsl,PASS,0.000000,,PASS,0.000000,,PASS,0.000000,
 test_checker,PASS,0.000000,,PASS,0.000000,,PASS,0.000000,
-test_clamp,FAIL,0.332679,RMSE 0.332679 exceeded threshold 0.025 (diff saved),FAIL,0.332679,RMSE 0.332679 exceeded threshold 0.025 (diff saved),FAIL,0.333164,RMSE 0.333164 exceeded threshold 0.025 (diff saved)
+test_clamp,PASS,0.002264,,PASS,0.002264,,PASS,0.001601,
 test_clouds,PASS,0.000312,,PASS,0.000312,,FAIL,0.141293,RMSE 0.141293 exceeded threshold 0.025 (diff saved)
 test_cross3,FAIL,0.192353,RMSE 0.192353 exceeded threshold 0.025 (diff saved),FAIL,0.192353,RMSE 0.192353 exceeded threshold 0.025 (diff saved),FAIL,0.192779,RMSE 0.192779 exceeded threshold 0.025 (diff saved)
 test_dot,PASS,0.000000,,PASS,0.000000,,PASS,0.001742,

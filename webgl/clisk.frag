@@ -811,8 +811,8 @@ vfloat lerp(vfloat arg0, vfloat arg1, vfloat arg2)
 vfloat vclamp(vfloat arg0, vfloat arg1, vfloat arg2)
 {
     vec4 a = smear_vec4(arg0);
-    vec4 b = smear_vec4(arg1);
-    vec4 c = smear_vec4(arg2);
+    vec4 b = get_vec4(arg1);
+    vec4 c = get_vec4(arg2);
     vec4 r = clamp(a,b,c);
     return make_vfloat(r);
 }

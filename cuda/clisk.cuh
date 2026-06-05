@@ -1401,8 +1401,8 @@ __device__ vfloat lerp(vfloat arg0, vfloat arg1, vfloat arg2)
 __device__ vfloat vclamp(vfloat arg0, vfloat arg1, vfloat arg2)
 {
     float4 a = arg0.get(true);
-    float4 b = arg1.get(true);
-    float4 c = arg2.get(true);
+    float4 b = arg1.get(false);
+    float4 c = arg2.get(false);
     float4 r;
     r.x = fmaxf(b.x, fminf(c.x, a.x));
     r.y = fmaxf(b.y, fminf(c.y, a.y));
