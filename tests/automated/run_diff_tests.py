@@ -3,6 +3,7 @@ import os
 import sys
 import subprocess
 import concurrent.futures
+import csv
 from compare_images import calculate_rmse, generate_diff_image
 
 # Threshold for validation (RMSE < 0.02 is standard allowance for GPU/CPU math variations)
@@ -246,6 +247,29 @@ def main():
     if "webgl" in targets:
         print(f"WebGL: {webgl_pass} PASSED, {webgl_fail} FAILED (out of {total} compared)")
         
+    # Write CSV summary of differential issues
+    csv_path = os.path.join(base_dir, "tests", "outputs", "SUMMARY.csv")
+    print(f"Writing CSV test summary to {csv_path}...")
+    try:
+        sorted_results = sorted(results, key=lambda x: x["name"])
+        with open(csv_path, "w", newline="") as csvfile:
+            writer = csv.writer(csvfile)
+            writer.writerow([
+                "test_case",
+                "cuda_status", "cuda_rmse", "cuda_error",
+                "cpp_status", "cpp_rmse", "cpp_error",
+                "webgl_status", "webgl_rmse", "webgl_error"
+            ])
+            for r in sorted_results:
+                writer.writerow([
+                    r["name"],
+                    r["cuda"]["status"], "" if r["cuda"]["rmse"] is None else f"{r['cuda']['rmse']:.6f}", r["cuda"]["error"] or "",
+                    r["cpp"]["status"], "" if r["cpp"]["rmse"] is None else f"{r['cpp']['rmse']:.6f}", r["cpp"]["error"] or "",
+                    r["webgl"]["status"], "" if r["webgl"]["rmse"] is None else f"{r['webgl']['rmse']:.6f}", r["webgl"]["error"] or ""
+                ])
+    except Exception as e:
+        print(f"Failed to write CSV summary: {e}")
+
     failed = False
     if "cuda" in targets and cuda_fail > 0:
         failed = True
