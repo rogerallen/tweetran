@@ -57,8 +57,8 @@ void render(uint8_t *fb, int image_width, int image_height)
     for (int y = 0; y < image_height; ++y) {
 #pragma omp parallel for
         for (int x = 0; x < image_width; ++x) {
-            float u = 1.0 * x / image_width;
-            float v = 1.0 * y / image_height;
+            float u = (float(x) + 0.5f) / image_width;
+            float v = (float(y) + 0.5f) / image_height;
             float3 pixel = render_pixel(make_float4(u, v, 0.0, 0.0));
             fb[y * image_width * 3 + x * 3 + 0] = uint8_t(255.99 * clamp01(pixel.x));
             fb[y * image_width * 3 + x * 3 + 1] = uint8_t(255.99 * clamp01(pixel.y));

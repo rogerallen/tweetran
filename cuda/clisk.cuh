@@ -176,7 +176,7 @@ __global__ void render_bgra(uint8_t *fb, float4 image_origin, float2 image_delta
     float3 pixel = make_float3(0.0f, 0.0f, 0.0f);
     for (int dj = 0; dj < ROOT_N; dj++) {
         for (int di = 0; di < ROOT_N; di++) {
-            float4 pos = make_float4(u + di * du, v + dj * dv, image_origin.z, image_origin.w / TIME_SCALE);
+            float4 pos = make_float4(u + (float(di) + 0.5f) * du, v + (float(dj) + 0.5f) * dv, image_origin.z, image_origin.w / TIME_SCALE);
             float3 tmp = render_pixel(pos);
             pixel.x += tmp.x;
             pixel.y += tmp.y;
@@ -197,8 +197,8 @@ __global__ void render_rgba(uint8_t *fb, float4 image_origin, float2 image_delta
     int pixel_index = j * surface_width * 4 + i * 4;
     if ((i >= image_width) || (j >= image_height))
         return;
-    float u = image_origin.x + image_delta.x * (float(i) / image_width);
-    float v = image_origin.y + image_delta.y * (float(j) / image_height);
+    float u = image_origin.x + image_delta.x * ((float(i) + 0.5f) / image_width);
+    float v = image_origin.y + image_delta.y * ((float(j) + 0.5f) / image_height);
     float4 pos = make_float4(u, v, image_origin.z, image_origin.w);
     float3 pixel = render_pixel(pos);
     fb[pixel_index + 0] = uint8_t(255.99 * clamp01(pixel.x));

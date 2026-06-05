@@ -1,73 +1,73 @@
 test_case,cuda_status,cuda_rmse,cuda_error,cpp_status,cpp_rmse,cpp_error,webgl_status,webgl_rmse,webgl_error
-test_adjust_hsl,PASS,0.009664,,PASS,0.009664,,PASS,0.001467,
-test_adjust_hue,PASS,0.008341,,PASS,0.008341,,PASS,0.002506,
-test_agate,FAIL,0.163973,RMSE 0.163973 exceeded threshold 0.025 (diff saved),FAIL,0.163972,RMSE 0.163972 exceeded threshold 0.025 (diff saved),FAIL,,"Command '['node', 'webgl/test_runner/render_headless.js', '/home/rallen/Documents/Devel/Tweegeemee/tweetran/tests/outputs/webgl/test_agate.frag', '64', '64', '/home/rallen/Documents/Devel/Tweegeemee/tweetran/tests/outputs/webgl/test_agate.png']' returned non-zero exit status 1."
+test_adjust_hsl,PASS,0.000187,,PASS,0.000187,,PASS,0.001467,
+test_adjust_hue,PASS,0.002815,,PASS,0.002815,,PASS,0.002506,
+test_agate,PASS,0.000312,,PASS,0.000300,,FAIL,,"Command '['node', 'webgl/test_runner/render_headless.js', '/home/rallen/Documents/Devel/Tweegeemee/tweetran/tests/outputs/webgl/test_agate.frag', '64', '64', '/home/rallen/Documents/Devel/Tweegeemee/tweetran/tests/outputs/webgl/test_agate.png']' returned non-zero exit status 1."
 test_alpha,PASS,0.000000,,PASS,0.000000,,PASS,0.000000,
-test_average,PASS,0.004528,,PASS,0.004528,,PASS,0.002264,
-test_blotches,FAIL,0.091698,RMSE 0.091698 exceeded threshold 0.025 (diff saved),FAIL,0.091698,RMSE 0.091698 exceeded threshold 0.025 (diff saved),FAIL,0.306371,RMSE 0.306371 exceeded threshold 0.025 (diff saved)
+test_average,PASS,0.002264,,PASS,0.002264,,PASS,0.002264,
+test_blotches,PASS,0.000123,,PASS,0.000123,,FAIL,0.306371,RMSE 0.306371 exceeded threshold 0.025 (diff saved)
 test_blue_from_hsl,PASS,0.000000,,PASS,0.000000,,PASS,0.000000,
-test_checker,FAIL,0.124020,RMSE 0.124020 exceeded threshold 0.025 (diff saved),FAIL,0.124020,RMSE 0.124020 exceeded threshold 0.025 (diff saved),PASS,0.000000,
-test_clamp,FAIL,0.328835,RMSE 0.328835 exceeded threshold 0.025 (diff saved),FAIL,0.328835,RMSE 0.328835 exceeded threshold 0.025 (diff saved),FAIL,0.333164,RMSE 0.333164 exceeded threshold 0.025 (diff saved)
-test_clouds,PASS,0.021776,,PASS,0.021776,,FAIL,0.141293,RMSE 0.141293 exceeded threshold 0.025 (diff saved)
-test_cross3,FAIL,0.188992,RMSE 0.188992 exceeded threshold 0.025 (diff saved),FAIL,0.188992,RMSE 0.188992 exceeded threshold 0.025 (diff saved),FAIL,0.192779,RMSE 0.192779 exceeded threshold 0.025 (diff saved)
-test_dot,PASS,0.012517,,PASS,0.012517,,PASS,0.001742,
-test_flecks,FAIL,0.106134,RMSE 0.106134 exceeded threshold 0.025 (diff saved),FAIL,0.106134,RMSE 0.106134 exceeded threshold 0.025 (diff saved),FAIL,0.283881,RMSE 0.283881 exceeded threshold 0.025 (diff saved)
-test_gradient,FAIL,0.165831,RMSE 0.165831 exceeded threshold 0.025 (diff saved),FAIL,0.165831,RMSE 0.165831 exceeded threshold 0.025 (diff saved),FAIL,0.607776,RMSE 0.607776 exceeded threshold 0.025 (diff saved)
-test_grain,FAIL,0.412340,RMSE 0.412340 exceeded threshold 0.025 (diff saved),FAIL,0.412340,RMSE 0.412340 exceeded threshold 0.025 (diff saved),FAIL,,"Command '['node', 'webgl/test_runner/render_headless.js', '/home/rallen/Documents/Devel/Tweegeemee/tweetran/tests/outputs/webgl/test_grain.frag', '64', '64', '/home/rallen/Documents/Devel/Tweegeemee/tweetran/tests/outputs/webgl/test_grain.png']' returned non-zero exit status 1."
+test_checker,PASS,0.000000,,PASS,0.000000,,PASS,0.000000,
+test_clamp,FAIL,0.332679,RMSE 0.332679 exceeded threshold 0.025 (diff saved),FAIL,0.332679,RMSE 0.332679 exceeded threshold 0.025 (diff saved),FAIL,0.333164,RMSE 0.333164 exceeded threshold 0.025 (diff saved)
+test_clouds,PASS,0.000312,,PASS,0.000312,,FAIL,0.141293,RMSE 0.141293 exceeded threshold 0.025 (diff saved)
+test_cross3,FAIL,0.192353,RMSE 0.192353 exceeded threshold 0.025 (diff saved),FAIL,0.192353,RMSE 0.192353 exceeded threshold 0.025 (diff saved),FAIL,0.192779,RMSE 0.192779 exceeded threshold 0.025 (diff saved)
+test_dot,PASS,0.000000,,PASS,0.000000,,PASS,0.001742,
+test_flecks,PASS,0.000336,,PASS,0.000336,,FAIL,0.283881,RMSE 0.283881 exceeded threshold 0.025 (diff saved)
+test_gradient,FAIL,0.162965,RMSE 0.162965 exceeded threshold 0.025 (diff saved),FAIL,0.162965,RMSE 0.162965 exceeded threshold 0.025 (diff saved),FAIL,0.607776,RMSE 0.607776 exceeded threshold 0.025 (diff saved)
+test_grain,PASS,0.000290,,PASS,0.000290,,FAIL,,"Command '['node', 'webgl/test_runner/render_headless.js', '/home/rallen/Documents/Devel/Tweegeemee/tweetran/tests/outputs/webgl/test_grain.frag', '64', '64', '/home/rallen/Documents/Devel/Tweegeemee/tweetran/tests/outputs/webgl/test_grain.png']' returned non-zero exit status 1."
 test_green_from_hsl,PASS,0.000000,,PASS,0.000000,,PASS,0.000000,
 test_height,PASS,0.000000,,PASS,0.000000,,PASS,0.000000,
 test_height_normal,PASS,0.000000,,PASS,0.000000,,PASS,0.000000,
-test_hsl_from_rgb,PASS,0.010335,,PASS,0.010335,,PASS,0.001212,
-test_hue_from_rgb,PASS,0.003849,,PASS,0.003849,,PASS,0.002099,
-test_length,PASS,0.009179,,PASS,0.009179,,PASS,0.001887,
-test_lerp,FAIL,0.749998,RMSE 0.749998 exceeded threshold 0.025 (diff saved),FAIL,0.749998,RMSE 0.749998 exceeded threshold 0.025 (diff saved),FAIL,0.745201,RMSE 0.745201 exceeded threshold 0.025 (diff saved)
-test_lightness_from_rgb,PASS,0.007842,,PASS,0.007842,,PASS,0.000000,
-test_max_component,PASS,0.011764,,PASS,0.011764,,PASS,0.003396,
+test_hsl_from_rgb,PASS,0.002264,,PASS,0.002264,,PASS,0.001212,
+test_hue_from_rgb,PASS,0.000000,,PASS,0.000000,,PASS,0.002099,
+test_length,PASS,0.000347,,PASS,0.000347,,PASS,0.001887,
+test_lerp,FAIL,0.746517,RMSE 0.746517 exceeded threshold 0.025 (diff saved),FAIL,0.746517,RMSE 0.746517 exceeded threshold 0.025 (diff saved),FAIL,0.745201,RMSE 0.745201 exceeded threshold 0.025 (diff saved)
+test_lightness_from_rgb,PASS,0.003922,,PASS,0.003922,,PASS,0.000000,
+test_max_component,PASS,0.003922,,PASS,0.003922,,PASS,0.003396,
 test_min_component,PASS,0.000000,,PASS,0.000000,,PASS,0.000000,
-test_noise,PASS,0.005776,,PASS,0.005776,,FAIL,0.131132,RMSE 0.131132 exceeded threshold 0.025 (diff saved)
-test_normalize,PASS,0.012118,,PASS,0.012118,,PASS,0.001719,
-test_offset,PASS,0.006184,,PASS,0.006184,,FAIL,0.209489,RMSE 0.209489 exceeded threshold 0.025 (diff saved)
-test_plasma,PASS,0.008797,,PASS,0.008797,,FAIL,0.403482,RMSE 0.403482 exceeded threshold 0.025 (diff saved)
-test_polar,PASS,0.005299,,PASS,0.005299,,PASS,0.001089,
-test_radius,PASS,0.009179,,PASS,0.009179,,PASS,0.001887,
+test_noise,PASS,0.000294,,PASS,0.000294,,FAIL,0.131132,RMSE 0.131132 exceeded threshold 0.025 (diff saved)
+test_normalize,PASS,0.000224,,PASS,0.000229,,PASS,0.001719,
+test_offset,PASS,0.000150,,PASS,0.000150,,FAIL,0.209489,RMSE 0.209489 exceeded threshold 0.025 (diff saved)
+test_plasma,PASS,0.000294,,PASS,0.000294,,FAIL,0.403482,RMSE 0.403482 exceeded threshold 0.025 (diff saved)
+test_polar,PASS,0.000200,,PASS,0.000200,,PASS,0.001089,
+test_radius,PASS,0.000347,,PASS,0.000347,,PASS,0.001887,
 test_red_from_hsl,PASS,0.000000,,PASS,0.000000,,PASS,0.000000,
 test_rgb_from_hsl,PASS,0.000000,,PASS,0.000000,,PASS,0.000000,
-test_rotate,PASS,0.009764,,PASS,0.009764,,FAIL,0.245107,RMSE 0.245107 exceeded threshold 0.025 (diff saved)
-test_saturation_from_rgb,PASS,0.015625,,PASS,0.015625,,PASS,0.000000,
-test_scale,PASS,0.016262,,PASS,0.016262,,FAIL,0.194179,RMSE 0.194179 exceeded threshold 0.025 (diff saved)
-test_sigmoid,PASS,0.003466,,PASS,0.003466,,PASS,0.002531,
-test_snoise,PASS,0.007904,,PASS,0.007904,,FAIL,0.155741,RMSE 0.155741 exceeded threshold 0.025 (diff saved)
-test_splasma,PASS,0.010666,,PASS,0.010668,,FAIL,0.105928,RMSE 0.105928 exceeded threshold 0.025 (diff saved)
-test_spots,FAIL,0.078630,RMSE 0.078630 exceeded threshold 0.025 (diff saved),FAIL,0.078630,RMSE 0.078630 exceeded threshold 0.025 (diff saved),FAIL,0.368039,RMSE 0.368039 exceeded threshold 0.025 (diff saved)
-test_square,PASS,0.007499,,PASS,0.007499,,PASS,0.001698,
+test_rotate,PASS,0.000123,,PASS,0.000123,,FAIL,0.245107,RMSE 0.245107 exceeded threshold 0.025 (diff saved)
+test_saturation_from_rgb,PASS,0.000000,,PASS,0.000000,,PASS,0.000000,
+test_scale,PASS,0.000106,,PASS,0.000106,,FAIL,0.194179,RMSE 0.194179 exceeded threshold 0.025 (diff saved)
+test_sigmoid,PASS,0.002299,,PASS,0.002299,,PASS,0.002531,
+test_snoise,PASS,0.000106,,PASS,0.000106,,FAIL,0.155741,RMSE 0.155741 exceeded threshold 0.025 (diff saved)
+test_splasma,PASS,0.000137,,PASS,0.000137,,FAIL,0.105928,RMSE 0.105928 exceeded threshold 0.025 (diff saved)
+test_spots,PASS,0.000194,,PASS,0.000194,,FAIL,0.368039,RMSE 0.368039 exceeded threshold 0.025 (diff saved)
+test_square,PASS,0.000000,,PASS,0.000000,,PASS,0.001698,
 test_t,PASS,0.000000,,PASS,0.000000,,PASS,0.000000,
 test_theta,PASS,0.000000,,PASS,0.000000,,PASS,0.000000,
-test_turbulate,FAIL,0.083301,RMSE 0.083301 exceeded threshold 0.025 (diff saved),FAIL,0.083301,RMSE 0.083301 exceeded threshold 0.025 (diff saved),FAIL,,"Command '['node', 'webgl/test_runner/render_headless.js', '/home/rallen/Documents/Devel/Tweegeemee/tweetran/tests/outputs/webgl/test_turbulate.frag', '64', '64', '/home/rallen/Documents/Devel/Tweegeemee/tweetran/tests/outputs/webgl/test_turbulate.png']' returned non-zero exit status 1."
-test_turbulence,PASS,0.015152,,PASS,0.015154,,FAIL,0.135636,RMSE 0.135636 exceeded threshold 0.025 (diff saved)
-test_v_,PASS,0.006733,,PASS,0.006733,,PASS,0.000000,
-test_vabs,PASS,0.009564,,PASS,0.009564,,PASS,0.002264,
+test_turbulate,FAIL,0.083507,RMSE 0.083507 exceeded threshold 0.025 (diff saved),FAIL,0.083507,RMSE 0.083507 exceeded threshold 0.025 (diff saved),FAIL,,"Command '['node', 'webgl/test_runner/render_headless.js', '/home/rallen/Documents/Devel/Tweegeemee/tweetran/tests/outputs/webgl/test_turbulate.frag', '64', '64', '/home/rallen/Documents/Devel/Tweegeemee/tweetran/tests/outputs/webgl/test_turbulate.png']' returned non-zero exit status 1."
+test_turbulence,PASS,0.000194,,PASS,0.000194,,FAIL,0.135636,RMSE 0.135636 exceeded threshold 0.025 (diff saved)
+test_v_,PASS,0.002264,,PASS,0.002264,,PASS,0.000000,
+test_vabs,PASS,0.003202,,PASS,0.003202,,PASS,0.002264,
 test_vadd,PASS,0.000000,,PASS,0.000000,,PASS,0.000000,
-test_vconcat,PASS,0.009564,,PASS,0.009564,,PASS,0.002264,
-test_vcos,PASS,0.003557,,PASS,0.003557,,PASS,0.001790,
-test_vdivide,PASS,0.006366,,PASS,0.006366,,PASS,0.000000,
-test_velvet,FAIL,0.031208,RMSE 0.031208 exceeded threshold 0.025 (diff saved),FAIL,0.031208,RMSE 0.031208 exceeded threshold 0.025 (diff saved),FAIL,0.214624,RMSE 0.214624 exceeded threshold 0.025 (diff saved)
+test_vconcat,PASS,0.003202,,PASS,0.003202,,PASS,0.002264,
+test_vcos,PASS,0.000000,,PASS,0.000000,,PASS,0.001790,
+test_vdivide,PASS,0.003202,,PASS,0.003202,,PASS,0.000000,
+test_velvet,PASS,0.000318,,PASS,0.000318,,FAIL,0.214624,RMSE 0.214624 exceeded threshold 0.025 (diff saved)
 test_vfloor,PASS,0.000000,,PASS,0.000000,,PASS,0.000000,
-test_vfrac,PASS,0.009564,,PASS,0.009564,,PASS,0.002264,
-test_vif,FAIL,0.102062,RMSE 0.102062 exceeded threshold 0.025 (diff saved),FAIL,0.102062,RMSE 0.102062 exceeded threshold 0.025 (diff saved),PASS,0.000000,
-test_vmax,PASS,0.007509,,PASS,0.007509,,PASS,0.003922,
-test_vmin,PASS,0.007104,,PASS,0.007104,,PASS,0.002264,
-test_vmod,PASS,0.009564,,PASS,0.009564,,PASS,0.002264,
-test_vmul,PASS,0.011257,,PASS,0.011257,,PASS,0.001601,
-test_vnoise,PASS,0.007226,,PASS,0.007226,,FAIL,0.209383,RMSE 0.209383 exceeded threshold 0.025 (diff saved)
-test_vplasma,PASS,0.009170,,PASS,0.009170,,FAIL,0.124944,RMSE 0.124944 exceeded threshold 0.025 (diff saved)
-test_vpow,PASS,0.007499,,PASS,0.007499,,PASS,0.001698,
+test_vfrac,PASS,0.003202,,PASS,0.003202,,PASS,0.002264,
+test_vif,PASS,0.000000,,PASS,0.000000,,PASS,0.000000,
+test_vmax,PASS,0.003922,,PASS,0.003922,,PASS,0.003922,
+test_vmin,PASS,0.003202,,PASS,0.003202,,PASS,0.002264,
+test_vmod,PASS,0.003202,,PASS,0.003202,,PASS,0.002264,
+test_vmul,PASS,0.002264,,PASS,0.002264,,PASS,0.001601,
+test_vnoise,PASS,0.000281,,PASS,0.000281,,FAIL,0.209383,RMSE 0.209383 exceeded threshold 0.025 (diff saved)
+test_vplasma,PASS,0.000267,,PASS,0.000267,,FAIL,0.124944,RMSE 0.124944 exceeded threshold 0.025 (diff saved)
+test_vpow,PASS,0.000000,,PASS,0.000000,,PASS,0.001698,
 test_vround,PASS,0.000000,,PASS,0.000000,,PASS,0.000000,
-test_vsin,PASS,0.005429,,PASS,0.005429,,PASS,0.002001,
-test_vsnoise,PASS,0.009359,,PASS,0.009359,,FAIL,0.231272,RMSE 0.231272 exceeded threshold 0.025 (diff saved)
-test_vsplasma,PASS,0.012360,,PASS,0.012360,,FAIL,0.142448,RMSE 0.142448 exceeded threshold 0.025 (diff saved)
-test_vsqrt,PASS,0.011171,,PASS,0.011171,,PASS,0.001443,
-test_vturbulence,PASS,0.013030,,PASS,0.013030,,FAIL,0.141476,RMSE 0.141476 exceeded threshold 0.025 (diff saved)
-test_wood,FAIL,0.299062,RMSE 0.299062 exceeded threshold 0.025 (diff saved),FAIL,0.299062,RMSE 0.299062 exceeded threshold 0.025 (diff saved),FAIL,,"Command '['node', 'webgl/test_runner/render_headless.js', '/home/rallen/Documents/Devel/Tweegeemee/tweetran/tests/outputs/webgl/test_wood.frag', '64', '64', '/home/rallen/Documents/Devel/Tweegeemee/tweetran/tests/outputs/webgl/test_wood.png']' returned non-zero exit status 1."
-test_x,PASS,0.011714,,PASS,0.011714,,PASS,0.002773,
-test_y,PASS,0.011714,,PASS,0.011714,,PASS,0.002773,
+test_vsin,PASS,0.000400,,PASS,0.000400,,PASS,0.002001,
+test_vsnoise,PASS,0.000137,,PASS,0.000137,,FAIL,0.231272,RMSE 0.231272 exceeded threshold 0.025 (diff saved)
+test_vsplasma,PASS,0.000150,,PASS,0.000150,,FAIL,0.142448,RMSE 0.142448 exceeded threshold 0.025 (diff saved)
+test_vsqrt,PASS,0.000000,,PASS,0.000000,,PASS,0.001443,
+test_vturbulence,PASS,0.000187,,PASS,0.000187,,FAIL,0.141476,RMSE 0.141476 exceeded threshold 0.025 (diff saved)
+test_wood,PASS,0.000416,,PASS,0.000416,,FAIL,,"Command '['node', 'webgl/test_runner/render_headless.js', '/home/rallen/Documents/Devel/Tweegeemee/tweetran/tests/outputs/webgl/test_wood.frag', '64', '64', '/home/rallen/Documents/Devel/Tweegeemee/tweetran/tests/outputs/webgl/test_wood.png']' returned non-zero exit status 1."
+test_x,PASS,0.003922,,PASS,0.003922,,PASS,0.002773,
+test_y,PASS,0.003922,,PASS,0.003922,,PASS,0.002773,
 test_z,PASS,0.000000,,PASS,0.000000,,PASS,0.000000,
