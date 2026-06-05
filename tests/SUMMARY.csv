@@ -9,7 +9,7 @@ test_blue_from_hsl,PASS,0.000000,,PASS,0.000000,,PASS,0.000000,
 test_checker,PASS,0.000000,,PASS,0.000000,,PASS,0.000000,
 test_clamp,PASS,0.002264,,PASS,0.002264,,PASS,0.001601,
 test_clouds,PASS,0.000312,,PASS,0.000312,,FAIL,0.141293,RMSE 0.141293 exceeded threshold 0.025 (diff saved)
-test_cross3,FAIL,0.192353,RMSE 0.192353 exceeded threshold 0.025 (diff saved),FAIL,0.192353,RMSE 0.192353 exceeded threshold 0.025 (diff saved),FAIL,0.192779,RMSE 0.192779 exceeded threshold 0.025 (diff saved)
+test_cross3,PASS,0.000000,,PASS,0.000000,,PASS,0.001204,
 test_dot,PASS,0.000000,,PASS,0.000000,,PASS,0.001742,
 test_flecks,PASS,0.000336,,PASS,0.000336,,FAIL,0.283881,RMSE 0.283881 exceeded threshold 0.025 (diff saved)
 test_gradient,PASS,0.006012,,PASS,0.006012,,FAIL,0.601068,RMSE 0.601068 exceeded threshold 0.025 (diff saved)

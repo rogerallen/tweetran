@@ -694,8 +694,8 @@ vfloat cross3(vfloat arg0, vfloat arg1)
     vec4 b = smear_vec4(arg1);
     vec4 r;
     r.x = a.y * b.z - a.z * b.y;
-    r.y = a.z * b.x - a.x * b.z;
-    r.z = a.x * b.y - a.y * b.x;
+    r.y = a.z * b.x - a.x * a.z;
+    r.z = a.x * b.y - a.y * a.x;
     r.w = 0.0;
     return make_vfloat(r);
 }
