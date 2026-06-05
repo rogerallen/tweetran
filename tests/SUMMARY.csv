@@ -20,7 +20,7 @@ test_height_normal,PASS,0.000000,,PASS,0.000000,,PASS,0.000000,
 test_hsl_from_rgb,PASS,0.002264,,PASS,0.002264,,PASS,0.001212,
 test_hue_from_rgb,PASS,0.000000,,PASS,0.000000,,PASS,0.002099,
 test_length,PASS,0.000347,,PASS,0.000347,,PASS,0.001887,
-test_lerp,FAIL,0.746517,RMSE 0.746517 exceeded threshold 0.025 (diff saved),FAIL,0.746517,RMSE 0.746517 exceeded threshold 0.025 (diff saved),FAIL,0.745201,RMSE 0.745201 exceeded threshold 0.025 (diff saved)
+test_lerp,PASS,0.000000,,PASS,0.000000,,PASS,0.000000,
 test_lightness_from_rgb,PASS,0.003922,,PASS,0.003922,,PASS,0.000000,
 test_max_component,PASS,0.003922,,PASS,0.003922,,PASS,0.003396,
 test_min_component,PASS,0.000000,,PASS,0.000000,,PASS,0.000000,

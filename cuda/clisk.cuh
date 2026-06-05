@@ -1391,10 +1391,10 @@ __device__ vfloat lerp(vfloat arg0, vfloat arg1, vfloat arg2)
     float4 b = arg1.get(true);
     float4 c = arg2.get(true);
     float4 r;
-    r.x = a.x * b.x + (1.0 - a.x) * c.x;
-    r.y = a.y * b.y + (1.0 - a.y) * c.y;
-    r.z = a.z * b.z + (1.0 - a.z) * c.z;
-    r.w = a.w * b.w + (1.0 - a.w) * c.w;
+    r.x = b.x * (1.0f - a.x) + c.x * a.x;
+    r.y = b.y * (1.0f - a.y) + c.y * a.y;
+    r.z = b.z * (1.0f - a.z) + c.z * a.z;
+    r.w = b.w * (1.0f - a.w) + c.w * a.w;
     return vfloat(r);
 }
 // JSFN vclamp IN 3x4 OUT 1x4
