@@ -92,7 +92,27 @@ At the top of `webgl/proto.js` is an array `frag_shaders` which lists the files 
 
 ## Testing
 
+### Parsing Tests (ctest)
+
 There are some parsing tests that run under ctest.
+```bash
+cd build
+ctest
+```
+
+### Automated Differential Testing (Multi-Target)
+
+We have a parallelized automated test suite that generates isolated test cases for all 73 supported Clisk functions, renders ground-truth reference images in Clojure, executes target outputs in C++ and CUDA, and evaluates pixel-by-pixel comparisons (using RMSE).
+
+To run the entire test pipeline from the root directory:
+```bash
+python3 tests/automated/run_diff_tests.py
+```
+
+Optional Flags:
+*   `--cuda-only`: Evaluate only the CUDA GPU target.
+*   `--cpp-only`: Evaluate only the C++ CPU target.
+*   `--regenerate-refs`: Re-run the Clojure exporter script to overwrite and recreate all reference images.
 
 ## License
 
