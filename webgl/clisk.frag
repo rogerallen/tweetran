@@ -862,3 +862,51 @@ vfloat vconcat(vfloat arg0, vfloat arg1, vfloat arg2)
 {
     return vconcat(vconcat(arg0, arg1), arg2);
 }
+// JSFN wood IN 1x4 OUT 1x1
+vfloat wood(vfloat pos)
+{
+    vfloat pos_scaled = make_vfloat(pos.v * 10.0, pos.components);
+    return vfrac(vlength(pos_scaled));
+}
+float dhash(vec4 pos)
+{
+    return fract(sin(dot(pos, vec4(12.9898, 78.233, 45.164, 94.673))) * 43758.5453);
+}
+// JSFN grain IN 1x4 OUT 1x4
+vfloat grain(vfloat pos)
+{
+    vec4 p = get_vec4(pos);
+    float r = dhash(p + vec4(-120.34, 340.21, -13.67, 56.78));
+    float g = dhash(p + vec4(12.301, 70.261, -167.678, 34.568));
+    float b = dhash(p + vec4(78.676, -178.678, -79.612, -80.111));
+    float a = dhash(p + vec4(-78.678, 7.6789, 200.567, 124.099));
+    return make_vfloat(r, g, b, a);
+}
+float agate_colour_map(float f)
+{
+    if (f <= 0.0) return 0.0;
+    if (f >= 1.0) return 0.0;
+    if (f < 0.05) {
+        float df = (f - 0.0) / 0.05;
+        return mix(0.0, 0.5, df);
+    }
+    if (f < 0.5) {
+        float df = (f - 0.05) / 0.45;
+        return mix(0.5, 1.0, df);
+    }
+    if (f < 0.95) {
+        float df = (f - 0.5) / 0.45;
+        return mix(1.0, 0.5, df);
+    }
+    float df = (f - 0.95) / 0.05;
+    return mix(0.5, 0.0, df);
+}
+// JSFN agate IN 1x4 OUT 1x1
+vfloat agate(vfloat pos)
+{
+    vfloat pos_scaled = make_vfloat(pos.v / 0.3, pos.components);
+    vfloat n = vmul(make_vfloat(4.0), plasma(pos_scaled));
+    vfloat pos_offset = make_vfloat(pos_scaled.v + smear_vec4(n), pos.components);
+    vfloat f = vfrac(pos_offset);
+    return make_vfloat(agate_colour_map(f.v.x));
+}

@@ -1,7 +1,7 @@
 test_case,cuda_status,cuda_rmse,cuda_error,cpp_status,cpp_rmse,cpp_error,webgl_status,webgl_rmse,webgl_error
 test_adjust_hsl,PASS,0.000187,,PASS,0.000187,,PASS,0.001467,
 test_adjust_hue,PASS,0.002815,,PASS,0.002815,,PASS,0.002506,
-test_agate,PASS,0.000312,,PASS,0.000300,,SKIPPED,,
+test_agate,PASS,0.000312,,PASS,0.000300,,PASS,0.000000,Compared against WebGL golden
 test_alpha,PASS,0.000000,,PASS,0.000000,,PASS,0.000000,
 test_average,PASS,0.002264,,PASS,0.002264,,PASS,0.002264,
 test_blotches,PASS,0.000123,,PASS,0.000123,,PASS,0.000000,Compared against WebGL golden
@@ -13,7 +13,7 @@ test_cross3,PASS,0.000000,,PASS,0.000000,,PASS,0.001204,
 test_dot,PASS,0.000000,,PASS,0.000000,,PASS,0.001742,
 test_flecks,PASS,0.000336,,PASS,0.000336,,PASS,0.000000,Compared against WebGL golden
 test_gradient,PASS,0.008023,,PASS,0.008147,,PASS,0.007935,
-test_grain,PASS,0.000290,,PASS,0.000290,,SKIPPED,,
+test_grain,PASS,0.000290,,PASS,0.000290,,PASS,0.000000,Compared against WebGL golden
 test_green_from_hsl,PASS,0.000000,,PASS,0.000000,,PASS,0.000000,
 test_height,PASS,0.000000,,PASS,0.000000,,PASS,0.000000,
 test_height_normal,PASS,0.000000,,PASS,0.000000,,PASS,0.000000,
@@ -67,7 +67,7 @@ test_vsnoise,PASS,0.000137,,PASS,0.000137,,PASS,0.000000,Compared against WebGL 
 test_vsplasma,PASS,0.000150,,PASS,0.000150,,PASS,0.000000,Compared against WebGL golden
 test_vsqrt,PASS,0.000000,,PASS,0.000000,,PASS,0.001443,
 test_vturbulence,PASS,0.000187,,PASS,0.000187,,PASS,0.000000,Compared against WebGL golden
-test_wood,PASS,0.000416,,PASS,0.000416,,SKIPPED,,
+test_wood,PASS,0.000416,,PASS,0.000416,,PASS,0.001915,
 test_x,PASS,0.003922,,PASS,0.003922,,PASS,0.002773,
 test_y,PASS,0.003922,,PASS,0.003922,,PASS,0.002773,
 test_z,PASS,0.000000,,PASS,0.000000,,PASS,0.000000,

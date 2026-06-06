@@ -115,9 +115,6 @@ def run_single_test(case_name, clj_path, ref_png, base_dir, targets, regenerate_
 
     # WebGL Test Execution
     if "webgl" in targets:
-        if case_name in ["test_agate", "test_grain", "test_wood"]:
-            test_result["webgl"] = {"status": "SKIPPED", "rmse": None, "error": None}
-            return test_result
         webgl_png = os.path.join(base_dir, "tests", "outputs", "webgl", f"{case_name}.png")
         webgl_diff = os.path.join(base_dir, "tests", "outputs", "webgl", f"{case_name}_diff.png")
         webgl_ref_dir = os.path.join(base_dir, "tests", "references_webgl")
