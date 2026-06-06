@@ -3188,6 +3188,7 @@
         
         let cppPass = 0, cudaPass = 0, webglPass = 0;
         let cppTotal = 0, cudaTotal = 0, webglTotal = 0;
+        let cppSkipped = 0, cudaSkipped = 0, webglSkipped = 0;
 
         rows.forEach(row => {
             const badges = row.querySelectorAll('.badge');
@@ -3196,18 +3197,24 @@
             if (cppText !== 'SKIPPED') {
                 cppTotal++;
                 if (cppText === 'PASS') cppPass++;
+            } else {
+                cppSkipped++;
             }
             
             const cudaText = badges[1].textContent;
             if (cudaText !== 'SKIPPED') {
                 cudaTotal++;
                 if (cudaText === 'PASS') cudaPass++;
+            } else {
+                cudaSkipped++;
             }
             
             const webglText = badges[2].textContent;
             if (webglText !== 'SKIPPED') {
                 webglTotal++;
                 if (webglText === 'PASS') webglPass++;
+            } else {
+                webglSkipped++;
             }
         });
 
@@ -3215,12 +3222,20 @@
         const cudaPct = cudaTotal > 0 ? Math.round((cudaPass / cudaTotal) * 100) : 0;
         const webglPct = webglTotal > 0 ? Math.round((webglPass / webglTotal) * 100) : 0;
 
+        const formatStat = (pct, pass, total, skipped) => {
+            let res = `${pct}% (${pass}/${total})`;
+            if (skipped > 0) {
+                res += ` <span style="font-size: 0.85rem; color: var(--text-muted); font-weight: 500;">(${skipped} skipped)</span>`;
+            }
+            return res;
+        };
+
         document.getElementById('stat-total').textContent = totalCount;
-        document.getElementById('stat-cpp').textContent = `${cppPct}% (${cppPass}/${cppTotal})`;
+        document.getElementById('stat-cpp').innerHTML = formatStat(cppPct, cppPass, cppTotal, cppSkipped);
         document.getElementById('bar-cpp').style.width = `${cppPct}%`;
-        document.getElementById('stat-cuda').textContent = `${cudaPct}% (${cudaPass}/${cudaTotal})`;
+        document.getElementById('stat-cuda').innerHTML = formatStat(cudaPct, cudaPass, cudaTotal, cudaSkipped);
         document.getElementById('bar-cuda').style.width = `${cudaPct}%`;
-        document.getElementById('stat-webgl').textContent = `${webglPct}% (${webglPass}/${webglTotal})`;
+        document.getElementById('stat-webgl').innerHTML = formatStat(webglPct, webglPass, webglTotal, webglSkipped);
         document.getElementById('bar-webgl').style.width = `${webglPct}%`;
 
         // Search and filter logic

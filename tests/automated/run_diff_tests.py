@@ -271,17 +271,22 @@ def main():
     total = len(test_suite)
     cuda_pass = sum(1 for r in results if r["cuda"]["status"] == "PASS")
     cuda_fail = sum(1 for r in results if r["cuda"]["status"] == "FAIL")
+    cuda_skip = sum(1 for r in results if r["cuda"]["status"] == "SKIPPED")
+    
     cpp_pass = sum(1 for r in results if r["cpp"]["status"] == "PASS")
     cpp_fail = sum(1 for r in results if r["cpp"]["status"] == "FAIL")
+    cpp_skip = sum(1 for r in results if r["cpp"]["status"] == "SKIPPED")
+    
     webgl_pass = sum(1 for r in results if r["webgl"]["status"] == "PASS")
     webgl_fail = sum(1 for r in results if r["webgl"]["status"] == "FAIL")
+    webgl_skip = sum(1 for r in results if r["webgl"]["status"] == "SKIPPED")
     
     if "cuda" in targets:
-        print(f"CUDA : {cuda_pass} PASSED, {cuda_fail} FAILED (out of {total} compared)")
+        print(f"CUDA : {cuda_pass} PASSED, {cuda_fail} FAILED, {cuda_skip} SKIPPED (out of {total} compared)")
     if "cpp" in targets:
-        print(f"C++  : {cpp_pass} PASSED, {cpp_fail} FAILED (out of {total} compared)")
+        print(f"C++  : {cpp_pass} PASSED, {cpp_fail} FAILED, {cpp_skip} SKIPPED (out of {total} compared)")
     if "webgl" in targets:
-        print(f"WebGL: {webgl_pass} PASSED, {webgl_fail} FAILED (out of {total} compared)")
+        print(f"WebGL: {webgl_pass} PASSED, {webgl_fail} FAILED, {webgl_skip} SKIPPED (out of {total} compared)")
         
     # Write CSV summary of differential issues
     csv_path = os.path.join(base_dir, "tests", "SUMMARY.csv")
@@ -922,6 +927,7 @@ def main():
         
         let cppPass = 0, cudaPass = 0, webglPass = 0;
         let cppTotal = 0, cudaTotal = 0, webglTotal = 0;
+        let cppSkipped = 0, cudaSkipped = 0, webglSkipped = 0;
 
         rows.forEach(row => {
             const badges = row.querySelectorAll('.badge');
@@ -930,18 +936,24 @@ def main():
             if (cppText !== 'SKIPPED') {
                 cppTotal++;
                 if (cppText === 'PASS') cppPass++;
+            } else {
+                cppSkipped++;
             }
             
             const cudaText = badges[1].textContent;
             if (cudaText !== 'SKIPPED') {
                 cudaTotal++;
                 if (cudaText === 'PASS') cudaPass++;
+            } else {
+                cudaSkipped++;
             }
             
             const webglText = badges[2].textContent;
             if (webglText !== 'SKIPPED') {
                 webglTotal++;
                 if (webglText === 'PASS') webglPass++;
+            } else {
+                webglSkipped++;
             }
         });
 
@@ -949,12 +961,20 @@ def main():
         const cudaPct = cudaTotal > 0 ? Math.round((cudaPass / cudaTotal) * 100) : 0;
         const webglPct = webglTotal > 0 ? Math.round((webglPass / webglTotal) * 100) : 0;
 
+        const formatStat = (pct, pass, total, skipped) => {
+            let res = `${pct}% (${pass}/${total})`;
+            if (skipped > 0) {
+                res += ` <span style="font-size: 0.85rem; color: var(--text-muted); font-weight: 500;">(${skipped} skipped)</span>`;
+            }
+            return res;
+        };
+
         document.getElementById('stat-total').textContent = totalCount;
-        document.getElementById('stat-cpp').textContent = `${cppPct}% (${cppPass}/${cppTotal})`;
+        document.getElementById('stat-cpp').innerHTML = formatStat(cppPct, cppPass, cppTotal, cppSkipped);
         document.getElementById('bar-cpp').style.width = `${cppPct}%`;
-        document.getElementById('stat-cuda').textContent = `${cudaPct}% (${cudaPass}/${cudaTotal})`;
+        document.getElementById('stat-cuda').innerHTML = formatStat(cudaPct, cudaPass, cudaTotal, cudaSkipped);
         document.getElementById('bar-cuda').style.width = `${cudaPct}%`;
-        document.getElementById('stat-webgl').textContent = `${webglPct}% (${webglPass}/${webglTotal})`;
+        document.getElementById('stat-webgl').innerHTML = formatStat(webglPct, webglPass, webglTotal, webglSkipped);
         document.getElementById('bar-webgl').style.width = `${webglPct}%`;
 
         // Search and filter logic
