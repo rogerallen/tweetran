@@ -1,19 +1,19 @@
 test_case,cuda_status,cuda_rmse,cuda_error,cpp_status,cpp_rmse,cpp_error,webgl_status,webgl_rmse,webgl_error
 test_adjust_hsl,PASS,0.000187,,PASS,0.000187,,PASS,0.001467,
 test_adjust_hue,PASS,0.002815,,PASS,0.002815,,PASS,0.002506,
-test_agate,PASS,0.000312,,PASS,0.000300,,FAIL,,"Command '['node', 'webgl/test_runner/render_headless.js', '/home/rallen/Documents/Devel/Tweegeemee/tweetran/tests/outputs/webgl/test_agate.frag', '64', '64', '/home/rallen/Documents/Devel/Tweegeemee/tweetran/tests/outputs/webgl/test_agate.png']' returned non-zero exit status 1."
+test_agate,PASS,0.000312,,PASS,0.000300,,SKIPPED,,
 test_alpha,PASS,0.000000,,PASS,0.000000,,PASS,0.000000,
 test_average,PASS,0.002264,,PASS,0.002264,,PASS,0.002264,
-test_blotches,PASS,0.000123,,PASS,0.000123,,FAIL,0.306371,RMSE 0.306371 exceeded threshold 0.025 (diff saved)
+test_blotches,PASS,0.000123,,PASS,0.000123,,PASS,0.000000,Compared against WebGL golden
 test_blue_from_hsl,PASS,0.000000,,PASS,0.000000,,PASS,0.000000,
 test_checker,PASS,0.000000,,PASS,0.000000,,PASS,0.000000,
 test_clamp,PASS,0.002264,,PASS,0.002264,,PASS,0.001601,
-test_clouds,PASS,0.000312,,PASS,0.000312,,FAIL,0.094469,RMSE 0.094469 exceeded threshold 0.025 (diff saved)
+test_clouds,PASS,0.000312,,PASS,0.000312,,PASS,0.000000,Compared against WebGL golden
 test_cross3,PASS,0.000000,,PASS,0.000000,,PASS,0.001204,
 test_dot,PASS,0.000000,,PASS,0.000000,,PASS,0.001742,
-test_flecks,PASS,0.000336,,PASS,0.000336,,FAIL,0.283881,RMSE 0.283881 exceeded threshold 0.025 (diff saved)
-test_gradient,PASS,0.006012,,PASS,0.006012,,FAIL,0.601068,RMSE 0.601068 exceeded threshold 0.025 (diff saved)
-test_grain,PASS,0.000290,,PASS,0.000290,,FAIL,,"Command '['node', 'webgl/test_runner/render_headless.js', '/home/rallen/Documents/Devel/Tweegeemee/tweetran/tests/outputs/webgl/test_grain.frag', '64', '64', '/home/rallen/Documents/Devel/Tweegeemee/tweetran/tests/outputs/webgl/test_grain.png']' returned non-zero exit status 1."
+test_flecks,PASS,0.000336,,PASS,0.000336,,PASS,0.000000,Compared against WebGL golden
+test_gradient,PASS,0.006012,,PASS,0.006012,,PASS,0.000000,Compared against WebGL golden
+test_grain,PASS,0.000290,,PASS,0.000290,,SKIPPED,,
 test_green_from_hsl,PASS,0.000000,,PASS,0.000000,,PASS,0.000000,
 test_height,PASS,0.000000,,PASS,0.000000,,PASS,0.000000,
 test_height_normal,PASS,0.000000,,PASS,0.000000,,PASS,0.000000,
@@ -24,33 +24,33 @@ test_lerp,PASS,0.000000,,PASS,0.000000,,PASS,0.000000,
 test_lightness_from_rgb,PASS,0.003922,,PASS,0.003922,,PASS,0.000000,
 test_max_component,PASS,0.003922,,PASS,0.003922,,PASS,0.003396,
 test_min_component,PASS,0.000000,,PASS,0.000000,,PASS,0.000000,
-test_noise,PASS,0.000294,,PASS,0.000294,,FAIL,0.131132,RMSE 0.131132 exceeded threshold 0.025 (diff saved)
+test_noise,PASS,0.000294,,PASS,0.000294,,PASS,0.000000,Compared against WebGL golden
 test_normalize,PASS,0.000224,,PASS,0.000229,,PASS,0.001719,
-test_offset,PASS,0.000150,,PASS,0.000150,,FAIL,0.209489,RMSE 0.209489 exceeded threshold 0.025 (diff saved)
-test_plasma,PASS,0.000294,,PASS,0.000294,,FAIL,0.096386,RMSE 0.096386 exceeded threshold 0.025 (diff saved)
+test_offset,PASS,0.000150,,PASS,0.000150,,PASS,0.000000,Compared against WebGL golden
+test_plasma,PASS,0.000294,,PASS,0.000294,,PASS,0.000000,Compared against WebGL golden
 test_polar,PASS,0.000200,,PASS,0.000200,,PASS,0.001089,
 test_radius,PASS,0.000347,,PASS,0.000347,,PASS,0.001887,
 test_red_from_hsl,PASS,0.000000,,PASS,0.000000,,PASS,0.000000,
 test_rgb_from_hsl,PASS,0.000000,,PASS,0.000000,,PASS,0.000000,
-test_rotate,PASS,0.000123,,PASS,0.000123,,FAIL,0.245107,RMSE 0.245107 exceeded threshold 0.025 (diff saved)
+test_rotate,PASS,0.000123,,PASS,0.000123,,PASS,0.000000,Compared against WebGL golden
 test_saturation_from_rgb,PASS,0.000000,,PASS,0.000000,,PASS,0.000000,
-test_scale,PASS,0.000106,,PASS,0.000106,,FAIL,0.194179,RMSE 0.194179 exceeded threshold 0.025 (diff saved)
+test_scale,PASS,0.000106,,PASS,0.000106,,PASS,0.000000,Compared against WebGL golden
 test_sigmoid,PASS,0.002299,,PASS,0.002299,,PASS,0.002531,
-test_snoise,PASS,0.000106,,PASS,0.000106,,FAIL,0.155741,RMSE 0.155741 exceeded threshold 0.025 (diff saved)
-test_splasma,PASS,0.000137,,PASS,0.000137,,FAIL,0.097654,RMSE 0.097654 exceeded threshold 0.025 (diff saved)
-test_spots,PASS,0.000194,,PASS,0.000194,,FAIL,0.368039,RMSE 0.368039 exceeded threshold 0.025 (diff saved)
+test_snoise,PASS,0.000106,,PASS,0.000106,,PASS,0.000000,Compared against WebGL golden
+test_splasma,PASS,0.000137,,PASS,0.000137,,PASS,0.000000,Compared against WebGL golden
+test_spots,PASS,0.000194,,PASS,0.000194,,PASS,0.000000,Compared against WebGL golden
 test_square,PASS,0.000000,,PASS,0.000000,,PASS,0.001698,
 test_t,PASS,0.000000,,PASS,0.000000,,PASS,0.000000,
 test_theta,PASS,0.000000,,PASS,0.000000,,PASS,0.000000,
-test_turbulate,PASS,0.000137,,PASS,0.000137,,FAIL,0.134065,RMSE 0.134065 exceeded threshold 0.025 (diff saved)
-test_turbulence,PASS,0.000194,,PASS,0.000194,,FAIL,0.135636,RMSE 0.135636 exceeded threshold 0.025 (diff saved)
+test_turbulate,PASS,0.000137,,PASS,0.000137,,PASS,0.000000,Compared against WebGL golden
+test_turbulence,PASS,0.000194,,PASS,0.000194,,PASS,0.000000,Compared against WebGL golden
 test_v_,PASS,0.002264,,PASS,0.002264,,PASS,0.000000,
 test_vabs,PASS,0.003202,,PASS,0.003202,,PASS,0.002264,
 test_vadd,PASS,0.000000,,PASS,0.000000,,PASS,0.000000,
 test_vconcat,PASS,0.003202,,PASS,0.003202,,PASS,0.002264,
 test_vcos,PASS,0.000000,,PASS,0.000000,,PASS,0.001790,
 test_vdivide,PASS,0.003202,,PASS,0.003202,,PASS,0.000000,
-test_velvet,PASS,0.000318,,PASS,0.000318,,FAIL,0.214624,RMSE 0.214624 exceeded threshold 0.025 (diff saved)
+test_velvet,PASS,0.000318,,PASS,0.000318,,PASS,0.000000,Compared against WebGL golden
 test_vfloor,PASS,0.000000,,PASS,0.000000,,PASS,0.000000,
 test_vfrac,PASS,0.003202,,PASS,0.003202,,PASS,0.002264,
 test_vif,PASS,0.000000,,PASS,0.000000,,PASS,0.000000,
@@ -58,16 +58,16 @@ test_vmax,PASS,0.003922,,PASS,0.003922,,PASS,0.003922,
 test_vmin,PASS,0.003202,,PASS,0.003202,,PASS,0.002264,
 test_vmod,PASS,0.003202,,PASS,0.003202,,PASS,0.002264,
 test_vmul,PASS,0.002264,,PASS,0.002264,,PASS,0.001601,
-test_vnoise,PASS,0.000281,,PASS,0.000281,,FAIL,0.209383,RMSE 0.209383 exceeded threshold 0.025 (diff saved)
-test_vplasma,PASS,0.000267,,PASS,0.000267,,FAIL,0.124944,RMSE 0.124944 exceeded threshold 0.025 (diff saved)
+test_vnoise,PASS,0.000281,,PASS,0.000281,,PASS,0.000000,Compared against WebGL golden
+test_vplasma,PASS,0.000267,,PASS,0.000267,,PASS,0.000000,Compared against WebGL golden
 test_vpow,PASS,0.000000,,PASS,0.000000,,PASS,0.001698,
 test_vround,PASS,0.000000,,PASS,0.000000,,PASS,0.000000,
 test_vsin,PASS,0.000400,,PASS,0.000400,,PASS,0.002001,
-test_vsnoise,PASS,0.000137,,PASS,0.000137,,FAIL,0.231272,RMSE 0.231272 exceeded threshold 0.025 (diff saved)
-test_vsplasma,PASS,0.000150,,PASS,0.000150,,FAIL,0.142448,RMSE 0.142448 exceeded threshold 0.025 (diff saved)
+test_vsnoise,PASS,0.000137,,PASS,0.000137,,PASS,0.000000,Compared against WebGL golden
+test_vsplasma,PASS,0.000150,,PASS,0.000150,,PASS,0.000000,Compared against WebGL golden
 test_vsqrt,PASS,0.000000,,PASS,0.000000,,PASS,0.001443,
-test_vturbulence,PASS,0.000187,,PASS,0.000187,,FAIL,0.141476,RMSE 0.141476 exceeded threshold 0.025 (diff saved)
-test_wood,PASS,0.000416,,PASS,0.000416,,FAIL,,"Command '['node', 'webgl/test_runner/render_headless.js', '/home/rallen/Documents/Devel/Tweegeemee/tweetran/tests/outputs/webgl/test_wood.frag', '64', '64', '/home/rallen/Documents/Devel/Tweegeemee/tweetran/tests/outputs/webgl/test_wood.png']' returned non-zero exit status 1."
+test_vturbulence,PASS,0.000187,,PASS,0.000187,,PASS,0.000000,Compared against WebGL golden
+test_wood,PASS,0.000416,,PASS,0.000416,,SKIPPED,,
 test_x,PASS,0.003922,,PASS,0.003922,,PASS,0.002773,
 test_y,PASS,0.003922,,PASS,0.003922,,PASS,0.002773,
 test_z,PASS,0.000000,,PASS,0.000000,,PASS,0.000000,

@@ -121,8 +121,21 @@ npm install
 *   `--cuda-only`: Evaluate only the CUDA GPU target.
 *   `--cpp-only`: Evaluate only the C++ CPU target.
 *   `--webgl-only`: Evaluate only the WebGL target.
-*   `--regenerate-refs`: Re-run the Clojure exporter script to overwrite and recreate all reference images.
+*   `--regenerate-refs`: Re-run the Clojure exporter script to recreate all Clojure reference images, and regenerate the WebGL-specific golden images.
+
+#### WebGL Golden References
+Because WebGL uses a high-performance procedural math approximation for simplex noise (to avoid memory latency of large lookup arrays on-chip), noise-based patterns render slightly differently in WebGL than in Clojure/C++/CUDA.
+* The test runner automatically tries to compare WebGL outputs against standard Clojure references first. If it passes, no WebGL-specific reference is generated.
+* If the output differs due to noise math, the runner falls back to comparing against a WebGL-specific golden reference in `tests/references_webgl/`.
+* Run `python3 tests/automated/run_diff_tests.py --regenerate-refs` to re-generate both standard and WebGL-specific golden references.
+
+#### Interactive Summary Dashboard
+Running the tests generates a local HTML dashboard at `tests/summary.html`. Open this file in your browser to view:
+* Detailed status tables (PASS/FAIL/SKIPPED) and RMSE scores for all target backends.
+* Grid comparisons: Clojure Reference, C++, CUDA, WebGL Golden (marked "Same as Clojure" if no custom golden is used), and WebGL Current.
+* Live filters, search functionality, and click-to-zoom comparisons.
 
 ## License
 
 Like the Clisk Library, code in this repository is LGPL 3.0.  http://www.gnu.org/licenses/lgpl-3.0.html
+
