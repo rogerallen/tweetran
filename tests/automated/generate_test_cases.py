@@ -33,11 +33,11 @@ def main():
     # Custom templates for functions with specific arguments requirements
     custom_templates = {
         # Modpos binary/unary functions (require a function/pattern as parameter)
-        "scale": "(clisk.live/scale 0.5 (clisk.live/x clisk.live/pos))",
-        "offset": "(clisk.live/offset [0.5 0.5 0.5 0.5] (clisk.live/x clisk.live/pos))",
-        "rotate": "(clisk.live/rotate 0.78 (clisk.live/x clisk.live/pos))",
+        "scale": "(clisk.live/scale 0.5 (clisk.live/v* clisk.live/pos [1.0 2.0 3.0 4.0]))",
+        "offset": "(clisk.live/offset [0.5 0.5 0.5 0.5] (clisk.live/v* clisk.live/pos [1.0 2.0 3.0 4.0]))",
+        "rotate": "(clisk.live/rotate 0.78 (clisk.live/v* clisk.live/pos [1.0 2.0 3.0 4.0]))",
         "turbulate": "(clisk.live/turbulate 0.2 clisk.live/snoise)",
-        "gradient": "(clisk.live/gradient (clisk.live/x clisk.live/pos))",
+        "gradient": "(clisk.live/gradient (clisk.live/vconcat (clisk.live/dot clisk.live/pos clisk.live/pos) clisk.live/pos))",
         
         # Operators & Math helpers
         "v+": "(clisk.live/v+ clisk.live/pos [1.0 2.0 3.0 4.0])",
