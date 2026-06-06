@@ -28,6 +28,11 @@ class vfloat {
         v = x;
         components = 4;
     }
+    __device__ vfloat(float4 x, int comps)
+    {
+        v = x;
+        components = comps;
+    }
     __device__ vfloat(float3 x)
     {
         v.x = x.x;
@@ -67,7 +72,13 @@ class vfloat {
             return make_float4(v.x, v.x, v.x, v.x);
         }
         else {
-            return v;
+            switch (components) {
+            case 0: return make_float4(0.0f, 0.0f, 0.0f, 0.0f);
+            case 1: return make_float4(v.x, 0.0f, 0.0f, 0.0f);
+            case 2: return make_float4(v.x, v.y, 0.0f, 0.0f);
+            case 3: return make_float4(v.x, v.y, v.z, 0.0f);
+            default: return v;
+            }
         }
     }
     __device__ float3 get3(bool smear = false)
@@ -76,7 +87,12 @@ class vfloat {
             return make_float3(v.x, v.x, v.x);
         }
         else {
-            return make_float3(v.x, v.y, v.z);
+            switch (components) {
+            case 0: return make_float3(0.0f, 0.0f, 0.0f);
+            case 1: return make_float3(v.x, 0.0f, 0.0f);
+            case 2: return make_float3(v.x, v.y, 0.0f);
+            default: return make_float3(v.x, v.y, v.z);
+            }
         }
     }
     __device__ float x() { return v.x; }
@@ -466,15 +482,28 @@ __device__ vfloat make_multi_fractal(vfloat pos, vfloat (*fn)(vfloat))
     float gain = 0.5;
     float scale = 0.5;
     vfloat sum = vfloat(0.0, 0.0, 0.0, 0.0);
+    int out_comp = 4;
     for (int octave = 0; octave < octaves; octave++) {
         float pos_scale = powf(lacunarity, octave);
         vfloat pos1 = vfloat(pos.x() * pos_scale, pos.y() * pos_scale, pos.z() * pos_scale, pos.w() * pos_scale);
         vfloat val = warp(pos1, fn);
+        if (octave == 0) {
+            out_comp = val.num_components();
+        }
         float val_scale = scale * powf(gain, octave);
         val = vfloat(val.x() * val_scale, val.y() * val_scale, val.z() * val_scale, val.w() * val_scale);
         sum = vfloat(sum.x() + val.x(), sum.y() + val.y(), sum.z() + val.z(), sum.w() + val.w());
     }
-    return sum;
+    switch (out_comp) {
+    case 1:
+        return vfloat(sum.x());
+    case 2:
+        return vfloat(sum.x(), sum.y());
+    case 3:
+        return vfloat(sum.x(), sum.y(), sum.z());
+    default:
+        return sum;
+    }
 }
 // END JSFN
 // Colors
@@ -954,7 +983,7 @@ __device__ vfloat vsin(vfloat arg0)
     r.y = sinf(a.y);
     r.z = sinf(a.z);
     r.w = sinf(a.w);
-    return vfloat(r);
+    return vfloat(r, arg0.num_components());
 }
 // JSFN vcos IN 1x4 OUT 1x4
 __device__ vfloat vcos(vfloat arg0)
@@ -965,7 +994,7 @@ __device__ vfloat vcos(vfloat arg0)
     r.y = cosf(a.y);
     r.z = cosf(a.z);
     r.w = cosf(a.w);
-    return vfloat(r);
+    return vfloat(r, arg0.num_components());
 }
 // JSFN vround IN 1x4 OUT 1x4
 __device__ vfloat vround(vfloat arg0)
@@ -976,7 +1005,7 @@ __device__ vfloat vround(vfloat arg0)
     r.y = roundf(a.y);
     r.z = roundf(a.z);
     r.w = roundf(a.w);
-    return vfloat(r);
+    return vfloat(r, arg0.num_components());
 }
 // JSFN vfloor IN 1x4 OUT 1x4
 __device__ vfloat vfloor(vfloat arg0)
@@ -987,7 +1016,7 @@ __device__ vfloat vfloor(vfloat arg0)
     r.y = floorf(a.y);
     r.z = floorf(a.z);
     r.w = floorf(a.w);
-    return vfloat(r);
+    return vfloat(r, arg0.num_components());
 }
 // END
 __device__ float fracf(float x)
@@ -1003,7 +1032,7 @@ __device__ vfloat vfrac(vfloat arg0)
     r.y = fracf(a.y);
     r.z = fracf(a.z);
     r.w = fracf(a.w);
-    return vfloat(r);
+    return vfloat(r, arg0.num_components());
 }
 // JSFN vsqrt IN 1x4 OUT 1x4
 __device__ vfloat vsqrt(vfloat arg0)
@@ -1014,7 +1043,7 @@ __device__ vfloat vsqrt(vfloat arg0)
     r.y = sqrtf(a.y);
     r.z = sqrtf(a.z);
     r.w = sqrtf(a.w);
-    return vfloat(r);
+    return vfloat(r, arg0.num_components());
 }
 // JSFN vabs IN 1x4 OUT 1x4
 __device__ vfloat vabs(vfloat arg0)
@@ -1025,7 +1054,7 @@ __device__ vfloat vabs(vfloat arg0)
     r.y = fabsf(a.y);
     r.z = fabsf(a.z);
     r.w = fabsf(a.w);
-    return vfloat(r);
+    return vfloat(r, arg0.num_components());
 }
 // JSFN square IN 1x4 OUT 1x4
 __device__ vfloat square(vfloat arg0)
@@ -1036,7 +1065,7 @@ __device__ vfloat square(vfloat arg0)
     r.y = a.y * a.y;
     r.z = a.z * a.z;
     r.w = a.w * a.w;
-    return vfloat(r);
+    return vfloat(r, arg0.num_components());
 }
 // JSFN vnormalize IN 1x4 OUT 1x4
 __device__ vfloat vnormalize(vfloat arg0)
@@ -1049,7 +1078,7 @@ __device__ vfloat vnormalize(vfloat arg0)
     r.y = a.y * rlen;
     r.z = a.z * rlen;
     r.w = a.w * rlen;
-    return vfloat(r);
+    return vfloat(r, arg0.num_components());
 }
 // JSFN sigmoid IN 1x4 OUT 1x4
 __device__ vfloat sigmoid(vfloat arg0)
@@ -1060,7 +1089,7 @@ __device__ vfloat sigmoid(vfloat arg0)
     r.y = logisticf(a.y);
     r.z = logisticf(a.z);
     r.w = logisticf(a.w);
-    return vfloat(r);
+    return vfloat(r, arg0.num_components());
 }
 // JSFN theta IN 1x4 OUT 1x1
 __device__ vfloat theta(vfloat arg0)
@@ -1170,7 +1199,7 @@ __device__ vfloat vadd(vfloat arg0, vfloat arg1)
     r.y = a.y + b.y;
     r.z = a.z + b.z;
     r.w = a.w + b.w;
-    return vfloat(r);
+    return vfloat(r, arg0.num_components() > arg1.num_components() ? arg0.num_components() : arg1.num_components());
 }
 // JSFN vsub IN 2x4 OUT 1x4
 __device__ vfloat vsub(vfloat arg0, vfloat arg1)
@@ -1182,7 +1211,7 @@ __device__ vfloat vsub(vfloat arg0, vfloat arg1)
     r.y = a.y - b.y;
     r.z = a.z - b.z;
     r.w = a.w - b.w;
-    return vfloat(r);
+    return vfloat(r, arg0.num_components() > arg1.num_components() ? arg0.num_components() : arg1.num_components());
 }
 // JSFN vmul IN 2x4 OUT 1x4
 __device__ vfloat vmul(vfloat arg0, vfloat arg1)
@@ -1194,7 +1223,7 @@ __device__ vfloat vmul(vfloat arg0, vfloat arg1)
     r.y = a.y * b.y;
     r.z = a.z * b.z;
     r.w = a.w * b.w;
-    return vfloat(r);
+    return vfloat(r, arg0.num_components() > arg1.num_components() ? arg0.num_components() : arg1.num_components());
 }
 // JSFN vdivide IN 2x4 OUT 1x4
 __device__ vfloat vdivide(vfloat arg0, vfloat arg1)
@@ -1206,7 +1235,7 @@ __device__ vfloat vdivide(vfloat arg0, vfloat arg1)
     r.y = a.y / b.y;
     r.z = a.z / b.z;
     r.w = a.w / b.w;
-    return vfloat(r);
+    return vfloat(r, arg0.num_components() > arg1.num_components() ? arg0.num_components() : arg1.num_components());
 }
 // JSFN vmin IN 2x4 OUT 1x4
 __device__ vfloat vmin(vfloat arg0, vfloat arg1)
@@ -1218,7 +1247,7 @@ __device__ vfloat vmin(vfloat arg0, vfloat arg1)
     r.y = fminf(a.y, b.y);
     r.z = fminf(a.z, b.z);
     r.w = fminf(a.w, b.w);
-    return vfloat(r);
+    return vfloat(r, arg0.num_components() > arg1.num_components() ? arg0.num_components() : arg1.num_components());
 }
 // JSFN vmax IN 2x4 OUT 1x4
 __device__ vfloat vmax(vfloat arg0, vfloat arg1)
@@ -1230,7 +1259,7 @@ __device__ vfloat vmax(vfloat arg0, vfloat arg1)
     r.y = fmaxf(a.y, b.y);
     r.z = fmaxf(a.z, b.z);
     r.w = fmaxf(a.w, b.w);
-    return vfloat(r);
+    return vfloat(r, arg0.num_components() > arg1.num_components() ? arg0.num_components() : arg1.num_components());
 }
 // JSFN vpow IN 2x4 OUT 1x4
 __device__ vfloat vpow(vfloat arg0, vfloat arg1)
@@ -1242,7 +1271,7 @@ __device__ vfloat vpow(vfloat arg0, vfloat arg1)
     r.y = powf(a.y, b.y);
     r.z = powf(a.z, b.z);
     r.w = powf(a.w, b.w);
-    return vfloat(r);
+    return vfloat(r, arg0.num_components() > arg1.num_components() ? arg0.num_components() : arg1.num_components());
 }
 // JSFN vmod IN 2x4 OUT 1x4
 __device__ vfloat vmod(vfloat arg0, vfloat arg1)
@@ -1254,7 +1283,7 @@ __device__ vfloat vmod(vfloat arg0, vfloat arg1)
     r.y = myfmodf(a.y, b.y);
     r.z = myfmodf(a.z, b.z);
     r.w = myfmodf(a.w, b.w);
-    return vfloat(r);
+    return vfloat(r, arg0.num_components() > arg1.num_components() ? arg0.num_components() : arg1.num_components());
 }
 // JSFN vdot IN 2x4 OUT 1x1
 __device__ vfloat vdot(vfloat arg0, vfloat arg1)

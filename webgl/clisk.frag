@@ -9,7 +9,7 @@ vfloat vabs(vfloat arg0)
 {
     vec4 a = smear_vec4(arg0);
     vec4 r = abs(a);
-    return make_vfloat(r);
+    return make_vfloat(r, arg0.components);
 }
 // JSFN vpow IN 2x4 OUT 1x4
 vfloat vpow(vfloat arg0, vfloat arg1)
@@ -17,7 +17,7 @@ vfloat vpow(vfloat arg0, vfloat arg1)
     vec4 a = smear_vec4(arg0);
     vec4 b = smear_vec4(arg1);
     vec4 r = pow(a,b);
-    return make_vfloat(r);
+    return make_vfloat(r, arg0.components > arg1.components ? arg0.components : arg1.components);
 }
 // JSFN vif IN 3x4 OUT 1x4
 vfloat vif(vfloat arg0, vfloat arg1, vfloat arg2)
@@ -46,7 +46,7 @@ vfloat sigmoid(vfloat arg0)
     r.y = logisticf(a.y);
     r.z = logisticf(a.z);
     r.w = logisticf(a.w);
-    return make_vfloat(r);
+    return make_vfloat(r, arg0.components);
 }
 // JSFN simplex_noise
 float simplex_noise(vec4 pos)
@@ -195,14 +195,21 @@ vfloat make_multi_fractal_noise(vfloat pos)
     float gain = 0.5;
     float scale = 0.5;
     vfloat sum = make_vfloat(0.0, 0.0, 0.0, 0.0);
+    int out_comp = 4;
     for (float octave = 0.0; octave < octaves; octave += 1.0) {
         float pos_scale = pow(lacunarity, octave);
         vfloat pos1 = make_vfloat(pos.v * pos_scale);
         vfloat val = noise(pos1);
+        if (octave == 0.0) {
+            out_comp = val.components;
+        }
         float val_scale = scale * pow(gain, octave);
         val = make_vfloat(val.v * val_scale);
         sum = make_vfloat(sum.v + val.v);
     }
+    if (out_comp == 1) return make_vfloat(sum.v.x);
+    if (out_comp == 2) return make_vfloat(sum.v.x, sum.v.y);
+    if (out_comp == 3) return make_vfloat(sum.v.x, sum.v.y, sum.v.z);
     return sum;
 }
 // JSGEN make_multi_fractal snoise
@@ -213,14 +220,21 @@ vfloat make_multi_fractal_snoise(vfloat pos)
     float gain = 0.5;
     float scale = 0.5;
     vfloat sum = make_vfloat(0.0, 0.0, 0.0, 0.0);
+    int out_comp = 4;
     for (float octave = 0.0; octave < octaves; octave += 1.0) {
         float pos_scale = pow(lacunarity, octave);
         vfloat pos1 = make_vfloat(pos.v * pos_scale);
         vfloat val = snoise(pos1);
+        if (octave == 0.0) {
+            out_comp = val.components;
+        }
         float val_scale = scale * pow(gain, octave);
         val = make_vfloat(val.v * val_scale);
         sum = make_vfloat(sum.v + val.v);
     }
+    if (out_comp == 1) return make_vfloat(sum.v.x);
+    if (out_comp == 2) return make_vfloat(sum.v.x, sum.v.y);
+    if (out_comp == 3) return make_vfloat(sum.v.x, sum.v.y, sum.v.z);
     return sum;
 }
 // JSGEN make_multi_fractal vabs_snoise
@@ -231,14 +245,21 @@ vfloat make_multi_fractal_vabs_snoise(vfloat pos)
     float gain = 0.5;
     float scale = 0.5;
     vfloat sum = make_vfloat(0.0, 0.0, 0.0, 0.0);
+    int out_comp = 4;
     for (float octave = 0.0; octave < octaves; octave += 1.0) {
         float pos_scale = pow(lacunarity, octave);
         vfloat pos1 = make_vfloat(pos.v * pos_scale);
         vfloat val = vabs_snoise(pos1);
+        if (octave == 0.0) {
+            out_comp = val.components;
+        }
         float val_scale = scale * pow(gain, octave);
         val = make_vfloat(val.v * val_scale);
         sum = make_vfloat(sum.v + val.v);
     }
+    if (out_comp == 1) return make_vfloat(sum.v.x);
+    if (out_comp == 2) return make_vfloat(sum.v.x, sum.v.y);
+    if (out_comp == 3) return make_vfloat(sum.v.x, sum.v.y, sum.v.z);
     return sum;
 }
 // JSGEN make_multi_fractal vabs_vsnoise
@@ -249,14 +270,21 @@ vfloat make_multi_fractal_vabs_vsnoise(vfloat pos)
     float gain = 0.5;
     float scale = 0.5;
     vfloat sum = make_vfloat(0.0, 0.0, 0.0, 0.0);
+    int out_comp = 4;
     for (float octave = 0.0; octave < octaves; octave += 1.0) {
         float pos_scale = pow(lacunarity, octave);
         vfloat pos1 = make_vfloat(pos.v * pos_scale);
         vfloat val = vabs_vsnoise(pos1);
+        if (octave == 0.0) {
+            out_comp = val.components;
+        }
         float val_scale = scale * pow(gain, octave);
         val = make_vfloat(val.v * val_scale);
         sum = make_vfloat(sum.v + val.v);
     }
+    if (out_comp == 1) return make_vfloat(sum.v.x);
+    if (out_comp == 2) return make_vfloat(sum.v.x, sum.v.y);
+    if (out_comp == 3) return make_vfloat(sum.v.x, sum.v.y, sum.v.z);
     return sum;
 }
 // JSFN plasma IN pos OUT 1x1
@@ -457,56 +485,56 @@ vfloat vsin(vfloat arg0)
 {
     vec4 a = smear_vec4(arg0);
     vec4 r = sin(a);
-    return make_vfloat(r);
+    return make_vfloat(r, arg0.components);
 }
 // JSFN vcos IN 1x4 OUT 1x4
 vfloat vcos(vfloat arg0)
 {
     vec4 a = smear_vec4(arg0);
     vec4 r = cos(a);
-    return make_vfloat(r);
+    return make_vfloat(r, arg0.components);
 }
 // JSFN vround IN 1x4 OUT 1x4
 vfloat vround(vfloat arg0)
 {
     vec4 a = smear_vec4(arg0);
     vec4 r = floor(a + 0.5);
-    return make_vfloat(r);
+    return make_vfloat(r, arg0.components);
 }
 // JSFN vfloor IN 1x4 OUT 1x4
 vfloat vfloor(vfloat arg0)
 {
     vec4 a = smear_vec4(arg0);
     vec4 r = floor(a);
-    return make_vfloat(r);
+    return make_vfloat(r, arg0.components);
 }
 // JSFN vfrac IN 1x4 OUT 1x4
 vfloat vfrac(vfloat arg0)
 {
     vec4 a = smear_vec4(arg0);
     vec4 r = fract(a);
-    return make_vfloat(r);
+    return make_vfloat(r, arg0.components);
 }
 // JSFN vsqrt IN 1x4 OUT 1x4
 vfloat vsqrt(vfloat arg0)
 {
     vec4 a = smear_vec4(arg0);
     vec4 r = sqrt(a);
-    return make_vfloat(r);
+    return make_vfloat(r, arg0.components);
 }
 // JSFN square IN 1x4 OUT 1x4
 vfloat square(vfloat arg0)
 {
     vec4 a = smear_vec4(arg0);
     vec4 r = a * a;
-    return make_vfloat(r);
+    return make_vfloat(r, arg0.components);
 }
 // JSFN vnormalize IN 1x4 OUT 1x4 
 vfloat vnormalize(vfloat arg0)
 {
     vec4 a = smear_vec4(arg0);
     vec4 r = normalize(a);
-    return make_vfloat(r);
+    return make_vfloat(r, arg0.components);
 }
 // JSFN theta IN 1x4 OUT 1x1
 vfloat theta(vfloat arg0)
@@ -629,7 +657,7 @@ vfloat vadd(vfloat arg0, vfloat arg1)
     vec4 a = smear_vec4(arg0);
     vec4 b = smear_vec4(arg1);
     vec4 r = a + b;
-    return make_vfloat(r);
+    return make_vfloat(r, arg0.components > arg1.components ? arg0.components : arg1.components);
 }
 // JSFN vsub IN 2x4 OUT 1x4
 vfloat vsub(vfloat arg0, vfloat arg1)
@@ -637,7 +665,7 @@ vfloat vsub(vfloat arg0, vfloat arg1)
     vec4 a = smear_vec4(arg0);
     vec4 b = smear_vec4(arg1);
     vec4 r = a - b;
-    return make_vfloat(r);
+    return make_vfloat(r, arg0.components > arg1.components ? arg0.components : arg1.components);
 }
 // JSFN vmul IN 2x4 OUT 1x4
 vfloat vmul(vfloat arg0, vfloat arg1)
@@ -645,7 +673,7 @@ vfloat vmul(vfloat arg0, vfloat arg1)
     vec4 a = smear_vec4(arg0);
     vec4 b = smear_vec4(arg1);
     vec4 r = a * b;
-    return make_vfloat(r);
+    return make_vfloat(r, arg0.components > arg1.components ? arg0.components : arg1.components);
 }
 // JSFN vdivide IN 2x4 OUT 1x4
 vfloat vdivide(vfloat arg0, vfloat arg1)
@@ -653,7 +681,7 @@ vfloat vdivide(vfloat arg0, vfloat arg1)
     vec4 a = smear_vec4(arg0);
     vec4 b = smear_vec4(arg1);
     vec4 r = a / b;
-    return make_vfloat(r);
+    return make_vfloat(r, arg0.components > arg1.components ? arg0.components : arg1.components);
 }
 // JSFN vmin IN 2x4 OUT 1x4
 vfloat vmin(vfloat arg0, vfloat arg1)
@@ -661,7 +689,7 @@ vfloat vmin(vfloat arg0, vfloat arg1)
     vec4 a = smear_vec4(arg0);
     vec4 b = smear_vec4(arg1);
     vec4 r = min(a,b);
-    return make_vfloat(r);
+    return make_vfloat(r, arg0.components > arg1.components ? arg0.components : arg1.components);
 }
 // JSFN vmax IN 2x4 OUT 1x4
 vfloat vmax(vfloat arg0, vfloat arg1)
@@ -669,7 +697,7 @@ vfloat vmax(vfloat arg0, vfloat arg1)
     vec4 a = smear_vec4(arg0);
     vec4 b = smear_vec4(arg1);
     vec4 r = max(a,b);
-    return make_vfloat(r);
+    return make_vfloat(r, arg0.components > arg1.components ? arg0.components : arg1.components);
 }
 // JSFN vmod IN 2x4 OUT 1x4
 vfloat vmod(vfloat arg0, vfloat arg1)
@@ -677,7 +705,7 @@ vfloat vmod(vfloat arg0, vfloat arg1)
     vec4 a = smear_vec4(arg0);
     vec4 b = smear_vec4(arg1);
     vec4 r = mod(a,b);
-    return make_vfloat(r);
+    return make_vfloat(r, arg0.components > arg1.components ? arg0.components : arg1.components);
 }
 // JSFN vdot IN 2x4 OUT 1x1
 vfloat vdot(vfloat arg0, vfloat arg1)

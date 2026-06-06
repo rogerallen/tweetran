@@ -373,15 +373,34 @@ class Expression {
         out << "    float gain = 0.5;\n";
         out << "    float scale = 0.5;\n";
         out << "    vfloat sum = make_vfloat(0.0, 0.0, 0.0, 0.0);\n";
+        out << "    int out_comp = 4;\n";
         out << "    for (float octave = 0.0; octave < octaves; octave += 1.0) {\n";
         out << "        float pos_scale = pow(lacunarity, octave);\n";
         out << "        vfloat pos1 = make_vfloat(pos.v * pos_scale);\n";
         out << "        vfloat val = " << fn_name << "(pos1);\n";
+        out << "        if (octave == 0.0) {\n";
+        out << "            out_comp = val.components;\n";
+        out << "        }\n";
         out << "        float val_scale = scale * pow(gain, octave);\n";
         out << "        val = make_vfloat(val.v * val_scale);\n";
         out << "        sum = make_vfloat(sum.v + val.v);\n";
         out << "    }\n";
+        out << "    if (out_comp == 1) return make_vfloat(sum.v.x);\n";
+        out << "    if (out_comp == 2) return make_vfloat(sum.v.x, sum.v.y);\n";
+        out << "    if (out_comp == 3) return make_vfloat(sum.v.x, sum.v.y, sum.v.z);\n";
         out << "    return sum;\n";
+        out << "}\n";
+    }
+
+    static void fragTurbulateFnGen(std::stringstream &out, std::string fn_name)
+    {
+        out << "vfloat turbulate_" << fn_name << "(vfloat pos, vfloat factor)\n";
+        out << "{\n";
+        out << "    vfloat v = vmul(factor, turbulence(pos));\n";
+        out << "    vec4 o = get_vec4(v);\n";
+        out << "    vfloat pos1 = make_vfloat(pos.v + o);\n";
+        out << "    vfloat var0 = " << fn_name << "(pos1);\n";
+        out << "    return var0;\n";
         out << "}\n";
     }
 
@@ -409,7 +428,9 @@ class Expression {
                     else if (mLabel == "gradient") {
                         fragGradientFnGen(out, fn_name);
                     }
-                    // FIXME more types
+                    else if (mLabel == "turbulate") {
+                        fragTurbulateFnGen(out, fn_name);
+                    }
                 }
             }
         }

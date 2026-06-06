@@ -14,6 +14,11 @@ vfloat make_vfloat(vec4 x)
   vfloat r = vfloat(x, 4);
   return r;
 }
+vfloat make_vfloat(vec4 x, int comps)
+{
+  vfloat r = vfloat(x, comps);
+  return r;
+}
 vfloat make_vfloat(vec3 x)
 {
   vfloat r = vfloat(vec4(x.xyz,0.0), 3);
@@ -46,6 +51,10 @@ vfloat make_vfloat(float x, float y, float z, float w)
 }
 vec4 get_vec4(vfloat x)
 {
+  if (x.components == 0) return vec4(0.0);
+  if (x.components == 1) return vec4(x.v.x, 0.0, 0.0, 0.0);
+  if (x.components == 2) return vec4(x.v.xy, 0.0, 0.0);
+  if (x.components == 3) return vec4(x.v.xyz, 0.0);
   return x.v;
 }
 vec4 smear_vec4(vfloat x)
@@ -57,6 +66,9 @@ vec4 smear_vec4(vfloat x)
 }
 vec3 get_vec3(vfloat x)
 {
+  if (x.components == 0) return vec3(0.0);
+  if (x.components == 1) return vec3(x.v.x, 0.0, 0.0);
+  if (x.components == 2) return vec3(x.v.xy, 0.0);
   return x.v.xyz;
 }
 vec3 smear_vec3(vfloat x)
