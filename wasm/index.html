@@ -1,0 +1,805 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tweetran Transpiler Playground</title>
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-color: #0b0d16;
+            --panel-bg: rgba(17, 20, 34, 0.7);
+            --panel-border: rgba(255, 255, 255, 0.08);
+            --primary: #6366f1;
+            --primary-hover: #4f46e5;
+            --text-main: #f3f4f6;
+            --text-muted: #9ca3af;
+            --success: #10b981;
+            --danger: #ef4444;
+            --card-glow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            background-image: 
+                radial-gradient(at 10% 20%, rgba(99, 102, 241, 0.15) 0px, transparent 50%),
+                radial-gradient(at 90% 80%, rgba(192, 132, 252, 0.15) 0px, transparent 50%);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+        }
+
+        header {
+            padding: 1.25rem 2rem;
+            border-bottom: 1px solid var(--panel-border);
+            background: rgba(11, 13, 22, 0.8);
+            backdrop-filter: blur(12px);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
+        }
+
+        .brand h1 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 800;
+            background: linear-gradient(to right, #818cf8, #c084fc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -0.5px;
+        }
+
+        .brand p {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            margin-top: 0.1rem;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .preset-select-label {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        select.preset-dropdown {
+            background: #181b2a;
+            border: 1px solid var(--panel-border);
+            color: var(--text-main);
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            font-family: inherit;
+            outline: none;
+            cursor: pointer;
+            font-weight: 500;
+            transition: border-color 0.2s ease;
+        }
+
+        select.preset-dropdown:focus {
+            border-color: var(--primary);
+        }
+
+        .main-container {
+            display: flex;
+            flex: 1;
+            padding: 1.5rem;
+            gap: 1.5rem;
+            height: calc(100vh - 75px);
+            max-width: 1800px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .pane {
+            background: var(--panel-bg);
+            border: 1px solid var(--panel-border);
+            border-radius: 16px;
+            box-shadow: var(--card-glow);
+            backdrop-filter: blur(12px);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            transition: border-color 0.2s ease;
+        }
+
+        .pane-header {
+            padding: 1rem 1.25rem;
+            border-bottom: 1px solid var(--panel-border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(15, 17, 26, 0.4);
+        }
+
+        .pane-title {
+            font-family: 'Outfit', sans-serif;
+            font-weight: 600;
+            font-size: 0.95rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #e0e7ff;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Editor Pane (Left) */
+        .editor-pane {
+            flex: 1.1;
+        }
+
+        .editor-container {
+            flex: 1;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+        }
+
+        textarea.clisk-editor {
+            flex: 1;
+            background: #0d0f19;
+            border: none;
+            resize: none;
+            color: #a5b4fc;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            padding: 1.25rem;
+            line-height: 1.5;
+            outline: none;
+            tab-size: 4;
+        }
+
+        .editor-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.5rem 1.25rem;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 0 12px rgba(99, 102, 241, 0.3);
+        }
+
+        .editor-btn:hover {
+            background: var(--primary-hover);
+            box-shadow: 0 0 16px rgba(99, 102, 241, 0.5);
+        }
+
+        /* Preview Pane (Middle) */
+        .preview-pane {
+            flex: 1;
+            align-items: center;
+        }
+
+        .canvas-container {
+            flex: 1;
+            width: 100%;
+            position: relative;
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+            background: #07080d;
+            padding-top: 1.5rem;
+            overflow: hidden;
+            cursor: grab;
+        }
+
+        .canvas-container:active {
+            cursor: grabbing;
+        }
+
+        canvas#webgl-canvas {
+            max-width: 100%;
+            max-height: 100%;
+            display: block;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+            border-radius: 8px;
+        }
+
+        .preview-controls {
+            width: 100%;
+            padding: 1.25rem;
+            border-top: 1px solid var(--panel-border);
+            background: rgba(15, 17, 26, 0.4);
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .control-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+        }
+
+        .control-label {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            font-weight: 500;
+            width: 70px;
+        }
+
+        .control-slider {
+            flex: 1;
+            -webkit-appearance: none;
+            background: #1e293b;
+            height: 6px;
+            border-radius: 3px;
+            outline: none;
+        }
+
+        .control-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: var(--primary);
+            cursor: pointer;
+            box-shadow: 0 0 8px rgba(99, 102, 241, 0.5);
+            transition: transform 0.1s ease;
+        }
+
+        .control-slider::-webkit-slider-thumb:hover {
+            transform: scale(1.2);
+        }
+
+        .control-val {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            color: #818cf8;
+            width: 55px;
+            text-align: right;
+        }
+
+        .btn-circle {
+            background: #1e293b;
+            border: 1px solid var(--panel-border);
+            color: var(--text-main);
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .btn-circle:hover {
+            background: var(--primary);
+            border-color: var(--primary);
+            color: white;
+        }
+
+        /* Exporter Pane (Right) */
+        .exporter-pane {
+            flex: 1.2;
+        }
+
+        .tabs-header {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .tab-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            padding: 0.25rem 0.75rem;
+            font-weight: 600;
+            font-size: 0.85rem;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .tab-btn.active {
+            background: rgba(99, 102, 241, 0.15);
+            color: #a5b4fc;
+        }
+
+        .code-container {
+            flex: 1;
+            position: relative;
+            background: #08090f;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        pre.code-viewer {
+            flex: 1;
+            padding: 1.25rem;
+            margin: 0;
+            overflow: auto;
+            color: #cbd5e1;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            line-height: 1.5;
+            white-space: pre-wrap;
+        }
+
+        .copy-btn {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: rgba(30, 41, 59, 0.8);
+            border: 1px solid var(--panel-border);
+            color: var(--text-muted);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            cursor: pointer;
+            backdrop-filter: blur(4px);
+            transition: all 0.2s ease;
+        }
+
+        .copy-btn:hover {
+            background: var(--primary);
+            border-color: var(--primary);
+            color: white;
+        }
+
+        /* Error/Status Bar */
+        .error-log {
+            padding: 0.75rem 1.25rem;
+            background: rgba(239, 68, 68, 0.1);
+            border-top: 1px solid rgba(239, 68, 68, 0.2);
+            color: #fca5a5;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            display: none;
+            white-space: pre-wrap;
+            max-height: 120px;
+            overflow-y: auto;
+        }
+
+        /* Loading Overlay */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: var(--bg-color);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            transition: opacity 0.5s ease;
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 3px solid rgba(99, 102, 241, 0.1);
+            border-top-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 1.5rem;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .loading-text {
+            font-family: 'Outfit', sans-serif;
+            font-weight: 600;
+            color: var(--text-main);
+            font-size: 1.2rem;
+            letter-spacing: 0.5px;
+        }
+
+        .loading-subtext {
+            color: var(--text-muted);
+            font-size: 0.8rem;
+            margin-top: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Loading Screen -->
+    <div class="loading-overlay" id="loading-overlay">
+        <div class="spinner"></div>
+        <div class="loading-text">Initializing WebAssembly compiler...</div>
+        <div class="loading-subtext">Loading CLISK transpilation assets</div>
+    </div>
+
+    <header>
+        <div class="brand">
+            <h1>TWEETRAN PLAYGROUND</h1>
+            <p>Write Clisk s-expressions, transpile dynamically, render WebGL instantly</p>
+        </div>
+        <div class="header-actions">
+            <span class="preset-select-label">Load Preset:</span>
+            <select class="preset-dropdown" id="preset-selector" onchange="loadPreset(this.value)">
+                <option value="custom">-- Custom Code --</option>
+                <option value="agate" selected>Agate Rock Texture</option>
+                <option value="wood">Circular Wood Grain</option>
+                <option value="plasma">Plasma Noise Pattern</option>
+                <option value="snoise">Simplex Noise Pattern</option>
+                <option value="scale">Scale Modifier</option>
+                <option value="rotate">Rotate Modifier</option>
+            </select>
+        </div>
+    </header>
+
+    <div class="main-container">
+        <!-- Editor (Left) -->
+        <div class="pane editor-pane">
+            <div class="pane-header">
+                <div class="pane-title">📝 CLISK Editor</div>
+                <button class="editor-btn" onclick="compileCurrentCode()">Transpile</button>
+            </div>
+            <div class="editor-container">
+                <textarea class="clisk-editor" id="clisk-editor" spellcheck="false" placeholder="Write clisk formula..."></textarea>
+            </div>
+        </div>
+
+        <!-- WebGL Preview (Center) -->
+        <div class="pane preview-pane">
+            <div class="pane-header">
+                <div class="pane-title">🌐 WebGL Live preview</div>
+                <button class="btn-circle" id="btn-play-pause" onclick="toggleAnimation()">⏸</button>
+            </div>
+            <div class="canvas-container" id="canvas-container">
+                <canvas id="webgl-canvas" width="384" height="384"></canvas>
+            </div>
+            <div class="preview-controls">
+                <div class="control-row">
+                    <span class="control-label">Zoom</span>
+                    <input type="range" class="control-slider" id="zoom-slider" min="0.1" max="10.0" step="0.05" value="1.0" oninput="updateZoom(this.value)">
+                    <span class="control-val" id="zoom-val">1.0x</span>
+                </div>
+                <div class="control-row">
+                    <span class="control-label">Time</span>
+                    <input type="range" class="control-slider" id="time-slider" min="0" max="60" step="0.05" value="0.0" oninput="updateTime(this.value)">
+                    <span class="control-val" id="time-val">0.0s</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Code Exporter (Right) -->
+        <div class="pane exporter-pane">
+            <div class="pane-header">
+                <div class="pane-title">🛠 Transpile Targets</div>
+                <div class="tabs-header">
+                    <button class="tab-btn active" onclick="switchTab('glsl')">GLSL</button>
+                    <button class="tab-btn" onclick="switchTab('cpp_cuda')">C++/CUDA</button>
+                </div>
+            </div>
+            <div class="code-container">
+                <button class="copy-btn" onclick="copyCurrentCode()">Copy</button>
+                <!-- GLSL Tab -->
+                <pre class="code-viewer" id="code-viewer-glsl" style="display: block;"></pre>
+                <!-- C++/CUDA Tab -->
+                <pre class="code-viewer" id="code-viewer-cpp" style="display: none;"></pre>
+            </div>
+            <div class="error-log" id="error-log"></div>
+        </div>
+    </div>
+
+    <!-- WebAssembly Glue Code -->
+    <script src="transpiler.js"></script>
+
+    <script>
+        // Preset CLISK formulas
+        const PRESETS = {
+            agate: `(clisk.live/agate)`,
+            wood: `(clisk.live/wood)`,
+            plasma: `(clisk.live/plasma)`,
+            snoise: `(clisk.live/snoise)`,
+            scale: `(clisk.live/scale 0.5 (clisk.live/v* clisk.live/pos [1.0 2.0 3.0 4.0]))`,
+            rotate: `(clisk.live/rotate 0.78 (clisk.live/v* clisk.live/pos [1.0 2.0 3.0 4.0]))`
+        };
+
+        let transpilerModule = null;
+        let transpileGLSL = null;
+        let transpileCPPCUDA = null;
+        let freeString = null;
+        
+        let glslCode = '';
+        let cppCode = '';
+        let activeTab = 'glsl';
+
+        // Load Preset Code
+        function loadPreset(key) {
+            if (PRESETS[key]) {
+                document.getElementById('clisk-editor').value = PRESETS[key].trim();
+                compileCurrentCode();
+            }
+        }
+
+        // Initialize WebAssembly compiler
+        createTranspilerModule().then(module => {
+            transpilerModule = module;
+            transpileGLSL = module.cwrap('transpile_to_glsl', 'number', ['string', 'string']);
+            transpileCPPCUDA = module.cwrap('transpile_to_cpp_cuda', 'number', ['string']);
+            freeString = module.cwrap('free_string', null, ['number']);
+            
+            // Hide loading overlay
+            document.getElementById('loading-overlay').style.opacity = '0';
+            setTimeout(() => {
+                document.getElementById('loading-overlay').style.display = 'none';
+            }, 500);
+
+            // Set initial state & transpile
+            loadPreset('agate');
+        });
+
+        // Error log display
+        function showError(msg) {
+            const errLog = document.getElementById('error-log');
+            errLog.textContent = msg;
+            errLog.style.display = 'block';
+        }
+
+        function clearError() {
+            document.getElementById('error-log').style.display = 'none';
+        }
+
+        // Run transpilation
+        function compileCurrentCode() {
+            if (!transpileGLSL) return;
+            
+            const cliskInput = document.getElementById('clisk-editor').value;
+            clearError();
+
+            // WebGL GLSL output
+            const glslPtr = transpileGLSL(cliskInput, "/");
+            const glslRes = transpilerModule.UTF8ToString(glslPtr);
+            freeString(glslPtr);
+
+            if (glslRes.startsWith('ERROR:')) {
+                showError(glslRes);
+                return;
+            }
+
+            glslCode = glslRes;
+            document.getElementById('code-viewer-glsl').textContent = glslCode;
+
+            // C++/CUDA output
+            const cppPtr = transpileCPPCUDA(cliskInput);
+            cppCode = transpilerModule.UTF8ToString(cppPtr);
+            freeString(cppPtr);
+            
+            document.getElementById('code-viewer-cpp').textContent = cppCode;
+
+            // Update WebGL Shader quad program
+            updateProgram(glslCode);
+        }
+
+        // Tab switching logic
+        function switchTab(tab) {
+            activeTab = tab;
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById('code-viewer-glsl').style.display = 'none';
+            document.getElementById('code-viewer-cpp').style.display = 'none';
+            
+            if (tab === 'glsl') {
+                event.target.classList.add('active');
+                document.getElementById('code-viewer-glsl').style.display = 'block';
+            } else if (tab === 'cpp_cuda') {
+                event.target.classList.add('active');
+                document.getElementById('code-viewer-cpp').style.display = 'block';
+            }
+        }
+
+        // Copy code to clipboard
+        function copyCurrentCode() {
+            const textToCopy = activeTab === 'glsl' ? glslCode : cppCode;
+            navigator.clipboard.writeText(textToCopy).then(() => {
+                const btn = event.target;
+                const orig = btn.textContent;
+                btn.textContent = 'Copied!';
+                btn.style.background = 'var(--success)';
+                btn.style.borderColor = 'var(--success)';
+                setTimeout(() => {
+                    btn.textContent = orig;
+                    btn.style.background = '';
+                    btn.style.borderColor = '';
+                }, 1500);
+            });
+        }
+
+        // WebGL render engine (vanilla WebGL)
+        const canvas = document.getElementById('webgl-canvas');
+        const gl = canvas.getContext('webgl2') || canvas.getContext('webgl');
+        if (!gl) {
+            showError('WebGL is not supported in this browser.');
+        }
+
+        // Quad position buffer setup
+        const positionBuffer = gl.createBuffer();
+        gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
+        const positions = new Float32Array([
+            -1, -1,
+             1, -1,
+            -1,  1,
+            -1,  1,
+             1, -1,
+             1,  1,
+        ]);
+        gl.bufferData(gl.ARRAY_BUFFER, positions, gl.STATIC_DRAW);
+
+        let currentProgram = null;
+        let vertexShader = null;
+
+        const vsSource = `
+            attribute vec2 position;
+            void main() {
+                gl_Position = vec4(position, 0.0, 1.0);
+            }
+        `;
+
+        function compileShader(gl, source, type) {
+            const shader = gl.createShader(type);
+            gl.shaderSource(shader, source);
+            gl.compileShader(shader);
+            if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
+                const info = gl.getShaderInfoLog(shader);
+                gl.deleteShader(shader);
+                throw new Error(info);
+            }
+            return shader;
+        }
+
+        function updateProgram(fragmentSource) {
+            try {
+                if (!vertexShader) {
+                    vertexShader = compileShader(gl, vsSource, gl.VERTEX_SHADER);
+                }
+                const fragmentShader = compileShader(gl, "precision mediump float;\n" + fragmentSource, gl.FRAGMENT_SHADER);
+                const program = gl.createProgram();
+                gl.attachShader(program, vertexShader);
+                gl.attachShader(program, fragmentShader);
+                gl.linkProgram(program);
+
+                if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
+                    throw new Error(gl.getProgramInfoLog(program));
+                }
+
+                if (currentProgram) {
+                    gl.deleteProgram(currentProgram);
+                }
+                currentProgram = program;
+                clearError();
+            } catch (e) {
+                showError("Fragment Shader compile error: " + e.message);
+            }
+        }
+
+        // Control parameters
+        let offset = [0.0, 0.0];
+        let zoom = 1.0;
+        let time = 0.0;
+        let lastTime = 0.0;
+        let isAnimating = true;
+
+        function updateZoom(val) {
+            zoom = parseFloat(val);
+            document.getElementById('zoom-val').textContent = zoom.toFixed(2) + 'x';
+        }
+
+        function updateTime(val) {
+            time = parseFloat(val);
+            document.getElementById('time-val').textContent = time.toFixed(1) + 's';
+        }
+
+        function toggleAnimation() {
+            isAnimating = !isAnimating;
+            const btn = document.getElementById('btn-play-pause');
+            btn.textContent = isAnimating ? '⏸' : '▶';
+        }
+
+        // Mouse interaction for Panning and Zooming
+        let isDragging = false;
+        let startDrag = [0, 0];
+        let startOffset = [0, 0];
+        const container = document.getElementById('canvas-container');
+
+        container.addEventListener('mousedown', e => {
+            isDragging = true;
+            startDrag = [e.clientX, e.clientY];
+            startOffset = [...offset];
+        });
+
+        window.addEventListener('mousemove', e => {
+            if (isDragging) {
+                const dx = e.clientX - startDrag[0];
+                const dy = e.clientY - startDrag[1];
+                // WebGL Y coordinate points upwards
+                offset[0] = startOffset[0] - dx * (zoom * 0.01);
+                offset[1] = startOffset[1] + dy * (zoom * 0.01);
+            }
+        });
+
+        window.addEventListener('mouseup', () => {
+            isDragging = false;
+        });
+
+        container.addEventListener('wheel', e => {
+            e.preventDefault();
+            const factor = e.deltaY < 0 ? 0.9 : 1.1;
+            zoom = Math.min(Math.max(zoom * factor, 0.1), 20.0);
+            document.getElementById('zoom-slider').value = zoom;
+            document.getElementById('zoom-val').textContent = zoom.toFixed(2) + 'x';
+        });
+
+        // Animation frame draw loop
+        function render(now) {
+            if (lastTime === 0) lastTime = now;
+            const dt = (now - lastTime) * 0.001;
+            lastTime = now;
+
+            if (isAnimating) {
+                time += dt;
+                document.getElementById('time-slider').value = time;
+                document.getElementById('time-val').textContent = time.toFixed(1) + 's';
+            }
+
+            if (currentProgram) {
+                gl.viewport(0, 0, canvas.width, canvas.height);
+                gl.clearColor(0.02, 0.03, 0.06, 1.0);
+                gl.clear(gl.COLOR_BUFFER_BIT);
+
+                gl.useProgram(currentProgram);
+
+                // Quad vertex attribute binding
+                const positionLocation = gl.getAttribLocation(currentProgram, 'position');
+                gl.enableVertexAttribArray(positionLocation);
+                gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
+                gl.vertexAttribPointer(positionLocation, 2, gl.FLOAT, false, 0, 0);
+
+                // Bind uniforms
+                const resLoc = gl.getUniformLocation(currentProgram, 'iResolution');
+                if (resLoc) gl.uniform3f(resLoc, canvas.width, canvas.height, 1.0);
+
+                const timeLoc = gl.getUniformLocation(currentProgram, 'iTime');
+                if (timeLoc) gl.uniform1f(timeLoc, time);
+
+                const offsetLoc = gl.getUniformLocation(currentProgram, 'uOffset');
+                if (offsetLoc) gl.uniform2f(offsetLoc, offset[0], offset[1]);
+
+                const zoomLoc = gl.getUniformLocation(currentProgram, 'uZoom');
+                if (zoomLoc) gl.uniform1f(zoomLoc, zoom);
+
+                gl.drawArrays(gl.TRIANGLES, 0, 6);
+            }
+
+            requestAnimationFrame(render);
+        }
+
+        requestAnimationFrame(render);
+    </script>
+</body>
+</html>

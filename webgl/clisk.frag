@@ -190,7 +190,7 @@ vfloat vabs_vsnoise(vfloat pos)
 // JSGEN make_multi_fractal noise
 vfloat make_multi_fractal_noise(vfloat pos)
 {
-    float octaves = 8.0;
+    const float octaves = 8.0;
     float lacunarity = 2.0;
     float gain = 0.5;
     float scale = 0.5;
@@ -215,7 +215,7 @@ vfloat make_multi_fractal_noise(vfloat pos)
 // JSGEN make_multi_fractal snoise
 vfloat make_multi_fractal_snoise(vfloat pos)
 {
-    float octaves = 8.0;
+    const float octaves = 8.0;
     float lacunarity = 2.0;
     float gain = 0.5;
     float scale = 0.5;
@@ -240,7 +240,7 @@ vfloat make_multi_fractal_snoise(vfloat pos)
 // JSGEN make_multi_fractal vabs_snoise
 vfloat make_multi_fractal_vabs_snoise(vfloat pos)
 {
-    float octaves = 8.0;
+    const float octaves = 8.0;
     float lacunarity = 2.0;
     float gain = 0.5;
     float scale = 0.5;
@@ -265,7 +265,7 @@ vfloat make_multi_fractal_vabs_snoise(vfloat pos)
 // JSGEN make_multi_fractal vabs_vsnoise
 vfloat make_multi_fractal_vabs_vsnoise(vfloat pos)
 {
-    float octaves = 8.0;
+    const float octaves = 8.0;
     float lacunarity = 2.0;
     float gain = 0.5;
     float scale = 0.5;
