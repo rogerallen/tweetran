@@ -439,24 +439,23 @@
             <h1>TWEETRAN PLAYGROUND</h1>
             <p>Write Clisk s-expressions, transpile dynamically, render WebGL instantly</p>
         </div>
-        <div class="header-actions">
-            <span class="preset-select-label">Load Preset:</span>
-            <select class="preset-dropdown" id="preset-selector" onchange="loadPreset(this.value)">
-                <option value="custom">-- Custom Code --</option>
-                <option value="test_09" selected>test_09 (gradient & noise)</option>
-                <option value="test_10">test_10 (scale & adjust-hsl)</option>
-                <option value="test_11">test_11 (vector scale)</option>
-                <option value="test_12">test_12 (nested scale & checker)</option>
-            </select>
-        </div>
     </header>
-
+ 
     <div class="main-container">
         <!-- Editor (Left) -->
         <div class="pane editor-pane">
             <div class="pane-header">
-                <div class="pane-title">📝 CLISK Editor</div>
-                <button class="editor-btn" onclick="compileCurrentCode()">Transpile</button>
+                <div class="pane-title">📝 Editor</div>
+                <div class="pane-actions" style="display: flex; gap: 0.75rem; align-items: center;">
+                    <select class="preset-dropdown" id="preset-selector" onchange="loadPreset(this.value)">
+                        <option value="custom">-- Custom Preset --</option>
+                        <option value="test_09" selected>test_09 (gradient & noise)</option>
+                        <option value="test_10">test_10 (scale & adjust-hsl)</option>
+                        <option value="test_11">test_11 (vector scale)</option>
+                        <option value="test_12">test_12 (nested scale & checker)</option>
+                    </select>
+                    <button class="editor-btn" onclick="compileCurrentCode()">Transpile</button>
+                </div>
             </div>
             <div class="editor-container">
                 <textarea class="clisk-editor" id="clisk-editor" spellcheck="false" placeholder="Write clisk formula..."></textarea>
