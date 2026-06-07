@@ -705,9 +705,8 @@
             if (isDragging) {
                 const dx = e.clientX - startDrag[0];
                 const dy = e.clientY - startDrag[1];
-                // WebGL Y coordinate points upwards
-                offset[0] = startOffset[0] - dx * (zoom * 0.01);
-                offset[1] = startOffset[1] + dy * (zoom * 0.01);
+                offset[0] = startOffset[0] + dx;
+                offset[1] = startOffset[1] + dy;
             }
         });
 
