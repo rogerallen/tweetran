@@ -135,7 +135,32 @@ Running the tests generates a local HTML dashboard at `tests/summary.html`. Open
 * Grid comparisons: Clojure Reference, C++, CUDA, WebGL Golden (marked "Same as Clojure" if no custom golden is used), and WebGL Current.
 * Live filters, search functionality, and click-to-zoom comparisons.
 
+### WebAssembly Transpiler & Interactive Playground
+
+We compile our C++ AST parser and code generators to WebAssembly using the Emscripten compiler. This allows us to run the transpiler pipeline entirely client-side, translating Clisk formulas to GLSL, C++, and CUDA shaders instantly in the browser with no server latency or costs.
+
+An interactive browser-based playground is located in the `wasm/` directory.
+
+#### Compilation Prerequisites & Build
+To compile the WebAssembly transpiler module:
+1. Ensure the Emscripten SDK (`emcc`) is installed.
+2. From the project root, navigate to the `wasm/` directory and run the compilation script:
+   ```bash
+   cd wasm
+   ./build.sh
+   ```
+   This compiles `transpiler_wasm.cpp` together with the transpiler core, embeds the WebGL shader source templates, and generates the modular assets `transpiler.js` and `transpiler.wasm`.
+
+#### Running the Playground Locally
+Because browsers prevent local asynchronous file requests (`file://`) due to CORS, you must run the playground using a local HTTP server:
+1. Spin up a lightweight server from the root directory:
+   ```bash
+   python3 -m http.server 8080 --directory wasm
+   ```
+2. Open your web browser and navigate to: [http://localhost:8080](http://localhost:8080).
+
 ## License
 
 Like the Clisk Library, code in this repository is LGPL 3.0.  http://www.gnu.org/licenses/lgpl-3.0.html
+
 
