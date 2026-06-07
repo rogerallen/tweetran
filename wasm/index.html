@@ -463,21 +463,14 @@
             </div>
         </div>
 
-        <!-- Code Exporter (Center) -->
+        <!-- GLSL Code Exporter (Center) -->
         <div class="pane exporter-pane">
             <div class="pane-header">
-                <div class="pane-title">🛠 Transpile Targets</div>
-                <div class="tabs-header">
-                    <button class="tab-btn active" onclick="switchTab('glsl')">GLSL</button>
-                    <button class="tab-btn" onclick="switchTab('cpp_cuda')">C++/CUDA</button>
-                </div>
+                <div class="pane-title">🛠 Transpiled GLSL</div>
             </div>
             <div class="code-container">
                 <button class="copy-btn" onclick="copyCurrentCode()">Copy</button>
-                <!-- GLSL Tab -->
                 <pre class="code-viewer" id="code-viewer-glsl" style="display: block;"></pre>
-                <!-- C++/CUDA Tab -->
-                <pre class="code-viewer" id="code-viewer-cpp" style="display: none;"></pre>
             </div>
             <div class="error-log" id="error-log"></div>
         </div>
@@ -520,12 +513,9 @@
 
         let transpilerModule = null;
         let transpileGLSL = null;
-        let transpileCPPCUDA = null;
         let freeString = null;
         
         let glslCode = '';
-        let cppCode = '';
-        let activeTab = 'glsl';
 
         // Load Preset Code
         function loadPreset(key) {
@@ -539,7 +529,6 @@
         createTranspilerModule().then(module => {
             transpilerModule = module;
             transpileGLSL = module.cwrap('transpile_to_glsl', 'number', ['string', 'string']);
-            transpileCPPCUDA = module.cwrap('transpile_to_cpp_cuda', 'number', ['string']);
             freeString = module.cwrap('free_string', null, ['number']);
             
             // Hide loading overlay
@@ -583,37 +572,13 @@
             glslCode = glslRes;
             document.getElementById('code-viewer-glsl').textContent = glslCode;
 
-            // C++/CUDA output
-            const cppPtr = transpileCPPCUDA(cliskInput);
-            cppCode = transpilerModule.UTF8ToString(cppPtr);
-            freeString(cppPtr);
-            
-            document.getElementById('code-viewer-cpp').textContent = cppCode;
-
             // Update WebGL Shader quad program
             updateProgram(glslCode);
         }
 
-        // Tab switching logic
-        function switchTab(tab) {
-            activeTab = tab;
-            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-            document.getElementById('code-viewer-glsl').style.display = 'none';
-            document.getElementById('code-viewer-cpp').style.display = 'none';
-            
-            if (tab === 'glsl') {
-                event.target.classList.add('active');
-                document.getElementById('code-viewer-glsl').style.display = 'block';
-            } else if (tab === 'cpp_cuda') {
-                event.target.classList.add('active');
-                document.getElementById('code-viewer-cpp').style.display = 'block';
-            }
-        }
-
         // Copy code to clipboard
         function copyCurrentCode() {
-            const textToCopy = activeTab === 'glsl' ? glslCode : cppCode;
-            navigator.clipboard.writeText(textToCopy).then(() => {
+            navigator.clipboard.writeText(glslCode).then(() => {
                 const btn = event.target;
                 const orig = btn.textContent;
                 btn.textContent = 'Copied!';
