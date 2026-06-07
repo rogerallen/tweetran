@@ -516,11 +516,22 @@
         let freeString = null;
         
         let glslCode = '';
+        let maxTimeReached = 60.0;
 
         // Load Preset Code
         function loadPreset(key) {
             if (PRESETS[key]) {
                 document.getElementById('clisk-editor').value = PRESETS[key].trim();
+                
+                // Reset time to 0.0 and reset slider boundaries
+                time = 0.0;
+                maxTimeReached = 60.0;
+                const slider = document.getElementById('time-slider');
+                slider.min = "0.0";
+                slider.max = "60.0";
+                slider.value = "0.0";
+                document.getElementById('time-val').textContent = "0.0s";
+                
                 compileCurrentCode();
             }
         }
@@ -730,7 +741,16 @@
 
             if (isAnimating) {
                 time += dt;
-                document.getElementById('time-slider').value = time;
+                maxTimeReached = Math.max(maxTimeReached, time);
+                const slider = document.getElementById('time-slider');
+                if (maxTimeReached > 60.0) {
+                    slider.min = (maxTimeReached - 60.0).toFixed(2);
+                    slider.max = maxTimeReached.toFixed(2);
+                } else {
+                    slider.min = "0.0";
+                    slider.max = "60.0";
+                }
+                slider.value = time;
                 document.getElementById('time-val').textContent = time.toFixed(1) + 's';
             }
 
