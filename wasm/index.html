@@ -189,6 +189,20 @@
             box-shadow: 0 0 16px rgba(99, 102, 241, 0.5);
         }
 
+        .editor-btn.secondary {
+            background: #1e293b;
+            color: var(--text-main);
+            border: 1px solid var(--panel-border);
+            box-shadow: none;
+        }
+
+        .editor-btn.secondary:hover {
+            background: #2d3748;
+            border-color: var(--primary);
+            box-shadow: 0 0 12px rgba(99, 102, 241, 0.2);
+        }
+
+
         /* Preview Pane (Middle) */
         .preview-pane {
             flex: 1;
@@ -469,6 +483,7 @@
                         <option value="test_11">test_11 (vector scale)</option>
                         <option value="test_12">test_12 (nested scale & checker)</option>
                     </select>
+                    <button class="editor-btn secondary" onclick="formatEditorCode()">Format</button>
                     <button class="editor-btn" onclick="compileCurrentCode()">Transpile</button>
                 </div>
             </div>
@@ -638,7 +653,12 @@
             
             try {
                 const code = await loadTweegeemeeCode(id);
-                document.getElementById('clisk-editor').value = code.trim();
+                try {
+                    document.getElementById('clisk-editor').value = formatLisp(code.trim());
+                } catch (fmtErr) {
+                    console.warn("Auto-formatting failed, displaying raw code:", fmtErr);
+                    document.getElementById('clisk-editor').value = code.trim();
+                }
                 
                 // Reset time to 0.0 and reset slider boundaries
                 time = 0.0;
@@ -657,6 +677,115 @@
                 loadBtn.disabled = false;
             }
         }
+
+        // Lisp S-expression pretty printer
+        function formatLisp(code) {
+            // Strip comments
+            const cleanCode = code.replace(/;.*$/gm, '');
+            
+            // Matches string literals, parens, brackets, or sequences of non-space/non-paren/non-bracket characters
+            const regex = /("[^"\\]*(?:\\.[^"\\]*)*"|[()\[\]]|[^\s()\[\]]+)/g;
+            const tokens = cleanCode.match(regex) || [];
+            
+            let index = 0;
+            function parseExpr() {
+                if (index >= tokens.length) return null;
+                const token = tokens[index++];
+                if (token === '(') {
+                    const list = [];
+                    list.type = 'list';
+                    while (index < tokens.length && tokens[index] !== ')') {
+                        list.push(parseExpr());
+                    }
+                    if (index >= tokens.length || tokens[index] !== ')') {
+                        throw new Error("Mismatched open parenthesis '('");
+                    }
+                    index++; // consume ')'
+                    return list;
+                } else if (token === '[') {
+                    const vector = [];
+                    vector.type = 'vector';
+                    while (index < tokens.length && tokens[index] !== ']') {
+                        vector.push(parseExpr());
+                    }
+                    if (index >= tokens.length || tokens[index] !== ']') {
+                        throw new Error("Mismatched open bracket '['");
+                    }
+                    index++; // consume ']'
+                    return vector;
+                } else if (token === ')' || token === ']') {
+                    throw new Error(`Unexpected closing token: '${token}'`);
+                } else {
+                    return token; // simple token
+                }
+            }
+            
+            const ast = [];
+            while (index < tokens.length) {
+                const expr = parseExpr();
+                if (expr !== null) {
+                    ast.push(expr);
+                }
+            }
+            
+            function serializeInline(node) {
+                if (Array.isArray(node)) {
+                    const open = node.type === 'vector' ? '[' : '(';
+                    const close = node.type === 'vector' ? ']' : ')';
+                    return open + node.map(serializeInline).join(' ') + close;
+                }
+                return node;
+            }
+            
+            function serialize(node, indentLevel = 0) {
+                if (!Array.isArray(node)) {
+                    return node;
+                }
+                
+                if (node.type === 'vector') {
+                    return serializeInline(node);
+                }
+                
+                const inline = serializeInline(node);
+                if (inline.length < 50) {
+                    return inline;
+                }
+                
+                if (node.length === 0) {
+                    return "()";
+                }
+                
+                const head = node[0];
+                const headStr = serialize(head, indentLevel);
+                
+                let result = "(" + headStr;
+                
+                for (let i = 1; i < node.length; i++) {
+                    const child = node[i];
+                    const childStr = serialize(child, indentLevel + 1);
+                    result += "\n" + '  '.repeat(indentLevel + 1) + childStr;
+                }
+                
+                result += ")";
+                return result;
+            }
+            
+            return ast.map(expr => serialize(expr, 0)).join('\n\n');
+        }
+
+        // Format active code in the editor
+        function formatEditorCode() {
+            const editor = document.getElementById('clisk-editor');
+            const originalCode = editor.value;
+            try {
+                const formatted = formatLisp(originalCode);
+                editor.value = formatted;
+                clearError();
+            } catch (e) {
+                showError("Formatting failed: " + e.message);
+            }
+        }
+
 
         // Initialize WebAssembly compiler
         createTranspilerModule().then(module => {
