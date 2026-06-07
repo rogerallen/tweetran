@@ -570,7 +570,14 @@
             }
 
             glslCode = glslRes;
-            document.getElementById('code-viewer-glsl').textContent = glslCode;
+            const viewer = document.getElementById('code-viewer-glsl');
+            viewer.textContent = glslCode;
+            setTimeout(() => {
+                const style = window.getComputedStyle(viewer);
+                const lh = parseFloat(style.lineHeight) || (1.5 * parseFloat(style.fontSize)) || 18;
+                const offset = 23 * lh;
+                viewer.scrollTop = Math.max(0, viewer.scrollHeight - viewer.clientHeight - offset);
+            }, 0);
 
             // Update WebGL Shader quad program
             updateProgram(glslCode);
