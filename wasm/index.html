@@ -443,12 +443,10 @@
             <span class="preset-select-label">Load Preset:</span>
             <select class="preset-dropdown" id="preset-selector" onchange="loadPreset(this.value)">
                 <option value="custom">-- Custom Code --</option>
-                <option value="agate" selected>Agate Rock Texture</option>
-                <option value="wood">Circular Wood Grain</option>
-                <option value="plasma">Plasma Noise Pattern</option>
-                <option value="snoise">Simplex Noise Pattern</option>
-                <option value="scale">Scale Modifier</option>
-                <option value="rotate">Rotate Modifier</option>
+                <option value="test_09" selected>test_09 (gradient & noise)</option>
+                <option value="test_10">test_10 (scale & adjust-hsl)</option>
+                <option value="test_11">test_11 (vector scale)</option>
+                <option value="test_12">test_12 (nested scale & checker)</option>
             </select>
         </div>
     </header>
@@ -514,12 +512,10 @@
     <script>
         // Preset CLISK formulas
         const PRESETS = {
-            agate: `(clisk.live/agate)`,
-            wood: `(clisk.live/wood)`,
-            plasma: `(clisk.live/plasma)`,
-            snoise: `(clisk.live/snoise)`,
-            scale: `(clisk.live/scale 0.5 (clisk.live/v* clisk.live/pos [1.0 2.0 3.0 4.0]))`,
-            rotate: `(clisk.live/rotate 0.78 (clisk.live/v* clisk.live/pos [1.0 2.0 3.0 4.0]))`
+            test_09: `(v+ (gradient (vsnoise)) (v* vsnoise vnoise))`,
+            test_10: `((scale (vsnoise) (clisk.live/adjust-hsl snoise clisk.live/pos)))`,
+            test_11: `(scale [1 1 1 10] vnoise)`,
+            test_12: `(scale (scale [1 1 1 10] (noise)) (checker [1.0 0.5 0.0 0.0] [0.25 0.25 0.5 0.0]))`
         };
 
         let transpilerModule = null;
@@ -553,7 +549,7 @@
             }, 500);
 
             // Set initial state & transpile
-            loadPreset('agate');
+            loadPreset('test_09');
         });
 
         // Error log display
