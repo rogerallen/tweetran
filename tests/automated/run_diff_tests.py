@@ -191,6 +191,9 @@ def main():
             targets = ["cpp"]
         elif arg == "--webgl-only":
             targets = ["webgl"]
+        elif arg == "--skip-webgl":
+            if "webgl" in targets:
+                targets.remove("webgl")
         elif arg == "--regenerate-refs":
             regenerate_refs = True
             

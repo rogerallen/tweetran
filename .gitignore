@@ -14,7 +14,8 @@ win_vs22/x64/
 tests/references/
 tests/outputs/
 tests/automated/.cpcache/
-tests/cases/
+tests/cases/*
+!tests/cases/fuzz_*.clj
 __pycache__/
 *.pyc
 node_modules/
