@@ -55,6 +55,8 @@ fn_db['turbulate']['addpos'] = True
 fn_db['turbulate']['modpos'] = True
 fn_db['gradient']['addpos'] = True
 fn_db['gradient']['modpos'] = True
+fn_db['height-normal']['addpos'] = True
+fn_db['height-normal']['modpos'] = True
 for f in modpos_binary_fns:
     fn_db[f]['addpos'] = True
     fn_db[f]['modpos'] = True

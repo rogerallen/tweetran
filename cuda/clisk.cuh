@@ -1144,15 +1144,26 @@ __device__ vfloat height(vfloat arg0)
     float r = a.z;
     return vfloat(r);
 }
-// JSFN height_normal IN 1x4 OUT 1x3
-__device__ vfloat height_normal(vfloat arg0)
+// Helper function for height_normal evaluation
+__device__ float height_val(vfloat pos, vfloat (*fn)(vfloat))
 {
-    vfloat v = gradient(arg0, z); // ??? I think this is right?
-    float3 r;
-    r.x = -v.x();
-    r.y = -v.y();
-    r.z = 1.0;
-    return vfloat(r);
+    vfloat val = fn(pos);
+    return (val.num_components() < 3) ? val.x() : val.z();
+}
+// FN height_normal IN pos,fn OUT 1x3
+__device__ vfloat height_normal(vfloat pos, vfloat (*fn)(vfloat))
+{
+    float epsilon = 0.000001f;
+    float oo_epsilon = 1.0f / epsilon;
+    vfloat pos_dx = make_float4(pos.x() + epsilon, pos.y(), pos.z(), pos.w());
+    vfloat pos_dy = make_float4(pos.x(), pos.y() + epsilon, pos.z(), pos.w());
+    float h = height_val(pos, fn);
+    float h_dx = height_val(pos_dx, fn);
+    float h_dy = height_val(pos_dy, fn);
+    float nx = -(h_dx - h) * oo_epsilon;
+    float ny = -(h_dy - h) * oo_epsilon;
+    float nz = 1.0f;
+    return vfloat(make_float3(nx, ny, nz));
 }
 // JSFN hue_from_rgb IN 1x3(rgb) OUT 1x1
 __device__ vfloat hue_from_rgb(vfloat arg0)
@@ -1328,7 +1339,7 @@ __device__ vfloat cross3(vfloat arg0, vfloat arg1)
     r.y = a.z * b.x - a.x * a.z;
     r.z = a.x * b.y - a.y * a.x;
     r.w = 0.0f;
-    return vfloat(r);
+    return vfloat(r, 3);
 }
 // JSFN adjust_hsl IN 2x3(rgb) OUT 1x3
 // (defn adjust-hsl [shift source] (rgb-from-hsl (v+ shift (hsl-from-rgb source))))

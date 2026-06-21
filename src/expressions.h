@@ -96,6 +96,7 @@ static std::set<std::string> gAddPos = {
     "vturbulence",
     "wood",
     "gradient",
+    "height-normal",
     "checker",
     "offset",
     "rotate",
@@ -105,6 +106,7 @@ static std::set<std::string> gAddPos = {
 
 static std::set<std::string> gModPos = {
     "gradient",
+    "height-normal",
     "offset",
     "rotate",
     "scale",
