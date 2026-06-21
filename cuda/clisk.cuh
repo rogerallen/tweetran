@@ -995,7 +995,7 @@ __device__ vfloat max_component(vfloat arg0)
 // JSFN vlength IN 1x4 OUT 1x1
 __device__ vfloat vlength(vfloat arg0)
 {
-    float4 a = arg0.get(true);
+    float4 a = arg0.get(false);
     float r = sqrtf(a.x * a.x + a.y * a.y + a.z * a.z + a.w * a.w);
     return vfloat(r);
 }
