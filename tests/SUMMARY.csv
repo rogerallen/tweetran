@@ -1,6 +1,8 @@
 test_case,cuda_status,cuda_rmse,cuda_error,cpp_status,cpp_rmse,cpp_error,webgl_status,webgl_rmse,webgl_error
-fizz_001_alpha_3d,FAIL,1.000000,RMSE 1.000000 exceeded threshold 0.025 (diff saved),FAIL,1.000000,RMSE 1.000000 exceeded threshold 0.025 (diff saved),SKIPPED,,
+fizz_001_alpha_3d,PASS,0.000000,,PASS,0.000000,,SKIPPED,,
 fizz_002_length_scalar,FAIL,0.254750,RMSE 0.254750 exceeded threshold 0.025 (diff saved),FAIL,0.254750,RMSE 0.254750 exceeded threshold 0.025 (diff saved),SKIPPED,,
+fizz_003_min_component_2d,FAIL,0.200000,RMSE 0.200000 exceeded threshold 0.025 (diff saved),FAIL,0.200000,RMSE 0.200000 exceeded threshold 0.025 (diff saved),SKIPPED,,
+fizz_004_max_component_2d,FAIL,0.200000,RMSE 0.200000 exceeded threshold 0.025 (diff saved),FAIL,0.200000,RMSE 0.200000 exceeded threshold 0.025 (diff saved),SKIPPED,,
 fuzz_000,PASS,0.000000,,PASS,0.000000,,SKIPPED,,
 fuzz_001,PASS,0.000000,,PASS,0.000000,,SKIPPED,,
 fuzz_002,FAIL,0.248319,RMSE 0.248319 exceeded threshold 0.025 (diff saved),FAIL,0.248319,RMSE 0.248319 exceeded threshold 0.025 (diff saved),SKIPPED,,
