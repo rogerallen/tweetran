@@ -16,6 +16,7 @@ tests/outputs/
 tests/automated/.cpcache/
 tests/cases/*
 !tests/cases/fuzz_*.clj
+!tests/cases/fizz_*.clj
 __pycache__/
 *.pyc
 node_modules/
