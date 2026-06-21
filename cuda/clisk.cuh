@@ -926,45 +926,70 @@ __device__ vfloat triangle_wave(vfloat arg0)
 // JSFN x IN 1x4 OUT 1x1
 __device__ vfloat x(vfloat arg0)
 {
-    float4 a = arg0.get(true);
+    if (arg0.num_components() <= 1) {
+        return arg0;
+    }
+    float4 a = arg0.get(false);
     return vfloat(a.x);
 }
 // JSFN y IN 1x4 OUT 1x1
 __device__ vfloat y(vfloat arg0)
 {
-    float4 a = arg0.get(true);
-    return vfloat(a.y);
+    if (arg0.num_components() <= 1) {
+        return arg0;
+    }
+    float4 a = arg0.get(false);
+    return vfloat(arg0.num_components() >= 2 ? a.y : 0.0f);
 }
 // JSFN z IN 1x4 OUT 1x1
 __device__ vfloat z(vfloat arg0)
 {
-    float4 a = arg0.get(true);
-    return vfloat(a.z);
+    if (arg0.num_components() <= 1) {
+        return arg0;
+    }
+    float4 a = arg0.get(false);
+    return vfloat(arg0.num_components() >= 3 ? a.z : 0.0f);
 }
 // JSFN t IN 1x4 OUT 1x1
 __device__ vfloat t(vfloat arg0)
 {
-    float4 a = arg0.get(true);
-    return vfloat(a.w);
+    if (arg0.num_components() <= 1) {
+        return arg0;
+    }
+    float4 a = arg0.get(false);
+    return vfloat(arg0.num_components() >= 4 ? a.w : 0.0f);
 }
 // JSFN alpha IN 1x4 OUT 1x1
 __device__ vfloat alpha(vfloat arg0)
 {
-    float4 a = arg0.get(true);
-    return vfloat(a.w);
+    if (arg0.num_components() <= 1) {
+        return arg0;
+    }
+    float4 a = arg0.get(false);
+    return vfloat(arg0.num_components() >= 4 ? a.w : 1.0f);
 }
 // JSFN min_component IN 1x4 OUT 1x1
 __device__ vfloat min_component(vfloat arg0)
 {
-    float4 a = arg0.get(true);
-    float r = fminf(a.x, fminf(a.y, fminf(a.z, a.w)));
+    float4 a = arg0.get(false);
+    int comps = arg0.num_components();
+    float r = 0.0f;
+    if (comps >= 1) r = a.x;
+    if (comps >= 2) r = fminf(r, a.y);
+    if (comps >= 3) r = fminf(r, a.z);
+    if (comps >= 4) r = fminf(r, a.w);
     return vfloat(r);
 }
 // JSFN max_component IN 1x4 OUT 1x1
 __device__ vfloat max_component(vfloat arg0)
 {
-    float4 a = arg0.get(true);
-    float r = fmaxf(a.x, fmaxf(a.y, fmaxf(a.z, a.w)));
+    float4 a = arg0.get(false);
+    int comps = arg0.num_components();
+    float r = 0.0f;
+    if (comps >= 1) r = a.x;
+    if (comps >= 2) r = fmaxf(r, a.y);
+    if (comps >= 3) r = fmaxf(r, a.z);
+    if (comps >= 4) r = fmaxf(r, a.w);
     return vfloat(r);
 }
 // JSFN vlength IN 1x4 OUT 1x1
