@@ -1428,11 +1428,11 @@ __device__ vfloat average(vfloat arg0, vfloat arg1)
     float4 a = arg0.get(true);
     float4 b = arg1.get(true);
     float4 r;
-    r.x = 0.5 * (a.x + b.x);
-    r.y = 0.5 * (a.y + b.y);
-    r.z = 0.5 * (a.z + b.z);
-    r.w = 0.5 * (a.w + b.w);
-    return vfloat(r);
+    r.x = 0.5f * (a.x + b.x);
+    r.y = 0.5f * (a.y + b.y);
+    r.z = 0.5f * (a.z + b.z);
+    r.w = 0.5f * (a.w + b.w);
+    return vfloat(r, arg0.num_components() > arg1.num_components() ? arg0.num_components() : arg1.num_components());
 }
 // END
 // ======================================================================
@@ -1445,11 +1445,18 @@ __device__ vfloat lerp(vfloat arg0, vfloat arg1, vfloat arg2)
     float4 b = arg1.get(true);
     float4 c = arg2.get(true);
     float4 r;
-    r.x = b.x * (1.0f - a.x) + c.x * a.x;
-    r.y = b.y * (1.0f - a.y) + c.y * a.y;
-    r.z = b.z * (1.0f - a.z) + c.z * a.z;
-    r.w = b.w * (1.0f - a.w) + c.w * a.w;
-    return vfloat(r);
+    float ax = fmaxf(0.0f, fminf(1.0f, a.x));
+    float ay = fmaxf(0.0f, fminf(1.0f, a.y));
+    float az = fmaxf(0.0f, fminf(1.0f, a.z));
+    float aw = fmaxf(0.0f, fminf(1.0f, a.w));
+    r.x = b.x * (1.0f - ax) + c.x * ax;
+    r.y = b.y * (1.0f - ay) + c.y * ay;
+    r.z = b.z * (1.0f - az) + c.z * az;
+    r.w = b.w * (1.0f - aw) + c.w * aw;
+    int comps = arg0.num_components();
+    if (arg1.num_components() > comps) comps = arg1.num_components();
+    if (arg2.num_components() > comps) comps = arg2.num_components();
+    return vfloat(r, comps);
 }
 // JSFN vclamp IN 3x4 OUT 1x4
 __device__ vfloat vclamp(vfloat arg0, vfloat arg1, vfloat arg2)
@@ -1462,7 +1469,7 @@ __device__ vfloat vclamp(vfloat arg0, vfloat arg1, vfloat arg2)
     r.y = fmaxf(b.y, fminf(c.y, a.y));
     r.z = fmaxf(b.z, fminf(c.z, a.z));
     r.w = fmaxf(b.w, fminf(c.w, a.w));
-    return vfloat(r);
+    return vfloat(r, arg0.num_components());
 }
 // JSFN vif IN 3x4 OUT 1x4
 __device__ vfloat vif(vfloat arg0, vfloat arg1, vfloat arg2)
@@ -1471,11 +1478,12 @@ __device__ vfloat vif(vfloat arg0, vfloat arg1, vfloat arg2)
     float4 a = arg1.get(true);
     float4 b = arg2.get(true);
     float4 r;
-    r.x = (condition > 0.0) ? a.x : b.x;
-    r.y = (condition > 0.0) ? a.y : b.y;
-    r.z = (condition > 0.0) ? a.z : b.z;
-    r.w = (condition > 0.0) ? a.w : b.w;
-    return vfloat(r);
+    r.x = (condition > 0.0f) ? a.x : b.x;
+    r.y = (condition > 0.0f) ? a.y : b.y;
+    r.z = (condition > 0.0f) ? a.z : b.z;
+    r.w = (condition > 0.0f) ? a.w : b.w;
+    int comps = arg1.num_components() > arg2.num_components() ? arg1.num_components() : arg2.num_components();
+    return vfloat(r, comps);
 }
 // JSFN average IN 3x4 OUT 1x4
 __device__ vfloat average(vfloat arg0, vfloat arg1, vfloat arg2)
@@ -1484,11 +1492,14 @@ __device__ vfloat average(vfloat arg0, vfloat arg1, vfloat arg2)
     float4 b = arg1.get(true);
     float4 c = arg2.get(true);
     float4 r;
-    r.x = 0.333333333333 * (a.x + b.x + c.x);
-    r.y = 0.333333333333 * (a.y + b.y + c.y);
-    r.z = 0.333333333333 * (a.z + b.z + c.z);
-    r.w = 0.333333333333 * (a.w + b.w + c.w);
-    return vfloat(r);
+    r.x = 0.333333333333f * (a.x + b.x + c.x);
+    r.y = 0.333333333333f * (a.y + b.y + c.y);
+    r.z = 0.333333333333f * (a.z + b.z + c.z);
+    r.w = 0.333333333333f * (a.w + b.w + c.w);
+    int comps = arg0.num_components();
+    if (arg1.num_components() > comps) comps = arg1.num_components();
+    if (arg2.num_components() > comps) comps = arg2.num_components();
+    return vfloat(r, comps);
 }
 // JSFN vconcat IN 3x4 OUT 1x4
 __device__ vfloat vconcat(vfloat arg0, vfloat arg1, vfloat arg2)
