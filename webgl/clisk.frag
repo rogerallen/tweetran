@@ -558,8 +558,10 @@ vfloat radius(vfloat arg0)
 // JSFN polar IN 1x4 OUT 1x2
 vfloat polar(vfloat arg0)
 {
-    float r = radius(arg0).v.x;
-    float t = theta(arg0).v.x;
+    float x = arg0.v.x;
+    float y = (arg0.components >= 2) ? arg0.v.y : 0.0;
+    float r = sqrt(x * x + y * y);
+    float t = M_PI + atan(y, x);
     return make_vfloat(r, t);
 }
 // JSFN height IN 1x4 OUT 1x1

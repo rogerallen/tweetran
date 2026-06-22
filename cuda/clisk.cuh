@@ -1133,8 +1133,10 @@ __device__ vfloat radius(vfloat arg0)
 // JSFN polar IN 1x4 OUT 1x2
 __device__ vfloat polar(vfloat arg0)
 {
-    float r = radius(arg0).x();
-    float t = theta(arg0).x();
+    float x = arg0.x();
+    float y = (arg0.num_components() >= 2) ? arg0.y() : 0.0f;
+    float r = sqrtf(x * x + y * y);
+    float t = M_PI + atan2f(y, x);
     return vfloat(r, t);
 }
 // JSFN height IN 1x4 OUT 1x1

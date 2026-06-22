@@ -13,7 +13,7 @@ fuzz_002,PASS,0.003208,,PASS,0.003208,,PASS,0.000000,Compared against WebGL gold
 fuzz_003,PASS,0.000061,,PASS,0.000061,,PASS,0.000000,Compared against WebGL golden
 fuzz_004,PASS,0.003922,,PASS,0.003922,,PASS,0.003922,
 fuzz_005,PASS,0.021563,,PASS,0.021563,,PASS,0.000000,Compared against WebGL golden
-fuzz_006,FAIL,0.340976,RMSE 0.340976 exceeded threshold 0.025 (diff saved),FAIL,0.340976,RMSE 0.340976 exceeded threshold 0.025 (diff saved),PASS,0.000000,Compared against WebGL golden
+fuzz_006,PASS,0.000162,,PASS,0.000132,,PASS,0.000000,Compared against WebGL golden
 fuzz_007,PASS,0.003209,,PASS,0.003209,,PASS,0.000000,Compared against WebGL golden
 fuzz_008,PASS,0.003580,,PASS,0.003580,,PASS,0.002816,
 fuzz_009,PASS,0.000184,,PASS,0.000184,,PASS,0.000000,Compared against WebGL golden
