@@ -156,13 +156,14 @@ To compile the WebAssembly transpiler module:
    ```
    This compiles `transpiler_wasm.cpp` together with the transpiler core, embeds the WebGL shader source templates, and generates the modular assets `transpiler.js` and `transpiler.wasm`.
 
-#### Running the Playground Locally
-Because browsers prevent local asynchronous file requests (`file://`) due to CORS, you must run the playground using a local HTTP server:
-1. Spin up a lightweight server from the root directory:
+#### Running the Playground Locally (Recommended for WebGL Viewing)
+To instantly visualize and interact with any tweegeemee image in WebGL without CLI transpilation:
+1. Start a local HTTP server from the root of the project to serve the WASM playground:
    ```bash
    python3 -m http.server 8080 --directory wasm
    ```
-2. Open your web browser and navigate to: [http://localhost:8080](http://localhost:8080).
+2. Navigate to [http://localhost:8080](http://localhost:8080) in your web browser.
+3. Paste any Clojure Clisk formula directly into the text editor, click **Transpile**, and the WebGL canvas will render the interactive shader immediately. You can pan (click-drag), zoom (mousewheel), and toggle animation.
 
 ## License
 
