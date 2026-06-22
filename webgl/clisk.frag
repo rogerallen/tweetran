@@ -4,6 +4,11 @@
 // Full list of functions used by Tweegeemee are here:
 // https://github.com/rogerallen/tweegeemee/blob/master/src/tweegeemee/image.clj
 // --------------------------------------------------------------------------------
+// JSFN unity IN 1x4 OUT 1x4
+vfloat unity(vfloat arg0)
+{
+    return arg0;
+}
 // JSFN vabs IN 1x4 OUT 1x4
 vfloat vabs(vfloat arg0) 
 {

@@ -404,6 +404,28 @@ class Expression {
         out << "}\n";
     }
 
+    static void fragHeightNormalFnGen(std::stringstream &out, std::string fn_name)
+    {
+        out << "vfloat height_normal_" << fn_name << "(vfloat pos)\n";
+        out << "{\n";
+        out << "    float epsilon = 0.000001;\n";
+        out << "    float oo_epsilon = 1.0 / epsilon;\n";
+        out << "    vfloat pos_dx = make_vfloat(pos.v.x + epsilon, pos.v.y, pos.v.z, pos.v.w);\n";
+        out << "    vfloat pos_dy = make_vfloat(pos.v.x, pos.v.y + epsilon, pos.v.z, pos.v.w);\n";
+        out << "    vfloat val = " << fn_name << "(pos);\n";
+        out << "    float h = (val.components < 3) ? val.v.x : val.v.z;\n";
+        out << "    vfloat val_dx = " << fn_name << "(pos_dx);\n";
+        out << "    float h_dx = (val_dx.components < 3) ? val_dx.v.x : val_dx.v.z;\n";
+        out << "    vfloat val_dy = " << fn_name << "(pos_dy);\n";
+        out << "    float h_dy = (val_dy.components < 3) ? val_dy.v.x : val_dy.v.z;\n";
+        out << "    float nx = -(h_dx - h) * oo_epsilon;\n";
+        out << "    float ny = -(h_dy - h) * oo_epsilon;\n";
+        out << "    float nz = 1.0;\n";
+        out << "    vfloat var0 = make_vfloat(nx, ny, nz);\n";
+        out << "    return var0;\n";
+        out << "}\n";
+    }
+
     // FIXME turbulate
 
     // generate scale/offset type functions (only) prior to the current blockNumber
@@ -415,7 +437,13 @@ class Expression {
         if (mBlockId == blockNumber) {
             if (mIsFunction) {
                 if (gModPos.find(mLabel) != gModPos.end()) {
-                    std::string fn_name = "pixel_fn" + std::to_string(mArgs[mArgs.size() - 1].mBlockId);
+                    std::string fn_name;
+                    if (mArgs[mArgs.size() - 1].mIsFunction) {
+                        fn_name = "pixel_fn" + std::to_string(mArgs[mArgs.size() - 1].mBlockId);
+                    }
+                    else {
+                        fn_name = mArgs[mArgs.size() - 1].mLabel;
+                    }
                     if (mLabel == "offset") {
                         fragOffsetFnGen(out, fn_name);
                     }
@@ -430,6 +458,9 @@ class Expression {
                     }
                     else if (mLabel == "turbulate") {
                         fragTurbulateFnGen(out, fn_name);
+                    }
+                    else if (mLabel == "height-normal") {
+                        fragHeightNormalFnGen(out, fn_name);
                     }
                 }
             }
@@ -447,7 +478,12 @@ class Expression {
                 lastVarName = cudaVariableName();
                 out << "    vfloat " << cudaVariableName() << " = ";
                 if (gModPos.find(mLabel) != gModPos.end()) {
-                    out << gFunctionRename[mLabel] + "_pixel_fn" << mArgs[mArgs.size() - 1].mBlockId << "(";
+                    if (mArgs[mArgs.size() - 1].mIsFunction) {
+                        out << gFunctionRename[mLabel] + "_pixel_fn" << mArgs[mArgs.size() - 1].mBlockId << "(";
+                    }
+                    else {
+                        out << gFunctionRename[mLabel] + "_" << mArgs[mArgs.size() - 1].mLabel << "(";
+                    }
                 }
                 else {
                     out << gFunctionRename[mLabel] << "(";
