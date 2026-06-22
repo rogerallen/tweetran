@@ -235,6 +235,95 @@
             font-weight: 600;
             color: #e0e7ff;
         }
+        
+        .test-title-row {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.35rem;
+        }
+
+        .test-case-title {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #e0e7ff;
+        }
+
+        .clj-file-link {
+            color: var(--primary);
+            text-decoration: none;
+            font-size: 0.85rem;
+            opacity: 0.7;
+            transition: opacity 0.2s ease, transform 0.2s ease;
+            display: inline-block;
+            line-height: 1;
+        }
+
+        .clj-file-link:hover {
+            opacity: 1;
+            transform: translate(1px, -1px);
+            color: #818cf8;
+        }
+
+        .clj-code-container {
+            max-width: 450px;
+            max-height: 120px;
+            overflow: auto;
+            background: rgba(15, 17, 26, 0.6);
+            border-radius: 6px;
+            padding: 0.4rem 0.6rem;
+            border: 1px solid rgba(255, 255, 255, 0.04);
+        }
+
+        .clj-code-container::-webkit-scrollbar {
+            width: 4px;
+            height: 4px;
+        }
+
+        .clj-code-container::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 2px;
+        }
+
+        .clj-code {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.72rem;
+            color: #a5b4fc;
+            white-space: pre-wrap;
+            word-break: break-all;
+            line-height: 1.3;
+        }
+
+        .modal-clj-container {
+            width: 256px;
+            height: 256px;
+            border-radius: 12px;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            background: #0f111a;
+            padding: 1rem;
+            overflow: auto;
+            text-align: left;
+        }
+
+        .modal-clj-container::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+
+        .modal-clj-container::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 3px;
+        }
+
+        .modal-clj-code {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.72rem;
+            color: #a5b4fc;
+            white-space: pre-wrap;
+            word-break: break-all;
+            line-height: 1.4;
+        }
 
         .badge {
             display: inline-flex;
@@ -502,7 +591,20 @@
             </thead>
             <tbody id="table-body">
                 <tr class="test-row" data-name="fizz_001_alpha_3d">
-                    <td class="test-name">fizz_001_alpha_3d</td>
+                    <td class="test-name">
+                        <div class="test-title-row">
+                            <span class="test-case-title">fizz_001_alpha_3d</span>
+                            <a href="cases/fizz_001_alpha_3d.clj" target="_blank" class="clj-file-link" title="Open Clojure File ↗">↗</a>
+                        </div>
+                        <div class="clj-code-container">
+                            <pre class="clj-code"><code>;; This test verifies the default behavior of the alpha (4th) component selector on a 3D vector.
+;; In Clojure Clisk, the alpha component defaults to 1.0f on vectors with fewer than 4 components.
+;; Unmodified C++ code incorrectly evaluates this to 0.0f due to get(true) not smearing and 
+;; returning the 4th element as 0.0f.
+(clisk.live/alpha (clisk.live/vconcat clisk.live/snoise [1.0 2.0]))
+</code></pre>
+                        </div>
+                    </td>
                     <td>
                         <span class="badge badge-PASS">PASS</span>
                         <span class="rmse-val">RMSE: 0.000000</span>
@@ -539,7 +641,20 @@
                     </td>
                 </tr>
                 <tr class="test-row" data-name="fizz_002_length_scalar">
-                    <td class="test-name">fizz_002_length_scalar</td>
+                    <td class="test-name">
+                        <div class="test-title-row">
+                            <span class="test-case-title">fizz_002_length_scalar</span>
+                            <a href="cases/fizz_002_length_scalar.clj" target="_blank" class="clj-file-link" title="Open Clojure File ↗">↗</a>
+                        </div>
+                        <div class="clj-code-container">
+                            <pre class="clj-code"><code>;; This test verifies the vlength reduction behavior on a 1D scalar.
+;; In Clojure Clisk, (length scalar) equals the absolute value |scalar| (a 1D magnitude).
+;; Unmodified C++ code incorrectly smears the scalar to 4D [v, v, v, v] before computing length,
+;; resulting in 2.0 * |scalar| (an incorrect scaling factor of 2.0).
+(clisk.live/length clisk.live/snoise)
+</code></pre>
+                        </div>
+                    </td>
                     <td>
                         <span class="badge badge-PASS">PASS</span>
                         <span class="rmse-val">RMSE: 0.000150</span>
@@ -576,7 +691,19 @@
                     </td>
                 </tr>
                 <tr class="test-row" data-name="fizz_003_min_component_2d">
-                    <td class="test-name">fizz_003_min_component_2d</td>
+                    <td class="test-name">
+                        <div class="test-title-row">
+                            <span class="test-case-title">fizz_003_min_component_2d</span>
+                            <a href="cases/fizz_003_min_component_2d.clj" target="_blank" class="clj-file-link" title="Open Clojure File ↗">↗</a>
+                        </div>
+                        <div class="clj-code-container">
+                            <pre class="clj-code"><code>;; This test verifies min-component on a 2D vector with positive components.
+;; Clojure Clisk evaluates the minimum component of [0.2 0.3] to be 0.2.
+;; Unmodified C++ code incorrectly returns 0.0f because it includes the unassigned 3rd and 4th components (z and w, which are initialized to 0.0f) in the calculation.
+(clisk.live/min-component [0.2 0.3])
+</code></pre>
+                        </div>
+                    </td>
                     <td>
                         <span class="badge badge-PASS">PASS</span>
                         <span class="rmse-val">RMSE: 0.000000</span>
@@ -613,7 +740,19 @@
                     </td>
                 </tr>
                 <tr class="test-row" data-name="fizz_004_max_component_2d">
-                    <td class="test-name">fizz_004_max_component_2d</td>
+                    <td class="test-name">
+                        <div class="test-title-row">
+                            <span class="test-case-title">fizz_004_max_component_2d</span>
+                            <a href="cases/fizz_004_max_component_2d.clj" target="_blank" class="clj-file-link" title="Open Clojure File ↗">↗</a>
+                        </div>
+                        <div class="clj-code-container">
+                            <pre class="clj-code"><code>;; This test verifies max-component on a 2D vector with negative components, shifted to be in range [0, 1].
+;; Clojure Clisk evaluates the maximum component of [-0.2 -0.3] to be -0.2 (plus 1.0 equals 0.8).
+;; Unmodified C++ code incorrectly returns 1.0 because it includes the unassigned components (0.0f) in the max calculation, yielding 1.0 + 0.0f = 1.0.
+(clisk.live/v+ 1.0 (clisk.live/max-component [-0.2 -0.3]))
+</code></pre>
+                        </div>
+                    </td>
                     <td>
                         <span class="badge badge-PASS">PASS</span>
                         <span class="rmse-val">RMSE: 0.000000</span>
@@ -650,7 +789,19 @@
                     </td>
                 </tr>
                 <tr class="test-row" data-name="fizz_005_vif_component_count">
-                    <td class="test-name">fizz_005_vif_component_count</td>
+                    <td class="test-name">
+                        <div class="test-title-row">
+                            <span class="test-case-title">fizz_005_vif_component_count</span>
+                            <a href="cases/fizz_005_vif_component_count.clj" target="_blank" class="clj-file-link" title="Open Clojure File ↗">↗</a>
+                        </div>
+                        <div class="clj-code-container">
+                            <pre class="clj-code"><code>;; This test verifies component count propagation through vif.
+;; In Clojure Clisk, (vif 1.0 [1.0 0.5 0.8] 0.0) returns a 3D vector, whose alpha (4th component) defaults to 1.0.
+;; Unmodified C++ code incorrectly returns a 4D vector [1.0, 0.5, 0.8, 0.0], making its alpha component evaluate to 0.0.
+(clisk.live/alpha (clisk.live/vif 1.0 [1.0 0.5 0.8] 0.0))
+</code></pre>
+                        </div>
+                    </td>
                     <td>
                         <span class="badge badge-PASS">PASS</span>
                         <span class="rmse-val">RMSE: 0.000000</span>
@@ -687,7 +838,19 @@
                     </td>
                 </tr>
                 <tr class="test-row" data-name="fizz_006_lerp_component_count">
-                    <td class="test-name">fizz_006_lerp_component_count</td>
+                    <td class="test-name">
+                        <div class="test-title-row">
+                            <span class="test-case-title">fizz_006_lerp_component_count</span>
+                            <a href="cases/fizz_006_lerp_component_count.clj" target="_blank" class="clj-file-link" title="Open Clojure File ↗">↗</a>
+                        </div>
+                        <div class="clj-code-container">
+                            <pre class="clj-code"><code>;; This test verifies component count propagation through lerp.
+;; In Clojure Clisk, (lerp 0.5 [1.0 0.5 0.8] 0.0) returns a 3D vector, whose alpha defaults to 1.0.
+;; Unmodified C++ code incorrectly returns a 4D vector with alpha equal to 0.0.
+(clisk.live/alpha (clisk.live/lerp 0.5 [1.0 0.5 0.8] 0.0))
+</code></pre>
+                        </div>
+                    </td>
                     <td>
                         <span class="badge badge-PASS">PASS</span>
                         <span class="rmse-val">RMSE: 0.000000</span>
@@ -724,7 +887,19 @@
                     </td>
                 </tr>
                 <tr class="test-row" data-name="fizz_007_cross3_component_count">
-                    <td class="test-name">fizz_007_cross3_component_count</td>
+                    <td class="test-name">
+                        <div class="test-title-row">
+                            <span class="test-case-title">fizz_007_cross3_component_count</span>
+                            <a href="cases/fizz_007_cross3_component_count.clj" target="_blank" class="clj-file-link" title="Open Clojure File ↗">↗</a>
+                        </div>
+                        <div class="clj-code-container">
+                            <pre class="clj-code"><code>;; This test verifies component count propagation through cross3.
+;; In Clojure Clisk, (cross3 pos [0.0 1.0 0.0]) returns a 3D vector, whose alpha (4th component) defaults to 1.0.
+;; Unmodified C++ code incorrectly returns a 4D vector with alpha equal to 0.0.
+(clisk.live/alpha (clisk.live/cross3 clisk.live/pos [0.0 1.0 0.0]))
+</code></pre>
+                        </div>
+                    </td>
                     <td>
                         <span class="badge badge-PASS">PASS</span>
                         <span class="rmse-val">RMSE: 0.000000</span>
@@ -761,7 +936,19 @@
                     </td>
                 </tr>
                 <tr class="test-row" data-name="fizz_008_height_normal_custom">
-                    <td class="test-name">fizz_008_height_normal_custom</td>
+                    <td class="test-name">
+                        <div class="test-title-row">
+                            <span class="test-case-title">fizz_008_height_normal_custom</span>
+                            <a href="cases/fizz_008_height_normal_custom.clj" target="_blank" class="clj-file-link" title="Open Clojure File ↗">↗</a>
+                        </div>
+                        <div class="clj-code-container">
+                            <pre class="clj-code"><code>;; This test verifies height-normal of a custom pattern (snoise).
+;; Clojure Clisk computes the normal of the height map defined by snoise.
+;; Unmodified C++ code cannot accept a custom function argument for height-normal and incorrectly evaluates the gradient of z instead.
+(clisk.live/height-normal clisk.live/snoise)
+</code></pre>
+                        </div>
+                    </td>
                     <td>
                         <span class="badge badge-PASS">PASS</span>
                         <span class="rmse-val">RMSE: 0.005383</span>
@@ -798,7 +985,16 @@
                     </td>
                 </tr>
                 <tr class="test-row" data-name="fuzz_000">
-                    <td class="test-name">fuzz_000</td>
+                    <td class="test-name">
+                        <div class="test-title-row">
+                            <span class="test-case-title">fuzz_000</span>
+                            <a href="cases/fuzz_000.clj" target="_blank" class="clj-file-link" title="Open Clojure File ↗">↗</a>
+                        </div>
+                        <div class="clj-code-container">
+                            <pre class="clj-code"><code>(rgb-from-hsl (v+ (vdivide (green-from-hsl wood) 1.5548) flecks))
+</code></pre>
+                        </div>
+                    </td>
                     <td>
                         <span class="badge badge-PASS">PASS</span>
                         <span class="rmse-val">RMSE: 0.000000</span>
@@ -835,7 +1031,16 @@
                     </td>
                 </tr>
                 <tr class="test-row" data-name="fuzz_001">
-                    <td class="test-name">fuzz_001</td>
+                    <td class="test-name">
+                        <div class="test-title-row">
+                            <span class="test-case-title">fuzz_001</span>
+                            <a href="cases/fuzz_001.clj" target="_blank" class="clj-file-link" title="Open Clojure File ↗">↗</a>
+                        </div>
+                        <div class="clj-code-container">
+                            <pre class="clj-code"><code>(rgb-from-hsl (vmin (saturation-from-rgb (dot (hue-from-rgb noise) (lerp vturbulence vplasma vturbulence))) spots))
+</code></pre>
+                        </div>
+                    </td>
                     <td>
                         <span class="badge badge-PASS">PASS</span>
                         <span class="rmse-val">RMSE: 0.000000</span>
@@ -872,7 +1077,16 @@
                     </td>
                 </tr>
                 <tr class="test-row" data-name="fuzz_002">
-                    <td class="test-name">fuzz_002</td>
+                    <td class="test-name">
+                        <div class="test-title-row">
+                            <span class="test-case-title">fuzz_002</span>
+                            <a href="cases/fuzz_002.clj" target="_blank" class="clj-file-link" title="Open Clojure File ↗">↗</a>
+                        </div>
+                        <div class="clj-code-container">
+                            <pre class="clj-code"><code>(rgb-from-hsl (vif (vcos (vmin plasma (vconcat spots plasma))) turbulence [-0.4795]))
+</code></pre>
+                        </div>
+                    </td>
                     <td>
                         <span class="badge badge-PASS">PASS</span>
                         <span class="rmse-val">RMSE: 0.000000</span>
@@ -909,7 +1123,16 @@
                     </td>
                 </tr>
                 <tr class="test-row" data-name="fuzz_003">
-                    <td class="test-name">fuzz_003</td>
+                    <td class="test-name">
+                        <div class="test-title-row">
+                            <span class="test-case-title">fuzz_003</span>
+                            <a href="cases/fuzz_003.clj" target="_blank" class="clj-file-link" title="Open Clojure File ↗">↗</a>
+                        </div>
+                        <div class="clj-code-container">
+                            <pre class="clj-code"><code>(rgb-from-hsl (vconcat (min-component (hsl-from-rgb (t plasma))) (v- (vdivide (length wood) 1.3107) (lerp (vcos blotches) (square vturbulence) (radius clouds)))))
+</code></pre>
+                        </div>
+                    </td>
                     <td>
                         <span class="badge badge-PASS">PASS</span>
                         <span class="rmse-val">RMSE: 0.000061</span>
@@ -946,7 +1169,16 @@
                     </td>
                 </tr>
                 <tr class="test-row" data-name="fuzz_004">
-                    <td class="test-name">fuzz_004</td>
+                    <td class="test-name">
+                        <div class="test-title-row">
+                            <span class="test-case-title">fuzz_004</span>
+                            <a href="cases/fuzz_004.clj" target="_blank" class="clj-file-link" title="Open Clojure File ↗">↗</a>
+                        </div>
+                        <div class="clj-code-container">
+                            <pre class="clj-code"><code>(rgb-from-hsl (vmin (hue-from-rgb (hue-from-rgb (vsqrt vnoise))) (v* (lerp (vfrac agate) (dot clouds wood) (scale 3.4404 splasma)) (vpow (clamp pos -0.5652 0.9074) [1.8876 1.0478 0.0307]))))
+</code></pre>
+                        </div>
+                    </td>
                     <td>
                         <span class="badge badge-PASS">PASS</span>
                         <span class="rmse-val">RMSE: 0.000000</span>
@@ -983,7 +1215,16 @@
                     </td>
                 </tr>
                 <tr class="test-row" data-name="fuzz_005">
-                    <td class="test-name">fuzz_005</td>
+                    <td class="test-name">
+                        <div class="test-title-row">
+                            <span class="test-case-title">fuzz_005</span>
+                            <a href="cases/fuzz_005.clj" target="_blank" class="clj-file-link" title="Open Clojure File ↗">↗</a>
+                        </div>
+                        <div class="clj-code-container">
+                            <pre class="clj-code"><code>(rgb-from-hsl (v- (vfrac (adjust-hsl [1.6897 1.6740 0.3958] (v* turbulence vsplasma))) (scale 4.8921 plasma)))
+</code></pre>
+                        </div>
+                    </td>
                     <td>
                         <span class="badge badge-PASS">PASS</span>
                         <span class="rmse-val">RMSE: 0.021563</span>
@@ -1020,7 +1261,16 @@
                     </td>
                 </tr>
                 <tr class="test-row" data-name="fuzz_006">
-                    <td class="test-name">fuzz_006</td>
+                    <td class="test-name">
+                        <div class="test-title-row">
+                            <span class="test-case-title">fuzz_006</span>
+                            <a href="cases/fuzz_006.clj" target="_blank" class="clj-file-link" title="Open Clojure File ↗">↗</a>
+                        </div>
+                        <div class="clj-code-container">
+                            <pre class="clj-code"><code>(rgb-from-hsl (v- wood (polar (turbulate 0.1045 (offset [1.9806 0.5995 -0.2476 0.0703] blotches)))))
+</code></pre>
+                        </div>
+                    </td>
                     <td>
                         <span class="badge badge-PASS">PASS</span>
                         <span class="rmse-val">RMSE: 0.000000</span>
@@ -1057,7 +1307,16 @@
                     </td>
                 </tr>
                 <tr class="test-row" data-name="fuzz_007">
-                    <td class="test-name">fuzz_007</td>
+                    <td class="test-name">
+                        <div class="test-title-row">
+                            <span class="test-case-title">fuzz_007</span>
+                            <a href="cases/fuzz_007.clj" target="_blank" class="clj-file-link" title="Open Clojure File ↗">↗</a>
+                        </div>
+                        <div class="clj-code-container">
+                            <pre class="clj-code"><code>(rgb-from-hsl (max-component vsplasma))
+</code></pre>
+                        </div>
+                    </td>
                     <td>
                         <span class="badge badge-PASS">PASS</span>
                         <span class="rmse-val">RMSE: 0.000000</span>
@@ -1094,7 +1353,16 @@
                     </td>
                 </tr>
                 <tr class="test-row" data-name="fuzz_008">
-                    <td class="test-name">fuzz_008</td>
+                    <td class="test-name">
+                        <div class="test-title-row">
+                            <span class="test-case-title">fuzz_008</span>
+                            <a href="cases/fuzz_008.clj" target="_blank" class="clj-file-link" title="Open Clojure File ↗">↗</a>
+                        </div>
+                        <div class="clj-code-container">
+                            <pre class="clj-code"><code>(rgb-from-hsl (z flecks))
+</code></pre>
+                        </div>
+                    </td>
                     <td>
                         <span class="badge badge-PASS">PASS</span>
                         <span class="rmse-val">RMSE: 0.000000</span>
@@ -1131,7 +1399,16 @@
                     </td>
                 </tr>
                 <tr class="test-row" data-name="fuzz_009">
-                    <td class="test-name">fuzz_009</td>
+                    <td class="test-name">
+                        <div class="test-title-row">
+                            <span class="test-case-title">fuzz_009</span>
+                            <a href="cases/fuzz_009.clj" target="_blank" class="clj-file-link" title="Open Clojure File ↗">↗</a>
+                        </div>
+                        <div class="clj-code-container">
+                            <pre class="clj-code"><code>(rgb-from-hsl (hsl-from-rgb (vmin velvet (radius (lerp pos spots clouds)))))
+</code></pre>
+                        </div>
+                    </td>
                     <td>
                         <span class="badge badge-PASS">PASS</span>
                         <span class="rmse-val">RMSE: 0.000184</span>
@@ -1168,7 +1445,16 @@
                     </td>
                 </tr>
                 <tr class="test-row" data-name="fuzz_010">
-                    <td class="test-name">fuzz_010</td>
+                    <td class="test-name">
+                        <div class="test-title-row">
+                            <span class="test-case-title">fuzz_010</span>
+                            <a href="cases/fuzz_010.clj" target="_blank" class="clj-file-link" title="Open Clojure File ↗">↗</a>
+                        </div>
+                        <div class="clj-code-container">
+                            <pre class="clj-code"><code>(rgb-from-hsl (scale 0.3479 (checker vturbulence (lerp (square vnoise) (sigmoid plasma) (y splasma)))))
+</code></pre>
+                        </div>
+                    </td>
                     <td>
                         <span class="badge badge-PASS">PASS</span>
                         <span class="rmse-val">RMSE: 0.000253</span>
@@ -1205,7 +1491,16 @@
                     </td>
                 </tr>
                 <tr class="test-row" data-name="fuzz_011">
-                    <td class="test-name">fuzz_011</td>
+                    <td class="test-name">
+                        <div class="test-title-row">
+                            <span class="test-case-title">fuzz_011</span>
+                            <a href="cases/fuzz_011.clj" target="_blank" class="clj-file-link" title="Open Clojure File ↗">↗</a>
+                        </div>
+                        <div class="clj-code-container">
+                            <pre class="clj-code"><code>(rgb-from-hsl (lerp (radius (length (offset [-0.9392 1.1363 -0.1800 -0.3080] blotches))) [-1.3808 -0.8132 1.8748 0.3167] (adjust-hue 0.3136 flecks)))
+</code></pre>
+                        </div>
+                    </td>
                     <td>
                         <span class="badge badge-PASS">PASS</span>
                         <span class="rmse-val">RMSE: 0.000112</span>
@@ -1242,7 +1537,16 @@
                     </td>
                 </tr>
                 <tr class="test-row" data-name="fuzz_012">
-                    <td class="test-name">fuzz_012</td>
+                    <td class="test-name">
+                        <div class="test-title-row">
+                            <span class="test-case-title">fuzz_012</span>
+                            <a href="cases/fuzz_012.clj" target="_blank" class="clj-file-link" title="Open Clojure File ↗">↗</a>
+                        </div>
+                        <div class="clj-code-container">
+                            <pre class="clj-code"><code>(rgb-from-hsl (alpha (vconcat (lightness-from-rgb blotches) vsplasma)))
+</code></pre>
+                        </div>
+                    </td>
                     <td>
                         <span class="badge badge-PASS">PASS</span>
                         <span class="rmse-val">RMSE: 0.000000</span>
@@ -1279,7 +1583,16 @@
                     </td>
                 </tr>
                 <tr class="test-row" data-name="fuzz_013">
-                    <td class="test-name">fuzz_013</td>
+                    <td class="test-name">
+                        <div class="test-title-row">
+                            <span class="test-case-title">fuzz_013</span>
+                            <a href="cases/fuzz_013.clj" target="_blank" class="clj-file-link" title="Open Clojure File ↗">↗</a>
+                        </div>
+                        <div class="clj-code-container">
+                            <pre class="clj-code"><code>(rgb-from-hsl (v+ (dot (vmax (average vturbulence blotches) clouds) (blue-from-hsl (scale 0.4590 splasma))) (sigmoid plasma)))
+</code></pre>
+                        </div>
+                    </td>
                     <td>
                         <span class="badge badge-PASS">PASS</span>
                         <span class="rmse-val">RMSE: 0.000000</span>
@@ -1316,7 +1629,16 @@
                     </td>
                 </tr>
                 <tr class="test-row" data-name="fuzz_014">
-                    <td class="test-name">fuzz_014</td>
+                    <td class="test-name">
+                        <div class="test-title-row">
+                            <span class="test-case-title">fuzz_014</span>
+                            <a href="cases/fuzz_014.clj" target="_blank" class="clj-file-link" title="Open Clojure File ↗">↗</a>
+                        </div>
+                        <div class="clj-code-container">
+                            <pre class="clj-code"><code>(rgb-from-hsl (rotate 0.3342 (theta (vif (rgb-from-hsl noise) (vmin splasma vnoise) (z pos)))))
+</code></pre>
+                        </div>
+                    </td>
                     <td>
                         <span class="badge badge-PASS">PASS</span>
                         <span class="rmse-val">RMSE: 0.000000</span>
@@ -1353,7 +1675,16 @@
                     </td>
                 </tr>
                 <tr class="test-row" data-name="fuzz_015">
-                    <td class="test-name">fuzz_015</td>
+                    <td class="test-name">
+                        <div class="test-title-row">
+                            <span class="test-case-title">fuzz_015</span>
+                            <a href="cases/fuzz_015.clj" target="_blank" class="clj-file-link" title="Open Clojure File ↗">↗</a>
+                        </div>
+                        <div class="clj-code-container">
+                            <pre class="clj-code"><code>(rgb-from-hsl (lightness-from-rgb (max-component (saturation-from-rgb (turbulate 0.0915 snoise)))))
+</code></pre>
+                        </div>
+                    </td>
                     <td>
                         <span class="badge badge-PASS">PASS</span>
                         <span class="rmse-val">RMSE: 0.000000</span>
@@ -1390,7 +1721,16 @@
                     </td>
                 </tr>
                 <tr class="test-row" data-name="fuzz_016">
-                    <td class="test-name">fuzz_016</td>
+                    <td class="test-name">
+                        <div class="test-title-row">
+                            <span class="test-case-title">fuzz_016</span>
+                            <a href="cases/fuzz_016.clj" target="_blank" class="clj-file-link" title="Open Clojure File ↗">↗</a>
+                        </div>
+                        <div class="clj-code-container">
+                            <pre class="clj-code"><code>(rgb-from-hsl (sigmoid vnoise))
+</code></pre>
+                        </div>
+                    </td>
                     <td>
                         <span class="badge badge-PASS">PASS</span>
                         <span class="rmse-val">RMSE: 0.000320</span>
@@ -1427,7 +1767,16 @@
                     </td>
                 </tr>
                 <tr class="test-row" data-name="fuzz_017">
-                    <td class="test-name">fuzz_017</td>
+                    <td class="test-name">
+                        <div class="test-title-row">
+                            <span class="test-case-title">fuzz_017</span>
+                            <a href="cases/fuzz_017.clj" target="_blank" class="clj-file-link" title="Open Clojure File ↗">↗</a>
+                        </div>
+                        <div class="clj-code-container">
+                            <pre class="clj-code"><code>(rgb-from-hsl (vpow (theta (dot (v* pos vnoise) (vconcat wood pos))) snoise))
+</code></pre>
+                        </div>
+                    </td>
                     <td>
                         <span class="badge badge-PASS">PASS</span>
                         <span class="rmse-val">RMSE: 0.000000</span>
@@ -1464,7 +1813,16 @@
                     </td>
                 </tr>
                 <tr class="test-row" data-name="fuzz_018">
-                    <td class="test-name">fuzz_018</td>
+                    <td class="test-name">
+                        <div class="test-title-row">
+                            <span class="test-case-title">fuzz_018</span>
+                            <a href="cases/fuzz_018.clj" target="_blank" class="clj-file-link" title="Open Clojure File ↗">↗</a>
+                        </div>
+                        <div class="clj-code-container">
+                            <pre class="clj-code"><code>(rgb-from-hsl (offset [1.2431 1.5257 -1.9009 0.9463] (checker agate [1.4584 1.9048])))
+</code></pre>
+                        </div>
+                    </td>
                     <td>
                         <span class="badge badge-PASS">PASS</span>
                         <span class="rmse-val">RMSE: 0.000000</span>
@@ -1501,7 +1859,16 @@
                     </td>
                 </tr>
                 <tr class="test-row" data-name="fuzz_019">
-                    <td class="test-name">fuzz_019</td>
+                    <td class="test-name">
+                        <div class="test-title-row">
+                            <span class="test-case-title">fuzz_019</span>
+                            <a href="cases/fuzz_019.clj" target="_blank" class="clj-file-link" title="Open Clojure File ↗">↗</a>
+                        </div>
+                        <div class="clj-code-container">
+                            <pre class="clj-code"><code>(rgb-from-hsl (t (hsl-from-rgb (offset [1.4887 1.4344 -1.1103 1.2663] (rgb-from-hsl blotches)))))
+</code></pre>
+                        </div>
+                    </td>
                     <td>
                         <span class="badge badge-PASS">PASS</span>
                         <span class="rmse-val">RMSE: 0.000000</span>
@@ -1538,7 +1905,16 @@
                     </td>
                 </tr>
                 <tr class="test-row" data-name="test_adjust_hsl">
-                    <td class="test-name">test_adjust_hsl</td>
+                    <td class="test-name">
+                        <div class="test-title-row">
+                            <span class="test-case-title">test_adjust_hsl</span>
+                            <a href="cases/test_adjust_hsl.clj" target="_blank" class="clj-file-link" title="Open Clojure File ↗">↗</a>
+                        </div>
+                        <div class="clj-code-container">
+                            <pre class="clj-code"><code>(clisk.live/adjust-hsl [0.1 0.2 0.3] clisk.live/pos)
+</code></pre>
+                        </div>
+                    </td>
                     <td>
                         <span class="badge badge-PASS">PASS</span>
                         <span class="rmse-val">RMSE: 0.000187</span>
@@ -1575,7 +1951,16 @@
                     </td>
                 </tr>
                 <tr class="test-row" data-name="test_adjust_hue">
-                    <td class="test-name">test_adjust_hue</td>
+                    <td class="test-name">
+                        <div class="test-title-row">
+                            <span class="test-case-title">test_adjust_hue</span>
+                            <a href="cases/test_adjust_hue.clj" target="_blank" class="clj-file-link" title="Open Clojure File ↗">↗</a>
+                        </div>
+                        <div class="clj-code-container">
+                            <pre class="clj-code"><code>(clisk.live/adjust-hue 0.25 clisk.live/pos)
+</code></pre>
+                        </div>
+                    </td>
                     <td>
                         <span class="badge badge-PASS">PASS</span>
                         <span class="rmse-val">RMSE: 0.002815</span>
@@ -1612,7 +1997,16 @@
                     </td>
                 </tr>
                 <tr class="test-row" data-name="test_agate">
-                    <td class="test-name">test_agate</td>
+                    <td class="test-name">
+                        <div class="test-title-row">
+                            <span class="test-case-title">test_agate</span>
+                            <a href="cases/test_agate.clj" target="_blank" class="clj-file-link" title="Open Clojure File ↗">↗</a>
+                        </div>
+                        <div class="clj-code-container">
+                            <pre class="clj-code"><code>clisk.live/agate
+</code></pre>
+                        </div>
+                    </td>
                     <td>
                         <span class="badge badge-PASS">PASS</span>
                         <span class="rmse-val">RMSE: 0.000300</span>
@@ -1649,7 +2043,16 @@
                     </td>
                 </tr>
                 <tr class="test-row" data-name="test_alpha">
-                    <td class="test-name">test_alpha</td>
+                    <td class="test-name">
+                        <div class="test-title-row">
+                            <span class="test-case-title">test_alpha</span>
+                            <a href="cases/test_alpha.clj" target="_blank" class="clj-file-link" title="Open Clojure File ↗">↗</a>
+                        </div>
+                        <div class="clj-code-container">
+                            <pre class="clj-code"><code>(clisk.live/alpha clisk.live/pos)
+</code></pre>
+                        </div>
+                    </td>
                     <td>
                         <span class="badge badge-PASS">PASS</span>
                         <span class="rmse-val">RMSE: 0.000000</span>
@@ -1686,7 +2089,16 @@
                     </td>
                 </tr>
                 <tr class="test-row" data-name="test_average">
-                    <td class="test-name">test_average</td>
+                    <td class="test-name">
+                        <div class="test-title-row">
+                            <span class="test-case-title">test_average</span>
+                            <a href="cases/test_average.clj" target="_blank" class="clj-file-link" title="Open Clojure File ↗">↗</a>
+                        </div>
+                        <div class="clj-code-container">
+                            <pre class="clj-code"><code>(clisk.live/average clisk.live/pos [1.0 2.0 3.0 4.0])
+</code></pre>
+                        </div>
+                    </td>
                     <td>
                         <span class="badge badge-PASS">PASS</span>
                         <span class="rmse-val">RMSE: 0.002264</span>
@@ -1723,7 +2135,16 @@
                     </td>
                 </tr>
                 <tr class="test-row" data-name="test_blotches">
-                    <td class="test-name">test_blotches</td>
+                    <td class="test-name">
+                        <div class="test-title-row">
+                            <span class="test-case-title">test_blotches</span>
+                            <a href="cases/test_blotches.clj" target="_blank" class="clj-file-link" title="Open Clojure File ↗">↗</a>
+                        </div>
+                        <div class="clj-code-container">
+                            <pre class="clj-code"><code>clisk.live/blotches
+</code></pre>
+                        </div>
+                    </td>
                     <td>
                         <span class="badge badge-PASS">PASS</span>
                         <span class="rmse-val">RMSE: 0.000123</span>
@@ -1760,7 +2181,16 @@
                     </td>
                 </tr>
                 <tr class="test-row" data-name="test_blue_from_hsl">
-                    <td class="test-name">test_blue_from_hsl</td>
+                    <td class="test-name">
+                        <div class="test-title-row">
+                            <span class="test-case-title">test_blue_from_hsl</span>
+                            <a href="cases/test_blue_from_hsl.clj" target="_blank" class="clj-file-link" title="Open Clojure File ↗">↗</a>
+                        </div>
+                        <div class="clj-code-container">
+                            <pre class="clj-code"><code>(clisk.live/blue-from-hsl clisk.live/pos)
+</code></pre>
+                        </div>
+                    </td>
                     <td>
                         <span class="badge badge-PASS">PASS</span>
                         <span class="rmse-val">RMSE: 0.000000</span>
@@ -1797,7 +2227,16 @@
                     </td>
                 </tr>
                 <tr class="test-row" data-name="test_checker">
-                    <td class="test-name">test_checker</td>
+                    <td class="test-name">
+                        <div class="test-title-row">
+                            <span class="test-case-title">test_checker</span>
+                            <a href="cases/test_checker.clj" target="_blank" class="clj-file-link" title="Open Clojure File ↗">↗</a>
+                        </div>
+                        <div class="clj-code-container">
+                            <pre class="clj-code"><code>(clisk.live/checker [0.0 0.0 0.0 1.0] [1.0 1.0 1.0 1.0])
+</code></pre>
+                        </div>
+                    </td>
                     <td>
                         <span class="badge badge-PASS">PASS</span>
                         <span class="rmse-val">RMSE: 0.000000</span>
@@ -1834,7 +2273,16 @@
                     </td>
                 </tr>
                 <tr class="test-row" data-name="test_clamp">
-                    <td class="test-name">test_clamp</td>
+                    <td class="test-name">
+                        <div class="test-title-row">
+                            <span class="test-case-title">test_clamp</span>
+                            <a href="cases/test_clamp.clj" target="_blank" class="clj-file-link" title="Open Clojure File ↗">↗</a>
+                        </div>
+                        <div class="clj-code-container">
+                            <pre class="clj-code"><code>(clisk.live/clamp clisk.live/pos 0.0 1.0)
+</code></pre>
+                        </div>
+                    </td>
                     <td>
                         <span class="badge badge-PASS">PASS</span>
                         <span class="rmse-val">RMSE: 0.002264</span>
@@ -1871,7 +2319,16 @@
                     </td>
                 </tr>
                 <tr class="test-row" data-name="test_clouds">
-                    <td class="test-name">test_clouds</td>
+                    <td class="test-name">
+                        <div class="test-title-row">
+                            <span class="test-case-title">test_clouds</span>
+                            <a href="cases/test_clouds.clj" target="_blank" class="clj-file-link" title="Open Clojure File ↗">↗</a>
+                        </div>
+                        <div class="clj-code-container">
+                            <pre class="clj-code"><code>clisk.live/clouds
+</code></pre>
+                        </div>
+                    </td>
                     <td>
                         <span class="badge badge-PASS">PASS</span>
                         <span class="rmse-val">RMSE: 0.000312</span>
@@ -1908,7 +2365,16 @@
                     </td>
                 </tr>
                 <tr class="test-row" data-name="test_cross3">
-                    <td class="test-name">test_cross3</td>
+                    <td class="test-name">
+                        <div class="test-title-row">
+                            <span class="test-case-title">test_cross3</span>
+                            <a href="cases/test_cross3.clj" target="_blank" class="clj-file-link" title="Open Clojure File ↗">↗</a>
+                        </div>
+                        <div class="clj-code-container">
+                            <pre class="clj-code"><code>(clisk.live/cross3 clisk.live/pos [0.0 1.0 0.0 0.0])
+</code></pre>
+                        </div>
+                    </td>
                     <td>
                         <span class="badge badge-PASS">PASS</span>
                         <span class="rmse-val">RMSE: 0.000000</span>
@@ -1945,7 +2411,16 @@
                     </td>
                 </tr>
                 <tr class="test-row" data-name="test_dot">
-                    <td class="test-name">test_dot</td>
+                    <td class="test-name">
+                        <div class="test-title-row">
+                            <span class="test-case-title">test_dot</span>
+                            <a href="cases/test_dot.clj" target="_blank" class="clj-file-link" title="Open Clojure File ↗">↗</a>
+                        </div>
+                        <div class="clj-code-container">
+                            <pre class="clj-code"><code>(clisk.live/dot clisk.live/pos clisk.live/pos)
+</code></pre>
+                        </div>
+                    </td>
                     <td>
                         <span class="badge badge-PASS">PASS</span>
                         <span class="rmse-val">RMSE: 0.000000</span>
@@ -1982,7 +2457,16 @@
                     </td>
                 </tr>
                 <tr class="test-row" data-name="test_flecks">
-                    <td class="test-name">test_flecks</td>
+                    <td class="test-name">
+                        <div class="test-title-row">
+                            <span class="test-case-title">test_flecks</span>
+                            <a href="cases/test_flecks.clj" target="_blank" class="clj-file-link" title="Open Clojure File ↗">↗</a>
+                        </div>
+                        <div class="clj-code-container">
+                            <pre class="clj-code"><code>clisk.live/flecks
+</code></pre>
+                        </div>
+                    </td>
                     <td>
                         <span class="badge badge-PASS">PASS</span>
                         <span class="rmse-val">RMSE: 0.000336</span>
@@ -2019,7 +2503,16 @@
                     </td>
                 </tr>
                 <tr class="test-row" data-name="test_gradient">
-                    <td class="test-name">test_gradient</td>
+                    <td class="test-name">
+                        <div class="test-title-row">
+                            <span class="test-case-title">test_gradient</span>
+                            <a href="cases/test_gradient.clj" target="_blank" class="clj-file-link" title="Open Clojure File ↗">↗</a>
+                        </div>
+                        <div class="clj-code-container">
+                            <pre class="clj-code"><code>(clisk.live/gradient (clisk.live/vconcat (clisk.live/dot clisk.live/pos clisk.live/pos) clisk.live/pos))
+</code></pre>
+                        </div>
+                    </td>
                     <td>
                         <span class="badge badge-PASS">PASS</span>
                         <span class="rmse-val">RMSE: 0.008147</span>
@@ -2056,7 +2549,16 @@
                     </td>
                 </tr>
                 <tr class="test-row" data-name="test_grain">
-                    <td class="test-name">test_grain</td>
+                    <td class="test-name">
+                        <div class="test-title-row">
+                            <span class="test-case-title">test_grain</span>
+                            <a href="cases/test_grain.clj" target="_blank" class="clj-file-link" title="Open Clojure File ↗">↗</a>
+                        </div>
+                        <div class="clj-code-container">
+                            <pre class="clj-code"><code>clisk.live/grain
+</code></pre>
+                        </div>
+                    </td>
                     <td>
                         <span class="badge badge-PASS">PASS</span>
                         <span class="rmse-val">RMSE: 0.000290</span>
@@ -2093,7 +2595,16 @@
                     </td>
                 </tr>
                 <tr class="test-row" data-name="test_green_from_hsl">
-                    <td class="test-name">test_green_from_hsl</td>
+                    <td class="test-name">
+                        <div class="test-title-row">
+                            <span class="test-case-title">test_green_from_hsl</span>
+                            <a href="cases/test_green_from_hsl.clj" target="_blank" class="clj-file-link" title="Open Clojure File ↗">↗</a>
+                        </div>
+                        <div class="clj-code-container">
+                            <pre class="clj-code"><code>(clisk.live/green-from-hsl clisk.live/pos)
+</code></pre>
+                        </div>
+                    </td>
                     <td>
                         <span class="badge badge-PASS">PASS</span>
                         <span class="rmse-val">RMSE: 0.000000</span>
@@ -2130,7 +2641,16 @@
                     </td>
                 </tr>
                 <tr class="test-row" data-name="test_height">
-                    <td class="test-name">test_height</td>
+                    <td class="test-name">
+                        <div class="test-title-row">
+                            <span class="test-case-title">test_height</span>
+                            <a href="cases/test_height.clj" target="_blank" class="clj-file-link" title="Open Clojure File ↗">↗</a>
+                        </div>
+                        <div class="clj-code-container">
+                            <pre class="clj-code"><code>(clisk.live/height clisk.live/pos)
+</code></pre>
+                        </div>
+                    </td>
                     <td>
                         <span class="badge badge-PASS">PASS</span>
                         <span class="rmse-val">RMSE: 0.000000</span>
@@ -2167,7 +2687,16 @@
                     </td>
                 </tr>
                 <tr class="test-row" data-name="test_height_normal">
-                    <td class="test-name">test_height_normal</td>
+                    <td class="test-name">
+                        <div class="test-title-row">
+                            <span class="test-case-title">test_height_normal</span>
+                            <a href="cases/test_height_normal.clj" target="_blank" class="clj-file-link" title="Open Clojure File ↗">↗</a>
+                        </div>
+                        <div class="clj-code-container">
+                            <pre class="clj-code"><code>(clisk.live/height-normal clisk.live/pos)
+</code></pre>
+                        </div>
+                    </td>
                     <td>
                         <span class="badge badge-PASS">PASS</span>
                         <span class="rmse-val">RMSE: 0.000000</span>
@@ -2204,7 +2733,16 @@
                     </td>
                 </tr>
                 <tr class="test-row" data-name="test_hsl_from_rgb">
-                    <td class="test-name">test_hsl_from_rgb</td>
+                    <td class="test-name">
+                        <div class="test-title-row">
+                            <span class="test-case-title">test_hsl_from_rgb</span>
+                            <a href="cases/test_hsl_from_rgb.clj" target="_blank" class="clj-file-link" title="Open Clojure File ↗">↗</a>
+                        </div>
+                        <div class="clj-code-container">
+                            <pre class="clj-code"><code>(clisk.live/hsl-from-rgb clisk.live/pos)
+</code></pre>
+                        </div>
+                    </td>
                     <td>
                         <span class="badge badge-PASS">PASS</span>
                         <span class="rmse-val">RMSE: 0.002264</span>
@@ -2241,7 +2779,16 @@
                     </td>
                 </tr>
                 <tr class="test-row" data-name="test_hue_from_rgb">
-                    <td class="test-name">test_hue_from_rgb</td>
+                    <td class="test-name">
+                        <div class="test-title-row">
+                            <span class="test-case-title">test_hue_from_rgb</span>
+                            <a href="cases/test_hue_from_rgb.clj" target="_blank" class="clj-file-link" title="Open Clojure File ↗">↗</a>
+                        </div>
+                        <div class="clj-code-container">
+                            <pre class="clj-code"><code>(clisk.live/hue-from-rgb clisk.live/pos)
+</code></pre>
+                        </div>
+                    </td>
                     <td>
                         <span class="badge badge-PASS">PASS</span>
                         <span class="rmse-val">RMSE: 0.000000</span>
@@ -2278,7 +2825,16 @@
                     </td>
                 </tr>
                 <tr class="test-row" data-name="test_length">
-                    <td class="test-name">test_length</td>
+                    <td class="test-name">
+                        <div class="test-title-row">
+                            <span class="test-case-title">test_length</span>
+                            <a href="cases/test_length.clj" target="_blank" class="clj-file-link" title="Open Clojure File ↗">↗</a>
+                        </div>
+                        <div class="clj-code-container">
+                            <pre class="clj-code"><code>(clisk.live/length clisk.live/pos)
+</code></pre>
+                        </div>
+                    </td>
                     <td>
                         <span class="badge badge-PASS">PASS</span>
                         <span class="rmse-val">RMSE: 0.000347</span>
@@ -2315,7 +2871,16 @@
                     </td>
                 </tr>
                 <tr class="test-row" data-name="test_lerp">
-                    <td class="test-name">test_lerp</td>
+                    <td class="test-name">
+                        <div class="test-title-row">
+                            <span class="test-case-title">test_lerp</span>
+                            <a href="cases/test_lerp.clj" target="_blank" class="clj-file-link" title="Open Clojure File ↗">↗</a>
+                        </div>
+                        <div class="clj-code-container">
+                            <pre class="clj-code"><code>(clisk.live/lerp 0.0 1.0 clisk.live/pos)
+</code></pre>
+                        </div>
+                    </td>
                     <td>
                         <span class="badge badge-PASS">PASS</span>
                         <span class="rmse-val">RMSE: 0.000000</span>
@@ -2352,7 +2917,16 @@
                     </td>
                 </tr>
                 <tr class="test-row" data-name="test_lightness_from_rgb">
-                    <td class="test-name">test_lightness_from_rgb</td>
+                    <td class="test-name">
+                        <div class="test-title-row">
+                            <span class="test-case-title">test_lightness_from_rgb</span>
+                            <a href="cases/test_lightness_from_rgb.clj" target="_blank" class="clj-file-link" title="Open Clojure File ↗">↗</a>
+                        </div>
+                        <div class="clj-code-container">
+                            <pre class="clj-code"><code>(clisk.live/lightness-from-rgb clisk.live/pos)
+</code></pre>
+                        </div>
+                    </td>
                     <td>
                         <span class="badge badge-PASS">PASS</span>
                         <span class="rmse-val">RMSE: 0.003922</span>
@@ -2389,7 +2963,16 @@
                     </td>
                 </tr>
                 <tr class="test-row" data-name="test_max_component">
-                    <td class="test-name">test_max_component</td>
+                    <td class="test-name">
+                        <div class="test-title-row">
+                            <span class="test-case-title">test_max_component</span>
+                            <a href="cases/test_max_component.clj" target="_blank" class="clj-file-link" title="Open Clojure File ↗">↗</a>
+                        </div>
+                        <div class="clj-code-container">
+                            <pre class="clj-code"><code>(clisk.live/max-component clisk.live/pos)
+</code></pre>
+                        </div>
+                    </td>
                     <td>
                         <span class="badge badge-PASS">PASS</span>
                         <span class="rmse-val">RMSE: 0.003922</span>
@@ -2426,7 +3009,16 @@
                     </td>
                 </tr>
                 <tr class="test-row" data-name="test_min_component">
-                    <td class="test-name">test_min_component</td>
+                    <td class="test-name">
+                        <div class="test-title-row">
+                            <span class="test-case-title">test_min_component</span>
+                            <a href="cases/test_min_component.clj" target="_blank" class="clj-file-link" title="Open Clojure File ↗">↗</a>
+                        </div>
+                        <div class="clj-code-container">
+                            <pre class="clj-code"><code>(clisk.live/min-component clisk.live/pos)
+</code></pre>
+                        </div>
+                    </td>
                     <td>
                         <span class="badge badge-PASS">PASS</span>
                         <span class="rmse-val">RMSE: 0.000000</span>
@@ -2463,7 +3055,16 @@
                     </td>
                 </tr>
                 <tr class="test-row" data-name="test_noise">
-                    <td class="test-name">test_noise</td>
+                    <td class="test-name">
+                        <div class="test-title-row">
+                            <span class="test-case-title">test_noise</span>
+                            <a href="cases/test_noise.clj" target="_blank" class="clj-file-link" title="Open Clojure File ↗">↗</a>
+                        </div>
+                        <div class="clj-code-container">
+                            <pre class="clj-code"><code>clisk.live/noise
+</code></pre>
+                        </div>
+                    </td>
                     <td>
                         <span class="badge badge-PASS">PASS</span>
                         <span class="rmse-val">RMSE: 0.000294</span>
@@ -2500,7 +3101,16 @@
                     </td>
                 </tr>
                 <tr class="test-row" data-name="test_normalize">
-                    <td class="test-name">test_normalize</td>
+                    <td class="test-name">
+                        <div class="test-title-row">
+                            <span class="test-case-title">test_normalize</span>
+                            <a href="cases/test_normalize.clj" target="_blank" class="clj-file-link" title="Open Clojure File ↗">↗</a>
+                        </div>
+                        <div class="clj-code-container">
+                            <pre class="clj-code"><code>(clisk.live/normalize clisk.live/pos)
+</code></pre>
+                        </div>
+                    </td>
                     <td>
                         <span class="badge badge-PASS">PASS</span>
                         <span class="rmse-val">RMSE: 0.000229</span>
@@ -2537,7 +3147,16 @@
                     </td>
                 </tr>
                 <tr class="test-row" data-name="test_offset">
-                    <td class="test-name">test_offset</td>
+                    <td class="test-name">
+                        <div class="test-title-row">
+                            <span class="test-case-title">test_offset</span>
+                            <a href="cases/test_offset.clj" target="_blank" class="clj-file-link" title="Open Clojure File ↗">↗</a>
+                        </div>
+                        <div class="clj-code-container">
+                            <pre class="clj-code"><code>(clisk.live/offset [0.5 0.5 0.5 0.5] (clisk.live/v* clisk.live/pos [1.0 2.0 3.0 4.0]))
+</code></pre>
+                        </div>
+                    </td>
                     <td>
                         <span class="badge badge-PASS">PASS</span>
                         <span class="rmse-val">RMSE: 0.001601</span>
@@ -2574,7 +3193,16 @@
                     </td>
                 </tr>
                 <tr class="test-row" data-name="test_plasma">
-                    <td class="test-name">test_plasma</td>
+                    <td class="test-name">
+                        <div class="test-title-row">
+                            <span class="test-case-title">test_plasma</span>
+                            <a href="cases/test_plasma.clj" target="_blank" class="clj-file-link" title="Open Clojure File ↗">↗</a>
+                        </div>
+                        <div class="clj-code-container">
+                            <pre class="clj-code"><code>clisk.live/plasma
+</code></pre>
+                        </div>
+                    </td>
                     <td>
                         <span class="badge badge-PASS">PASS</span>
                         <span class="rmse-val">RMSE: 0.000294</span>
@@ -2611,7 +3239,16 @@
                     </td>
                 </tr>
                 <tr class="test-row" data-name="test_polar">
-                    <td class="test-name">test_polar</td>
+                    <td class="test-name">
+                        <div class="test-title-row">
+                            <span class="test-case-title">test_polar</span>
+                            <a href="cases/test_polar.clj" target="_blank" class="clj-file-link" title="Open Clojure File ↗">↗</a>
+                        </div>
+                        <div class="clj-code-container">
+                            <pre class="clj-code"><code>(clisk.live/polar clisk.live/pos)
+</code></pre>
+                        </div>
+                    </td>
                     <td>
                         <span class="badge badge-PASS">PASS</span>
                         <span class="rmse-val">RMSE: 0.000200</span>
@@ -2648,7 +3285,16 @@
                     </td>
                 </tr>
                 <tr class="test-row" data-name="test_radius">
-                    <td class="test-name">test_radius</td>
+                    <td class="test-name">
+                        <div class="test-title-row">
+                            <span class="test-case-title">test_radius</span>
+                            <a href="cases/test_radius.clj" target="_blank" class="clj-file-link" title="Open Clojure File ↗">↗</a>
+                        </div>
+                        <div class="clj-code-container">
+                            <pre class="clj-code"><code>(clisk.live/radius clisk.live/pos)
+</code></pre>
+                        </div>
+                    </td>
                     <td>
                         <span class="badge badge-PASS">PASS</span>
                         <span class="rmse-val">RMSE: 0.000347</span>
@@ -2685,7 +3331,16 @@
                     </td>
                 </tr>
                 <tr class="test-row" data-name="test_red_from_hsl">
-                    <td class="test-name">test_red_from_hsl</td>
+                    <td class="test-name">
+                        <div class="test-title-row">
+                            <span class="test-case-title">test_red_from_hsl</span>
+                            <a href="cases/test_red_from_hsl.clj" target="_blank" class="clj-file-link" title="Open Clojure File ↗">↗</a>
+                        </div>
+                        <div class="clj-code-container">
+                            <pre class="clj-code"><code>(clisk.live/red-from-hsl clisk.live/pos)
+</code></pre>
+                        </div>
+                    </td>
                     <td>
                         <span class="badge badge-PASS">PASS</span>
                         <span class="rmse-val">RMSE: 0.000000</span>
@@ -2722,7 +3377,16 @@
                     </td>
                 </tr>
                 <tr class="test-row" data-name="test_rgb_from_hsl">
-                    <td class="test-name">test_rgb_from_hsl</td>
+                    <td class="test-name">
+                        <div class="test-title-row">
+                            <span class="test-case-title">test_rgb_from_hsl</span>
+                            <a href="cases/test_rgb_from_hsl.clj" target="_blank" class="clj-file-link" title="Open Clojure File ↗">↗</a>
+                        </div>
+                        <div class="clj-code-container">
+                            <pre class="clj-code"><code>(clisk.live/rgb-from-hsl clisk.live/pos)
+</code></pre>
+                        </div>
+                    </td>
                     <td>
                         <span class="badge badge-PASS">PASS</span>
                         <span class="rmse-val">RMSE: 0.000000</span>
@@ -2759,7 +3423,16 @@
                     </td>
                 </tr>
                 <tr class="test-row" data-name="test_rotate">
-                    <td class="test-name">test_rotate</td>
+                    <td class="test-name">
+                        <div class="test-title-row">
+                            <span class="test-case-title">test_rotate</span>
+                            <a href="cases/test_rotate.clj" target="_blank" class="clj-file-link" title="Open Clojure File ↗">↗</a>
+                        </div>
+                        <div class="clj-code-container">
+                            <pre class="clj-code"><code>(clisk.live/rotate 0.78 (clisk.live/v* clisk.live/pos [1.0 2.0 3.0 4.0]))
+</code></pre>
+                        </div>
+                    </td>
                     <td>
                         <span class="badge badge-PASS">PASS</span>
                         <span class="rmse-val">RMSE: 0.000117</span>
@@ -2796,7 +3469,16 @@
                     </td>
                 </tr>
                 <tr class="test-row" data-name="test_saturation_from_rgb">
-                    <td class="test-name">test_saturation_from_rgb</td>
+                    <td class="test-name">
+                        <div class="test-title-row">
+                            <span class="test-case-title">test_saturation_from_rgb</span>
+                            <a href="cases/test_saturation_from_rgb.clj" target="_blank" class="clj-file-link" title="Open Clojure File ↗">↗</a>
+                        </div>
+                        <div class="clj-code-container">
+                            <pre class="clj-code"><code>(clisk.live/saturation-from-rgb clisk.live/pos)
+</code></pre>
+                        </div>
+                    </td>
                     <td>
                         <span class="badge badge-PASS">PASS</span>
                         <span class="rmse-val">RMSE: 0.000000</span>
@@ -2833,7 +3515,16 @@
                     </td>
                 </tr>
                 <tr class="test-row" data-name="test_scale">
-                    <td class="test-name">test_scale</td>
+                    <td class="test-name">
+                        <div class="test-title-row">
+                            <span class="test-case-title">test_scale</span>
+                            <a href="cases/test_scale.clj" target="_blank" class="clj-file-link" title="Open Clojure File ↗">↗</a>
+                        </div>
+                        <div class="clj-code-container">
+                            <pre class="clj-code"><code>(clisk.live/scale 0.5 (clisk.live/v* clisk.live/pos [1.0 2.0 3.0 4.0]))
+</code></pre>
+                        </div>
+                    </td>
                     <td>
                         <span class="badge badge-PASS">PASS</span>
                         <span class="rmse-val">RMSE: 0.001961</span>
@@ -2870,7 +3561,16 @@
                     </td>
                 </tr>
                 <tr class="test-row" data-name="test_sigmoid">
-                    <td class="test-name">test_sigmoid</td>
+                    <td class="test-name">
+                        <div class="test-title-row">
+                            <span class="test-case-title">test_sigmoid</span>
+                            <a href="cases/test_sigmoid.clj" target="_blank" class="clj-file-link" title="Open Clojure File ↗">↗</a>
+                        </div>
+                        <div class="clj-code-container">
+                            <pre class="clj-code"><code>(clisk.live/sigmoid clisk.live/pos)
+</code></pre>
+                        </div>
+                    </td>
                     <td>
                         <span class="badge badge-PASS">PASS</span>
                         <span class="rmse-val">RMSE: 0.002299</span>
@@ -2907,7 +3607,16 @@
                     </td>
                 </tr>
                 <tr class="test-row" data-name="test_snoise">
-                    <td class="test-name">test_snoise</td>
+                    <td class="test-name">
+                        <div class="test-title-row">
+                            <span class="test-case-title">test_snoise</span>
+                            <a href="cases/test_snoise.clj" target="_blank" class="clj-file-link" title="Open Clojure File ↗">↗</a>
+                        </div>
+                        <div class="clj-code-container">
+                            <pre class="clj-code"><code>clisk.live/snoise
+</code></pre>
+                        </div>
+                    </td>
                     <td>
                         <span class="badge badge-PASS">PASS</span>
                         <span class="rmse-val">RMSE: 0.000106</span>
@@ -2944,7 +3653,16 @@
                     </td>
                 </tr>
                 <tr class="test-row" data-name="test_splasma">
-                    <td class="test-name">test_splasma</td>
+                    <td class="test-name">
+                        <div class="test-title-row">
+                            <span class="test-case-title">test_splasma</span>
+                            <a href="cases/test_splasma.clj" target="_blank" class="clj-file-link" title="Open Clojure File ↗">↗</a>
+                        </div>
+                        <div class="clj-code-container">
+                            <pre class="clj-code"><code>clisk.live/splasma
+</code></pre>
+                        </div>
+                    </td>
                     <td>
                         <span class="badge badge-PASS">PASS</span>
                         <span class="rmse-val">RMSE: 0.000137</span>
@@ -2981,7 +3699,16 @@
                     </td>
                 </tr>
                 <tr class="test-row" data-name="test_spots">
-                    <td class="test-name">test_spots</td>
+                    <td class="test-name">
+                        <div class="test-title-row">
+                            <span class="test-case-title">test_spots</span>
+                            <a href="cases/test_spots.clj" target="_blank" class="clj-file-link" title="Open Clojure File ↗">↗</a>
+                        </div>
+                        <div class="clj-code-container">
+                            <pre class="clj-code"><code>clisk.live/spots
+</code></pre>
+                        </div>
+                    </td>
                     <td>
                         <span class="badge badge-PASS">PASS</span>
                         <span class="rmse-val">RMSE: 0.000194</span>
@@ -3018,7 +3745,16 @@
                     </td>
                 </tr>
                 <tr class="test-row" data-name="test_square">
-                    <td class="test-name">test_square</td>
+                    <td class="test-name">
+                        <div class="test-title-row">
+                            <span class="test-case-title">test_square</span>
+                            <a href="cases/test_square.clj" target="_blank" class="clj-file-link" title="Open Clojure File ↗">↗</a>
+                        </div>
+                        <div class="clj-code-container">
+                            <pre class="clj-code"><code>(clisk.live/square clisk.live/pos)
+</code></pre>
+                        </div>
+                    </td>
                     <td>
                         <span class="badge badge-PASS">PASS</span>
                         <span class="rmse-val">RMSE: 0.000000</span>
@@ -3055,7 +3791,16 @@
                     </td>
                 </tr>
                 <tr class="test-row" data-name="test_t">
-                    <td class="test-name">test_t</td>
+                    <td class="test-name">
+                        <div class="test-title-row">
+                            <span class="test-case-title">test_t</span>
+                            <a href="cases/test_t.clj" target="_blank" class="clj-file-link" title="Open Clojure File ↗">↗</a>
+                        </div>
+                        <div class="clj-code-container">
+                            <pre class="clj-code"><code>(clisk.live/t clisk.live/pos)
+</code></pre>
+                        </div>
+                    </td>
                     <td>
                         <span class="badge badge-PASS">PASS</span>
                         <span class="rmse-val">RMSE: 0.000000</span>
@@ -3092,7 +3837,16 @@
                     </td>
                 </tr>
                 <tr class="test-row" data-name="test_theta">
-                    <td class="test-name">test_theta</td>
+                    <td class="test-name">
+                        <div class="test-title-row">
+                            <span class="test-case-title">test_theta</span>
+                            <a href="cases/test_theta.clj" target="_blank" class="clj-file-link" title="Open Clojure File ↗">↗</a>
+                        </div>
+                        <div class="clj-code-container">
+                            <pre class="clj-code"><code>(clisk.live/theta clisk.live/pos)
+</code></pre>
+                        </div>
+                    </td>
                     <td>
                         <span class="badge badge-PASS">PASS</span>
                         <span class="rmse-val">RMSE: 0.000000</span>
@@ -3129,7 +3883,16 @@
                     </td>
                 </tr>
                 <tr class="test-row" data-name="test_turbulate">
-                    <td class="test-name">test_turbulate</td>
+                    <td class="test-name">
+                        <div class="test-title-row">
+                            <span class="test-case-title">test_turbulate</span>
+                            <a href="cases/test_turbulate.clj" target="_blank" class="clj-file-link" title="Open Clojure File ↗">↗</a>
+                        </div>
+                        <div class="clj-code-container">
+                            <pre class="clj-code"><code>(clisk.live/turbulate 0.2 clisk.live/snoise)
+</code></pre>
+                        </div>
+                    </td>
                     <td>
                         <span class="badge badge-PASS">PASS</span>
                         <span class="rmse-val">RMSE: 0.000137</span>
@@ -3166,7 +3929,16 @@
                     </td>
                 </tr>
                 <tr class="test-row" data-name="test_turbulence">
-                    <td class="test-name">test_turbulence</td>
+                    <td class="test-name">
+                        <div class="test-title-row">
+                            <span class="test-case-title">test_turbulence</span>
+                            <a href="cases/test_turbulence.clj" target="_blank" class="clj-file-link" title="Open Clojure File ↗">↗</a>
+                        </div>
+                        <div class="clj-code-container">
+                            <pre class="clj-code"><code>clisk.live/turbulence
+</code></pre>
+                        </div>
+                    </td>
                     <td>
                         <span class="badge badge-PASS">PASS</span>
                         <span class="rmse-val">RMSE: 0.000194</span>
@@ -3203,7 +3975,16 @@
                     </td>
                 </tr>
                 <tr class="test-row" data-name="test_v_">
-                    <td class="test-name">test_v_</td>
+                    <td class="test-name">
+                        <div class="test-title-row">
+                            <span class="test-case-title">test_v_</span>
+                            <a href="cases/test_v_.clj" target="_blank" class="clj-file-link" title="Open Clojure File ↗">↗</a>
+                        </div>
+                        <div class="clj-code-container">
+                            <pre class="clj-code"><code>(clisk.live/v- clisk.live/pos [0.5 0.5 0.5 0.5])
+</code></pre>
+                        </div>
+                    </td>
                     <td>
                         <span class="badge badge-PASS">PASS</span>
                         <span class="rmse-val">RMSE: 0.002264</span>
@@ -3240,7 +4021,16 @@
                     </td>
                 </tr>
                 <tr class="test-row" data-name="test_vabs">
-                    <td class="test-name">test_vabs</td>
+                    <td class="test-name">
+                        <div class="test-title-row">
+                            <span class="test-case-title">test_vabs</span>
+                            <a href="cases/test_vabs.clj" target="_blank" class="clj-file-link" title="Open Clojure File ↗">↗</a>
+                        </div>
+                        <div class="clj-code-container">
+                            <pre class="clj-code"><code>(clisk.live/vabs clisk.live/pos)
+</code></pre>
+                        </div>
+                    </td>
                     <td>
                         <span class="badge badge-PASS">PASS</span>
                         <span class="rmse-val">RMSE: 0.003202</span>
@@ -3277,7 +4067,16 @@
                     </td>
                 </tr>
                 <tr class="test-row" data-name="test_vadd">
-                    <td class="test-name">test_vadd</td>
+                    <td class="test-name">
+                        <div class="test-title-row">
+                            <span class="test-case-title">test_vadd</span>
+                            <a href="cases/test_vadd.clj" target="_blank" class="clj-file-link" title="Open Clojure File ↗">↗</a>
+                        </div>
+                        <div class="clj-code-container">
+                            <pre class="clj-code"><code>(clisk.live/v+ clisk.live/pos [1.0 2.0 3.0 4.0])
+</code></pre>
+                        </div>
+                    </td>
                     <td>
                         <span class="badge badge-PASS">PASS</span>
                         <span class="rmse-val">RMSE: 0.000000</span>
@@ -3314,7 +4113,16 @@
                     </td>
                 </tr>
                 <tr class="test-row" data-name="test_vconcat">
-                    <td class="test-name">test_vconcat</td>
+                    <td class="test-name">
+                        <div class="test-title-row">
+                            <span class="test-case-title">test_vconcat</span>
+                            <a href="cases/test_vconcat.clj" target="_blank" class="clj-file-link" title="Open Clojure File ↗">↗</a>
+                        </div>
+                        <div class="clj-code-container">
+                            <pre class="clj-code"><code>(clisk.live/vconcat clisk.live/pos [1.0])
+</code></pre>
+                        </div>
+                    </td>
                     <td>
                         <span class="badge badge-PASS">PASS</span>
                         <span class="rmse-val">RMSE: 0.003202</span>
@@ -3351,7 +4159,16 @@
                     </td>
                 </tr>
                 <tr class="test-row" data-name="test_vcos">
-                    <td class="test-name">test_vcos</td>
+                    <td class="test-name">
+                        <div class="test-title-row">
+                            <span class="test-case-title">test_vcos</span>
+                            <a href="cases/test_vcos.clj" target="_blank" class="clj-file-link" title="Open Clojure File ↗">↗</a>
+                        </div>
+                        <div class="clj-code-container">
+                            <pre class="clj-code"><code>(clisk.live/vcos clisk.live/pos)
+</code></pre>
+                        </div>
+                    </td>
                     <td>
                         <span class="badge badge-PASS">PASS</span>
                         <span class="rmse-val">RMSE: 0.000000</span>
@@ -3388,7 +4205,16 @@
                     </td>
                 </tr>
                 <tr class="test-row" data-name="test_vdivide">
-                    <td class="test-name">test_vdivide</td>
+                    <td class="test-name">
+                        <div class="test-title-row">
+                            <span class="test-case-title">test_vdivide</span>
+                            <a href="cases/test_vdivide.clj" target="_blank" class="clj-file-link" title="Open Clojure File ↗">↗</a>
+                        </div>
+                        <div class="clj-code-container">
+                            <pre class="clj-code"><code>(clisk.live/vdivide clisk.live/pos [2.0 2.0 2.0 2.0])
+</code></pre>
+                        </div>
+                    </td>
                     <td>
                         <span class="badge badge-PASS">PASS</span>
                         <span class="rmse-val">RMSE: 0.003202</span>
@@ -3425,7 +4251,16 @@
                     </td>
                 </tr>
                 <tr class="test-row" data-name="test_velvet">
-                    <td class="test-name">test_velvet</td>
+                    <td class="test-name">
+                        <div class="test-title-row">
+                            <span class="test-case-title">test_velvet</span>
+                            <a href="cases/test_velvet.clj" target="_blank" class="clj-file-link" title="Open Clojure File ↗">↗</a>
+                        </div>
+                        <div class="clj-code-container">
+                            <pre class="clj-code"><code>clisk.live/velvet
+</code></pre>
+                        </div>
+                    </td>
                     <td>
                         <span class="badge badge-PASS">PASS</span>
                         <span class="rmse-val">RMSE: 0.000318</span>
@@ -3462,7 +4297,16 @@
                     </td>
                 </tr>
                 <tr class="test-row" data-name="test_vfloor">
-                    <td class="test-name">test_vfloor</td>
+                    <td class="test-name">
+                        <div class="test-title-row">
+                            <span class="test-case-title">test_vfloor</span>
+                            <a href="cases/test_vfloor.clj" target="_blank" class="clj-file-link" title="Open Clojure File ↗">↗</a>
+                        </div>
+                        <div class="clj-code-container">
+                            <pre class="clj-code"><code>(clisk.live/vfloor clisk.live/pos)
+</code></pre>
+                        </div>
+                    </td>
                     <td>
                         <span class="badge badge-PASS">PASS</span>
                         <span class="rmse-val">RMSE: 0.000000</span>
@@ -3499,7 +4343,16 @@
                     </td>
                 </tr>
                 <tr class="test-row" data-name="test_vfrac">
-                    <td class="test-name">test_vfrac</td>
+                    <td class="test-name">
+                        <div class="test-title-row">
+                            <span class="test-case-title">test_vfrac</span>
+                            <a href="cases/test_vfrac.clj" target="_blank" class="clj-file-link" title="Open Clojure File ↗">↗</a>
+                        </div>
+                        <div class="clj-code-container">
+                            <pre class="clj-code"><code>(clisk.live/vfrac clisk.live/pos)
+</code></pre>
+                        </div>
+                    </td>
                     <td>
                         <span class="badge badge-PASS">PASS</span>
                         <span class="rmse-val">RMSE: 0.003202</span>
@@ -3536,7 +4389,16 @@
                     </td>
                 </tr>
                 <tr class="test-row" data-name="test_vif">
-                    <td class="test-name">test_vif</td>
+                    <td class="test-name">
+                        <div class="test-title-row">
+                            <span class="test-case-title">test_vif</span>
+                            <a href="cases/test_vif.clj" target="_blank" class="clj-file-link" title="Open Clojure File ↗">↗</a>
+                        </div>
+                        <div class="clj-code-container">
+                            <pre class="clj-code"><code>(clisk.live/vif clisk.live/pos [1.0 0.0 0.0 1.0] [0.0 0.0 1.0 1.0])
+</code></pre>
+                        </div>
+                    </td>
                     <td>
                         <span class="badge badge-PASS">PASS</span>
                         <span class="rmse-val">RMSE: 0.000000</span>
@@ -3573,7 +4435,16 @@
                     </td>
                 </tr>
                 <tr class="test-row" data-name="test_vmax">
-                    <td class="test-name">test_vmax</td>
+                    <td class="test-name">
+                        <div class="test-title-row">
+                            <span class="test-case-title">test_vmax</span>
+                            <a href="cases/test_vmax.clj" target="_blank" class="clj-file-link" title="Open Clojure File ↗">↗</a>
+                        </div>
+                        <div class="clj-code-container">
+                            <pre class="clj-code"><code>(clisk.live/vmax clisk.live/pos [0.5 0.5 0.5 0.5])
+</code></pre>
+                        </div>
+                    </td>
                     <td>
                         <span class="badge badge-PASS">PASS</span>
                         <span class="rmse-val">RMSE: 0.003922</span>
@@ -3610,7 +4481,16 @@
                     </td>
                 </tr>
                 <tr class="test-row" data-name="test_vmin">
-                    <td class="test-name">test_vmin</td>
+                    <td class="test-name">
+                        <div class="test-title-row">
+                            <span class="test-case-title">test_vmin</span>
+                            <a href="cases/test_vmin.clj" target="_blank" class="clj-file-link" title="Open Clojure File ↗">↗</a>
+                        </div>
+                        <div class="clj-code-container">
+                            <pre class="clj-code"><code>(clisk.live/vmin clisk.live/pos [0.5 0.5 0.5 0.5])
+</code></pre>
+                        </div>
+                    </td>
                     <td>
                         <span class="badge badge-PASS">PASS</span>
                         <span class="rmse-val">RMSE: 0.003202</span>
@@ -3647,7 +4527,16 @@
                     </td>
                 </tr>
                 <tr class="test-row" data-name="test_vmod">
-                    <td class="test-name">test_vmod</td>
+                    <td class="test-name">
+                        <div class="test-title-row">
+                            <span class="test-case-title">test_vmod</span>
+                            <a href="cases/test_vmod.clj" target="_blank" class="clj-file-link" title="Open Clojure File ↗">↗</a>
+                        </div>
+                        <div class="clj-code-container">
+                            <pre class="clj-code"><code>(clisk.live/vmod clisk.live/pos [1.0 1.0 1.0 1.0])
+</code></pre>
+                        </div>
+                    </td>
                     <td>
                         <span class="badge badge-PASS">PASS</span>
                         <span class="rmse-val">RMSE: 0.003202</span>
@@ -3684,7 +4573,16 @@
                     </td>
                 </tr>
                 <tr class="test-row" data-name="test_vmul">
-                    <td class="test-name">test_vmul</td>
+                    <td class="test-name">
+                        <div class="test-title-row">
+                            <span class="test-case-title">test_vmul</span>
+                            <a href="cases/test_vmul.clj" target="_blank" class="clj-file-link" title="Open Clojure File ↗">↗</a>
+                        </div>
+                        <div class="clj-code-container">
+                            <pre class="clj-code"><code>(clisk.live/v* clisk.live/pos [2.0 2.0 2.0 2.0])
+</code></pre>
+                        </div>
+                    </td>
                     <td>
                         <span class="badge badge-PASS">PASS</span>
                         <span class="rmse-val">RMSE: 0.002264</span>
@@ -3721,7 +4619,16 @@
                     </td>
                 </tr>
                 <tr class="test-row" data-name="test_vnoise">
-                    <td class="test-name">test_vnoise</td>
+                    <td class="test-name">
+                        <div class="test-title-row">
+                            <span class="test-case-title">test_vnoise</span>
+                            <a href="cases/test_vnoise.clj" target="_blank" class="clj-file-link" title="Open Clojure File ↗">↗</a>
+                        </div>
+                        <div class="clj-code-container">
+                            <pre class="clj-code"><code>clisk.live/vnoise
+</code></pre>
+                        </div>
+                    </td>
                     <td>
                         <span class="badge badge-PASS">PASS</span>
                         <span class="rmse-val">RMSE: 0.000281</span>
@@ -3758,7 +4665,16 @@
                     </td>
                 </tr>
                 <tr class="test-row" data-name="test_vplasma">
-                    <td class="test-name">test_vplasma</td>
+                    <td class="test-name">
+                        <div class="test-title-row">
+                            <span class="test-case-title">test_vplasma</span>
+                            <a href="cases/test_vplasma.clj" target="_blank" class="clj-file-link" title="Open Clojure File ↗">↗</a>
+                        </div>
+                        <div class="clj-code-container">
+                            <pre class="clj-code"><code>clisk.live/vplasma
+</code></pre>
+                        </div>
+                    </td>
                     <td>
                         <span class="badge badge-PASS">PASS</span>
                         <span class="rmse-val">RMSE: 0.000267</span>
@@ -3795,7 +4711,16 @@
                     </td>
                 </tr>
                 <tr class="test-row" data-name="test_vpow">
-                    <td class="test-name">test_vpow</td>
+                    <td class="test-name">
+                        <div class="test-title-row">
+                            <span class="test-case-title">test_vpow</span>
+                            <a href="cases/test_vpow.clj" target="_blank" class="clj-file-link" title="Open Clojure File ↗">↗</a>
+                        </div>
+                        <div class="clj-code-container">
+                            <pre class="clj-code"><code>(clisk.live/vpow clisk.live/pos [2.0 2.0 2.0 2.0])
+</code></pre>
+                        </div>
+                    </td>
                     <td>
                         <span class="badge badge-PASS">PASS</span>
                         <span class="rmse-val">RMSE: 0.000000</span>
@@ -3832,7 +4757,16 @@
                     </td>
                 </tr>
                 <tr class="test-row" data-name="test_vround">
-                    <td class="test-name">test_vround</td>
+                    <td class="test-name">
+                        <div class="test-title-row">
+                            <span class="test-case-title">test_vround</span>
+                            <a href="cases/test_vround.clj" target="_blank" class="clj-file-link" title="Open Clojure File ↗">↗</a>
+                        </div>
+                        <div class="clj-code-container">
+                            <pre class="clj-code"><code>(clisk.live/vround clisk.live/pos)
+</code></pre>
+                        </div>
+                    </td>
                     <td>
                         <span class="badge badge-PASS">PASS</span>
                         <span class="rmse-val">RMSE: 0.000000</span>
@@ -3869,7 +4803,16 @@
                     </td>
                 </tr>
                 <tr class="test-row" data-name="test_vsin">
-                    <td class="test-name">test_vsin</td>
+                    <td class="test-name">
+                        <div class="test-title-row">
+                            <span class="test-case-title">test_vsin</span>
+                            <a href="cases/test_vsin.clj" target="_blank" class="clj-file-link" title="Open Clojure File ↗">↗</a>
+                        </div>
+                        <div class="clj-code-container">
+                            <pre class="clj-code"><code>(clisk.live/vsin clisk.live/pos)
+</code></pre>
+                        </div>
+                    </td>
                     <td>
                         <span class="badge badge-PASS">PASS</span>
                         <span class="rmse-val">RMSE: 0.000400</span>
@@ -3906,7 +4849,16 @@
                     </td>
                 </tr>
                 <tr class="test-row" data-name="test_vsnoise">
-                    <td class="test-name">test_vsnoise</td>
+                    <td class="test-name">
+                        <div class="test-title-row">
+                            <span class="test-case-title">test_vsnoise</span>
+                            <a href="cases/test_vsnoise.clj" target="_blank" class="clj-file-link" title="Open Clojure File ↗">↗</a>
+                        </div>
+                        <div class="clj-code-container">
+                            <pre class="clj-code"><code>clisk.live/vsnoise
+</code></pre>
+                        </div>
+                    </td>
                     <td>
                         <span class="badge badge-PASS">PASS</span>
                         <span class="rmse-val">RMSE: 0.000137</span>
@@ -3943,7 +4895,16 @@
                     </td>
                 </tr>
                 <tr class="test-row" data-name="test_vsplasma">
-                    <td class="test-name">test_vsplasma</td>
+                    <td class="test-name">
+                        <div class="test-title-row">
+                            <span class="test-case-title">test_vsplasma</span>
+                            <a href="cases/test_vsplasma.clj" target="_blank" class="clj-file-link" title="Open Clojure File ↗">↗</a>
+                        </div>
+                        <div class="clj-code-container">
+                            <pre class="clj-code"><code>clisk.live/vsplasma
+</code></pre>
+                        </div>
+                    </td>
                     <td>
                         <span class="badge badge-PASS">PASS</span>
                         <span class="rmse-val">RMSE: 0.000150</span>
@@ -3980,7 +4941,16 @@
                     </td>
                 </tr>
                 <tr class="test-row" data-name="test_vsqrt">
-                    <td class="test-name">test_vsqrt</td>
+                    <td class="test-name">
+                        <div class="test-title-row">
+                            <span class="test-case-title">test_vsqrt</span>
+                            <a href="cases/test_vsqrt.clj" target="_blank" class="clj-file-link" title="Open Clojure File ↗">↗</a>
+                        </div>
+                        <div class="clj-code-container">
+                            <pre class="clj-code"><code>(clisk.live/vsqrt clisk.live/pos)
+</code></pre>
+                        </div>
+                    </td>
                     <td>
                         <span class="badge badge-PASS">PASS</span>
                         <span class="rmse-val">RMSE: 0.000000</span>
@@ -4017,7 +4987,16 @@
                     </td>
                 </tr>
                 <tr class="test-row" data-name="test_vturbulence">
-                    <td class="test-name">test_vturbulence</td>
+                    <td class="test-name">
+                        <div class="test-title-row">
+                            <span class="test-case-title">test_vturbulence</span>
+                            <a href="cases/test_vturbulence.clj" target="_blank" class="clj-file-link" title="Open Clojure File ↗">↗</a>
+                        </div>
+                        <div class="clj-code-container">
+                            <pre class="clj-code"><code>clisk.live/vturbulence
+</code></pre>
+                        </div>
+                    </td>
                     <td>
                         <span class="badge badge-PASS">PASS</span>
                         <span class="rmse-val">RMSE: 0.000187</span>
@@ -4054,7 +5033,16 @@
                     </td>
                 </tr>
                 <tr class="test-row" data-name="test_wood">
-                    <td class="test-name">test_wood</td>
+                    <td class="test-name">
+                        <div class="test-title-row">
+                            <span class="test-case-title">test_wood</span>
+                            <a href="cases/test_wood.clj" target="_blank" class="clj-file-link" title="Open Clojure File ↗">↗</a>
+                        </div>
+                        <div class="clj-code-container">
+                            <pre class="clj-code"><code>clisk.live/wood
+</code></pre>
+                        </div>
+                    </td>
                     <td>
                         <span class="badge badge-PASS">PASS</span>
                         <span class="rmse-val">RMSE: 0.000416</span>
@@ -4091,7 +5079,16 @@
                     </td>
                 </tr>
                 <tr class="test-row" data-name="test_x">
-                    <td class="test-name">test_x</td>
+                    <td class="test-name">
+                        <div class="test-title-row">
+                            <span class="test-case-title">test_x</span>
+                            <a href="cases/test_x.clj" target="_blank" class="clj-file-link" title="Open Clojure File ↗">↗</a>
+                        </div>
+                        <div class="clj-code-container">
+                            <pre class="clj-code"><code>(clisk.live/x clisk.live/pos)
+</code></pre>
+                        </div>
+                    </td>
                     <td>
                         <span class="badge badge-PASS">PASS</span>
                         <span class="rmse-val">RMSE: 0.003922</span>
@@ -4128,7 +5125,16 @@
                     </td>
                 </tr>
                 <tr class="test-row" data-name="test_y">
-                    <td class="test-name">test_y</td>
+                    <td class="test-name">
+                        <div class="test-title-row">
+                            <span class="test-case-title">test_y</span>
+                            <a href="cases/test_y.clj" target="_blank" class="clj-file-link" title="Open Clojure File ↗">↗</a>
+                        </div>
+                        <div class="clj-code-container">
+                            <pre class="clj-code"><code>(clisk.live/y clisk.live/pos)
+</code></pre>
+                        </div>
+                    </td>
                     <td>
                         <span class="badge badge-PASS">PASS</span>
                         <span class="rmse-val">RMSE: 0.003922</span>
@@ -4165,7 +5171,16 @@
                     </td>
                 </tr>
                 <tr class="test-row" data-name="test_z">
-                    <td class="test-name">test_z</td>
+                    <td class="test-name">
+                        <div class="test-title-row">
+                            <span class="test-case-title">test_z</span>
+                            <a href="cases/test_z.clj" target="_blank" class="clj-file-link" title="Open Clojure File ↗">↗</a>
+                        </div>
+                        <div class="clj-code-container">
+                            <pre class="clj-code"><code>(clisk.live/z clisk.live/pos)
+</code></pre>
+                        </div>
+                    </td>
                     <td>
                         <span class="badge badge-PASS">PASS</span>
                         <span class="rmse-val">RMSE: 0.000000</span>
@@ -4218,6 +5233,8 @@
     </div>
 
     <script>
+        const cljCodes = {"fizz_001_alpha_3d": ";; This test verifies the default behavior of the alpha (4th) component selector on a 3D vector.\n;; In Clojure Clisk, the alpha component defaults to 1.0f on vectors with fewer than 4 components.\n;; Unmodified C++ code incorrectly evaluates this to 0.0f due to get(true) not smearing and \n;; returning the 4th element as 0.0f.\n(clisk.live/alpha (clisk.live/vconcat clisk.live/snoise [1.0 2.0]))\n", "fizz_002_length_scalar": ";; This test verifies the vlength reduction behavior on a 1D scalar.\n;; In Clojure Clisk, (length scalar) equals the absolute value |scalar| (a 1D magnitude).\n;; Unmodified C++ code incorrectly smears the scalar to 4D [v, v, v, v] before computing length,\n;; resulting in 2.0 * |scalar| (an incorrect scaling factor of 2.0).\n(clisk.live/length clisk.live/snoise)\n", "fizz_003_min_component_2d": ";; This test verifies min-component on a 2D vector with positive components.\n;; Clojure Clisk evaluates the minimum component of [0.2 0.3] to be 0.2.\n;; Unmodified C++ code incorrectly returns 0.0f because it includes the unassigned 3rd and 4th components (z and w, which are initialized to 0.0f) in the calculation.\n(clisk.live/min-component [0.2 0.3])\n", "fizz_004_max_component_2d": ";; This test verifies max-component on a 2D vector with negative components, shifted to be in range [0, 1].\n;; Clojure Clisk evaluates the maximum component of [-0.2 -0.3] to be -0.2 (plus 1.0 equals 0.8).\n;; Unmodified C++ code incorrectly returns 1.0 because it includes the unassigned components (0.0f) in the max calculation, yielding 1.0 + 0.0f = 1.0.\n(clisk.live/v+ 1.0 (clisk.live/max-component [-0.2 -0.3]))\n", "fizz_005_vif_component_count": ";; This test verifies component count propagation through vif.\n;; In Clojure Clisk, (vif 1.0 [1.0 0.5 0.8] 0.0) returns a 3D vector, whose alpha (4th component) defaults to 1.0.\n;; Unmodified C++ code incorrectly returns a 4D vector [1.0, 0.5, 0.8, 0.0], making its alpha component evaluate to 0.0.\n(clisk.live/alpha (clisk.live/vif 1.0 [1.0 0.5 0.8] 0.0))\n", "fizz_006_lerp_component_count": ";; This test verifies component count propagation through lerp.\n;; In Clojure Clisk, (lerp 0.5 [1.0 0.5 0.8] 0.0) returns a 3D vector, whose alpha defaults to 1.0.\n;; Unmodified C++ code incorrectly returns a 4D vector with alpha equal to 0.0.\n(clisk.live/alpha (clisk.live/lerp 0.5 [1.0 0.5 0.8] 0.0))\n", "fizz_007_cross3_component_count": ";; This test verifies component count propagation through cross3.\n;; In Clojure Clisk, (cross3 pos [0.0 1.0 0.0]) returns a 3D vector, whose alpha (4th component) defaults to 1.0.\n;; Unmodified C++ code incorrectly returns a 4D vector with alpha equal to 0.0.\n(clisk.live/alpha (clisk.live/cross3 clisk.live/pos [0.0 1.0 0.0]))\n", "fizz_008_height_normal_custom": ";; This test verifies height-normal of a custom pattern (snoise).\n;; Clojure Clisk computes the normal of the height map defined by snoise.\n;; Unmodified C++ code cannot accept a custom function argument for height-normal and incorrectly evaluates the gradient of z instead.\n(clisk.live/height-normal clisk.live/snoise)\n", "fuzz_000": "(rgb-from-hsl (v+ (vdivide (green-from-hsl wood) 1.5548) flecks))\n", "fuzz_001": "(rgb-from-hsl (vmin (saturation-from-rgb (dot (hue-from-rgb noise) (lerp vturbulence vplasma vturbulence))) spots))\n", "fuzz_002": "(rgb-from-hsl (vif (vcos (vmin plasma (vconcat spots plasma))) turbulence [-0.4795]))\n", "fuzz_003": "(rgb-from-hsl (vconcat (min-component (hsl-from-rgb (t plasma))) (v- (vdivide (length wood) 1.3107) (lerp (vcos blotches) (square vturbulence) (radius clouds)))))\n", "fuzz_004": "(rgb-from-hsl (vmin (hue-from-rgb (hue-from-rgb (vsqrt vnoise))) (v* (lerp (vfrac agate) (dot clouds wood) (scale 3.4404 splasma)) (vpow (clamp pos -0.5652 0.9074) [1.8876 1.0478 0.0307]))))\n", "fuzz_005": "(rgb-from-hsl (v- (vfrac (adjust-hsl [1.6897 1.6740 0.3958] (v* turbulence vsplasma))) (scale 4.8921 plasma)))\n", "fuzz_006": "(rgb-from-hsl (v- wood (polar (turbulate 0.1045 (offset [1.9806 0.5995 -0.2476 0.0703] blotches)))))\n", "fuzz_007": "(rgb-from-hsl (max-component vsplasma))\n", "fuzz_008": "(rgb-from-hsl (z flecks))\n", "fuzz_009": "(rgb-from-hsl (hsl-from-rgb (vmin velvet (radius (lerp pos spots clouds)))))\n", "fuzz_010": "(rgb-from-hsl (scale 0.3479 (checker vturbulence (lerp (square vnoise) (sigmoid plasma) (y splasma)))))\n", "fuzz_011": "(rgb-from-hsl (lerp (radius (length (offset [-0.9392 1.1363 -0.1800 -0.3080] blotches))) [-1.3808 -0.8132 1.8748 0.3167] (adjust-hue 0.3136 flecks)))\n", "fuzz_012": "(rgb-from-hsl (alpha (vconcat (lightness-from-rgb blotches) vsplasma)))\n", "fuzz_013": "(rgb-from-hsl (v+ (dot (vmax (average vturbulence blotches) clouds) (blue-from-hsl (scale 0.4590 splasma))) (sigmoid plasma)))\n", "fuzz_014": "(rgb-from-hsl (rotate 0.3342 (theta (vif (rgb-from-hsl noise) (vmin splasma vnoise) (z pos)))))\n", "fuzz_015": "(rgb-from-hsl (lightness-from-rgb (max-component (saturation-from-rgb (turbulate 0.0915 snoise)))))\n", "fuzz_016": "(rgb-from-hsl (sigmoid vnoise))\n", "fuzz_017": "(rgb-from-hsl (vpow (theta (dot (v* pos vnoise) (vconcat wood pos))) snoise))\n", "fuzz_018": "(rgb-from-hsl (offset [1.2431 1.5257 -1.9009 0.9463] (checker agate [1.4584 1.9048])))\n", "fuzz_019": "(rgb-from-hsl (t (hsl-from-rgb (offset [1.4887 1.4344 -1.1103 1.2663] (rgb-from-hsl blotches)))))\n", "test_adjust_hsl": "(clisk.live/adjust-hsl [0.1 0.2 0.3] clisk.live/pos)\n", "test_adjust_hue": "(clisk.live/adjust-hue 0.25 clisk.live/pos)\n", "test_agate": "clisk.live/agate\n", "test_alpha": "(clisk.live/alpha clisk.live/pos)\n", "test_average": "(clisk.live/average clisk.live/pos [1.0 2.0 3.0 4.0])\n", "test_blotches": "clisk.live/blotches\n", "test_blue_from_hsl": "(clisk.live/blue-from-hsl clisk.live/pos)\n", "test_checker": "(clisk.live/checker [0.0 0.0 0.0 1.0] [1.0 1.0 1.0 1.0])\n", "test_clamp": "(clisk.live/clamp clisk.live/pos 0.0 1.0)\n", "test_clouds": "clisk.live/clouds\n", "test_cross3": "(clisk.live/cross3 clisk.live/pos [0.0 1.0 0.0 0.0])\n", "test_dot": "(clisk.live/dot clisk.live/pos clisk.live/pos)\n", "test_flecks": "clisk.live/flecks\n", "test_gradient": "(clisk.live/gradient (clisk.live/vconcat (clisk.live/dot clisk.live/pos clisk.live/pos) clisk.live/pos))\n", "test_grain": "clisk.live/grain\n", "test_green_from_hsl": "(clisk.live/green-from-hsl clisk.live/pos)\n", "test_height": "(clisk.live/height clisk.live/pos)\n", "test_height_normal": "(clisk.live/height-normal clisk.live/pos)\n", "test_hsl_from_rgb": "(clisk.live/hsl-from-rgb clisk.live/pos)\n", "test_hue_from_rgb": "(clisk.live/hue-from-rgb clisk.live/pos)\n", "test_length": "(clisk.live/length clisk.live/pos)\n", "test_lerp": "(clisk.live/lerp 0.0 1.0 clisk.live/pos)\n", "test_lightness_from_rgb": "(clisk.live/lightness-from-rgb clisk.live/pos)\n", "test_max_component": "(clisk.live/max-component clisk.live/pos)\n", "test_min_component": "(clisk.live/min-component clisk.live/pos)\n", "test_noise": "clisk.live/noise\n", "test_normalize": "(clisk.live/normalize clisk.live/pos)\n", "test_offset": "(clisk.live/offset [0.5 0.5 0.5 0.5] (clisk.live/v* clisk.live/pos [1.0 2.0 3.0 4.0]))\n", "test_plasma": "clisk.live/plasma\n", "test_polar": "(clisk.live/polar clisk.live/pos)\n", "test_radius": "(clisk.live/radius clisk.live/pos)\n", "test_red_from_hsl": "(clisk.live/red-from-hsl clisk.live/pos)\n", "test_rgb_from_hsl": "(clisk.live/rgb-from-hsl clisk.live/pos)\n", "test_rotate": "(clisk.live/rotate 0.78 (clisk.live/v* clisk.live/pos [1.0 2.0 3.0 4.0]))\n", "test_saturation_from_rgb": "(clisk.live/saturation-from-rgb clisk.live/pos)\n", "test_scale": "(clisk.live/scale 0.5 (clisk.live/v* clisk.live/pos [1.0 2.0 3.0 4.0]))\n", "test_sigmoid": "(clisk.live/sigmoid clisk.live/pos)\n", "test_snoise": "clisk.live/snoise\n", "test_splasma": "clisk.live/splasma\n", "test_spots": "clisk.live/spots\n", "test_square": "(clisk.live/square clisk.live/pos)\n", "test_t": "(clisk.live/t clisk.live/pos)\n", "test_theta": "(clisk.live/theta clisk.live/pos)\n", "test_turbulate": "(clisk.live/turbulate 0.2 clisk.live/snoise)\n", "test_turbulence": "clisk.live/turbulence\n", "test_v_": "(clisk.live/v- clisk.live/pos [0.5 0.5 0.5 0.5])\n", "test_vabs": "(clisk.live/vabs clisk.live/pos)\n", "test_vadd": "(clisk.live/v+ clisk.live/pos [1.0 2.0 3.0 4.0])\n", "test_vconcat": "(clisk.live/vconcat clisk.live/pos [1.0])\n", "test_vcos": "(clisk.live/vcos clisk.live/pos)\n", "test_vdivide": "(clisk.live/vdivide clisk.live/pos [2.0 2.0 2.0 2.0])\n", "test_velvet": "clisk.live/velvet\n", "test_vfloor": "(clisk.live/vfloor clisk.live/pos)\n", "test_vfrac": "(clisk.live/vfrac clisk.live/pos)\n", "test_vif": "(clisk.live/vif clisk.live/pos [1.0 0.0 0.0 1.0] [0.0 0.0 1.0 1.0])\n", "test_vmax": "(clisk.live/vmax clisk.live/pos [0.5 0.5 0.5 0.5])\n", "test_vmin": "(clisk.live/vmin clisk.live/pos [0.5 0.5 0.5 0.5])\n", "test_vmod": "(clisk.live/vmod clisk.live/pos [1.0 1.0 1.0 1.0])\n", "test_vmul": "(clisk.live/v* clisk.live/pos [2.0 2.0 2.0 2.0])\n", "test_vnoise": "clisk.live/vnoise\n", "test_vplasma": "clisk.live/vplasma\n", "test_vpow": "(clisk.live/vpow clisk.live/pos [2.0 2.0 2.0 2.0])\n", "test_vround": "(clisk.live/vround clisk.live/pos)\n", "test_vsin": "(clisk.live/vsin clisk.live/pos)\n", "test_vsnoise": "clisk.live/vsnoise\n", "test_vsplasma": "clisk.live/vsplasma\n", "test_vsqrt": "(clisk.live/vsqrt clisk.live/pos)\n", "test_vturbulence": "clisk.live/vturbulence\n", "test_wood": "clisk.live/wood\n", "test_x": "(clisk.live/x clisk.live/pos)\n", "test_y": "(clisk.live/y clisk.live/pos)\n", "test_z": "(clisk.live/z clisk.live/pos)\n"};
+
         // Calculate statistics
         const rows = Array.from(document.querySelectorAll('.test-row'));
         const totalCount = rows.length;
@@ -4315,12 +5332,37 @@
             });
         });
 
+        // HTML Escaper
+        function escapeHtml(text) {
+            if (!text) return '';
+            return text
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+        }
+
         // Lightbox modal logic
         function openLightbox(name, ref, cpp, cuda, webglGolden, webgl) {
             document.getElementById('modal-test-title').textContent = name;
             const grid = document.getElementById('modal-comparison-grid');
             grid.innerHTML = '';
             
+            // Add Clojure Source card if available
+            const cljCode = cljCodes[name];
+            if (cljCode) {
+                const card = document.createElement('div');
+                card.className = 'comp-card';
+                card.innerHTML = `
+                    <span>Clojure Source</span>
+                    <div class="modal-clj-container">
+                        <pre class="modal-clj-code"><code>${escapeHtml(cljCode)}</code></pre>
+                    </div>
+                `;
+                grid.appendChild(card);
+            }
+
             const addCompCard = (title, src) => {
                 if (!src || src.includes('N/A')) return;
                 const card = document.createElement('div');

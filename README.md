@@ -109,6 +109,11 @@ To run the entire test pipeline (C++, CUDA, and WebGL) from the root directory:
 python3 tests/automated/run_diff_tests.py
 ```
 
+*Note:* If you are running tests on a headless machine or remote session, WebGL context creation may fail unless you specify a valid `DISPLAY` environment variable:
+```bash
+DISPLAY=:1 python3 tests/automated/run_diff_tests.py
+```
+
 #### Headless WebGL Testing Prerequisites
 Headless WebGL tests compile and render fragment shaders using `headless-gl` inside a Node.js helper.
 To set up dependencies before running WebGL tests:
