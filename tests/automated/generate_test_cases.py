@@ -39,8 +39,20 @@ def main():
         "turbulate": "(clisk.live/turbulate 0.2 clisk.live/snoise)",
         "gradient": "(clisk.live/gradient (clisk.live/vconcat (clisk.live/dot clisk.live/pos clisk.live/pos) clisk.live/pos))",
         
+        # Unary channels & math to select specific varying components
+        "alpha": "(clisk.live/alpha (clisk.live/vconcat (clisk.live/vconcat (clisk.live/x clisk.live/pos) (clisk.live/y clisk.live/pos)) (clisk.live/vconcat (clisk.live/x clisk.live/pos) (clisk.live/y clisk.live/pos))))",
+        "z": "(clisk.live/z (clisk.live/vconcat (clisk.live/vconcat (clisk.live/x clisk.live/pos) (clisk.live/y clisk.live/pos)) (clisk.live/vconcat (clisk.live/x clisk.live/pos) (clisk.live/y clisk.live/pos))))",
+        "t": "(clisk.live/t (clisk.live/vconcat (clisk.live/vconcat (clisk.live/x clisk.live/pos) (clisk.live/y clisk.live/pos)) (clisk.live/vconcat (clisk.live/x clisk.live/pos) (clisk.live/y clisk.live/pos))))",
+        
+        # HSL Conversions with shifting to prevent black/white output clamp
+        "red-from-hsl": "(clisk.live/red-from-hsl (clisk.live/v+ [0.0 0.0 0.5 0.0] (clisk.live/v* 0.5 clisk.live/pos)))",
+        "green-from-hsl": "(clisk.live/green-from-hsl (clisk.live/v+ [0.0 0.0 0.5 0.0] (clisk.live/v* 0.5 clisk.live/pos)))",
+        "blue-from-hsl": "(clisk.live/blue-from-hsl (clisk.live/v+ [0.0 0.0 0.5 0.0] (clisk.live/v* 0.5 clisk.live/pos)))",
+        "rgb-from-hsl": "(clisk.live/rgb-from-hsl (clisk.live/v+ [0.0 0.0 0.5 0.0] (clisk.live/v* 0.5 clisk.live/pos)))",
+        "saturation-from-rgb": "(clisk.live/saturation-from-rgb (clisk.live/vconcat (clisk.live/vconcat (clisk.live/x clisk.live/pos) (clisk.live/y clisk.live/pos)) [0.5]))",
+        
         # Operators & Math helpers
-        "v+": "(clisk.live/v+ clisk.live/pos [1.0 2.0 3.0 4.0])",
+        "v+": "(clisk.live/v+ clisk.live/pos [0.1 0.2 0.3 0.0])",
         "v*": "(clisk.live/v* clisk.live/pos [2.0 2.0 2.0 2.0])",
         "v-": "(clisk.live/v- clisk.live/pos [0.5 0.5 0.5 0.5])",
         "vdivide": "(clisk.live/vdivide clisk.live/pos [2.0 2.0 2.0 2.0])",
@@ -48,6 +60,8 @@ def main():
         "vmod": "(clisk.live/vmod clisk.live/pos [1.0 1.0 1.0 1.0])",
         "vmin": "(clisk.live/vmin clisk.live/pos [0.5 0.5 0.5 0.5])",
         "vmax": "(clisk.live/vmax clisk.live/pos [0.5 0.5 0.5 0.5])",
+        "min-component": "(clisk.live/min-component (clisk.live/vconcat (clisk.live/x clisk.live/pos) (clisk.live/y clisk.live/pos)))",
+        "vfloor": "(clisk.live/vfloor (clisk.live/v- (clisk.live/v* clisk.live/pos 3.0) 1.0))",
         "dot": "(clisk.live/dot clisk.live/pos clisk.live/pos)",
         "cross3": "(clisk.live/cross3 clisk.live/pos [0.0 1.0 0.0 0.0])",
         "vconcat": "(clisk.live/vconcat clisk.live/pos [1.0])",
@@ -55,11 +69,16 @@ def main():
         "adjust-hue": "(clisk.live/adjust-hue 0.25 clisk.live/pos)",
         "adjust-hsl": "(clisk.live/adjust-hsl [0.1 0.2 0.3] clisk.live/pos)",
         "checker": "(clisk.live/checker [0.0 0.0 0.0 1.0] [1.0 1.0 1.0 1.0])",
+        "theta": "(clisk.live/v* 0.15 (clisk.live/theta clisk.live/pos))",
+        
+        # Height map functions
+        "height": "(clisk.live/height clisk.live/snoise)",
+        "height-normal": "(clisk.live/height-normal clisk.live/snoise)",
         
         # Ternary functions
-        "lerp": "(clisk.live/lerp 0.0 1.0 clisk.live/pos)",
+        "lerp": "(clisk.live/lerp 0.5 clisk.live/pos [1.0 0.0 0.0 1.0])",
         "clamp": "(clisk.live/clamp clisk.live/pos 0.0 1.0)",
-        "vif": "(clisk.live/vif clisk.live/pos [1.0 0.0 0.0 1.0] [0.0 0.0 1.0 1.0])"
+        "vif": "(clisk.live/vif clisk.live/snoise [1.0 0.0 0.0 1.0] [0.0 0.0 1.0 1.0])"
     }
     
     # Process all functions
