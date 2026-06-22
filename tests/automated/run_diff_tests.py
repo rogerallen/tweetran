@@ -4,6 +4,8 @@ import sys
 import subprocess
 import concurrent.futures
 import csv
+import json
+import html
 from compare_images import calculate_rmse, generate_diff_image
 
 # Threshold for validation (RMSE < 0.02 is standard allowance for GPU/CPU math variations)
@@ -324,6 +326,21 @@ def main():
     print(f"Writing HTML dashboard to {html_path}...")
     try:
         sorted_results = sorted(results, key=lambda x: x["name"])
+        
+        # Build clj codes dictionary
+        clj_codes_dict = {}
+        cases_dir = os.path.join(base_dir, "tests", "cases")
+        for r in sorted_results:
+            name = r["name"]
+            clj_file_path = os.path.join(cases_dir, f"{name}.clj")
+            if os.path.exists(clj_file_path):
+                try:
+                    with open(clj_file_path, "r", encoding="utf-8") as cljf:
+                        clj_codes_dict[name] = cljf.read()
+                except Exception as e:
+                    clj_codes_dict[name] = f"; Error reading file: {e}"
+        json_clj_codes = json.dumps(clj_codes_dict).replace("</script>", "<\\/script>")
+
         with open(html_path, "w") as htmlfile:
             htmlfile.write("""<!DOCTYPE html>
 <html lang="en">
@@ -561,6 +578,95 @@ def main():
             font-size: 0.9rem;
             font-weight: 600;
             color: #e0e7ff;
+        }
+        
+        .test-title-row {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.35rem;
+        }
+
+        .test-case-title {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #e0e7ff;
+        }
+
+        .clj-file-link {
+            color: var(--primary);
+            text-decoration: none;
+            font-size: 0.85rem;
+            opacity: 0.7;
+            transition: opacity 0.2s ease, transform 0.2s ease;
+            display: inline-block;
+            line-height: 1;
+        }
+
+        .clj-file-link:hover {
+            opacity: 1;
+            transform: translate(1px, -1px);
+            color: #818cf8;
+        }
+
+        .clj-code-container {
+            max-width: 450px;
+            max-height: 120px;
+            overflow: auto;
+            background: rgba(15, 17, 26, 0.6);
+            border-radius: 6px;
+            padding: 0.4rem 0.6rem;
+            border: 1px solid rgba(255, 255, 255, 0.04);
+        }
+
+        .clj-code-container::-webkit-scrollbar {
+            width: 4px;
+            height: 4px;
+        }
+
+        .clj-code-container::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 2px;
+        }
+
+        .clj-code {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.72rem;
+            color: #a5b4fc;
+            white-space: pre-wrap;
+            word-break: break-all;
+            line-height: 1.3;
+        }
+
+        .modal-clj-container {
+            width: 256px;
+            height: 256px;
+            border-radius: 12px;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            background: #0f111a;
+            padding: 1rem;
+            overflow: auto;
+            text-align: left;
+        }
+
+        .modal-clj-container::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+
+        .modal-clj-container::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 3px;
+        }
+
+        .modal-clj-code {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.72rem;
+            color: #a5b4fc;
+            white-space: pre-wrap;
+            word-break: break-all;
+            line-height: 1.4;
         }
 
         .badge {
@@ -865,8 +971,19 @@ def main():
                 if cuda_status == "FAIL": row_classes.append("cuda-failed")
                 if webgl_status == "FAIL": row_classes.append("webgl-failed")
 
+                clj_code = clj_codes_dict.get(name, "")
+                escaped_clj_code = html.escape(clj_code)
+
                 htmlfile.write(f"""                <tr class="{' '.join(row_classes)}" data-name="{name}">
-                    <td class="test-name">{name}</td>
+                    <td class="test-name">
+                        <div class="test-title-row">
+                            <span class="test-case-title">{name}</span>
+                            <a href="cases/{name}.clj" target="_blank" class="clj-file-link" title="Open Clojure File ↗">↗</a>
+                        </div>
+                        <div class="clj-code-container">
+                            <pre class="clj-code"><code>{escaped_clj_code}</code></pre>
+                        </div>
+                    </td>
                     <td>
                         <span class="badge badge-{cpp_status}">{cpp_status}</span>
                         {f'<span class="rmse-val">RMSE: {cpp_rmse}</span>' if cpp_rmse else ''}
@@ -904,7 +1021,7 @@ def main():
                 </tr>
 """)
 
-            htmlfile.write("""            </tbody>
+            htmlfile.write(("""            </tbody>
         </table>
     </div>
 
@@ -921,6 +1038,8 @@ def main():
     </div>
 
     <script>
+        const cljCodes = {json_clj_codes};
+
         // Calculate statistics
         const rows = Array.from(document.querySelectorAll('.test-row'));
         const totalCount = rows.length;
@@ -1018,12 +1137,37 @@ def main():
             });
         });
 
+        // HTML Escaper
+        function escapeHtml(text) {
+            if (!text) return '';
+            return text
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+        }
+
         // Lightbox modal logic
         function openLightbox(name, ref, cpp, cuda, webglGolden, webgl) {
             document.getElementById('modal-test-title').textContent = name;
             const grid = document.getElementById('modal-comparison-grid');
             grid.innerHTML = '';
             
+            // Add Clojure Source card if available
+            const cljCode = cljCodes[name];
+            if (cljCode) {
+                const card = document.createElement('div');
+                card.className = 'comp-card';
+                card.innerHTML = `
+                    <span>Clojure Source</span>
+                    <div class="modal-clj-container">
+                        <pre class="modal-clj-code"><code>${escapeHtml(cljCode)}</code></pre>
+                    </div>
+                `;
+                grid.appendChild(card);
+            }
+
             const addCompCard = (title, src) => {
                 if (!src || src.includes('N/A')) return;
                 const card = document.createElement('div');
@@ -1058,7 +1202,7 @@ def main():
     </script>
 </body>
 </html>
-""")
+""").replace("{json_clj_codes}", json_clj_codes))
     except Exception as e:
         print(f"Failed to write HTML summary: {e}")
 
